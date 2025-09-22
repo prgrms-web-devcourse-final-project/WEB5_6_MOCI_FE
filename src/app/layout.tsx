@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { pretendard } from "./fonts";
+import SmoothScrollerProvider from "@/provider/SmoothScrollerProvider";
 
 export const metadata: Metadata = {
   title: "디딤돌",
@@ -14,7 +15,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko-KR" className={pretendard.variable}>
-      <body className={`antialiased`}>{children}</body>
+      <body className={`antialiased`}>
+        {children}
+        <SmoothScrollerProvider>{children}</SmoothScrollerProvider>
+      </body>
     </html>
   );
 }
