@@ -1,0 +1,7 @@
+@layer utilities {
+  /*헤더 높이 고정: 48px*/
+  .root-min-h {
+    min-height: calc(100vh - 48px);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}

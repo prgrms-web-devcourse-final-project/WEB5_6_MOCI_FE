@@ -1,10 +1,10 @@
-import Header from "@/components/MainHeader";
+import Header from "@/shared/components/MainHeader";
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div>
       <Header />
-      <main>{children}</main>
+      <main className="root-min-h">{children}</main>
     </div>
   );
 }
