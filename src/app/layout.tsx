@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import "../shared/styles/globals.css";
 import { pretendard } from "./fonts";
 import SmoothScrollerProvider from "@/provider/SmoothScrollerProvider";
 

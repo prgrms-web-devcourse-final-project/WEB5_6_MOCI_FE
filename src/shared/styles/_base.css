@@ -1,0 +1,20 @@
+@layer base {
+  html {
+    font-family: var(
+      --font-pretendard,
+      -apple-system,
+      "Segoe UI",
+      "Malgun Gothic",
+      "Ubuntu",
+      "Noto Sans KR",
+      sans-serif
+    );
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    /* font-family: var(--font-sans); */
+    line-height: var(--line-height-base);
+    font-weight: var(--font-weight-base);
+  }
+}
