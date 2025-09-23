@@ -1,10 +1,10 @@
-import Header from "@/components/Header";
+import Header from "@/components/MainHeader";
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div>
       <Header />
-      {children}
+      <main>{children}</main>
     </div>
   );
 }

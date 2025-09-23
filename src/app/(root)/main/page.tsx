@@ -1,4 +1,4 @@
 function Page() {
-  return <div>Login page</div>;
+  return <div>Main Page</div>;
 }
 export default Page;
