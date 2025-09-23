@@ -16,8 +16,9 @@ export default function RootLayout({
   return (
     <html lang="ko-KR" className={pretendard.variable}>
       <body className={`antialiased`}>
-        {children}
-        <SmoothScrollerProvider>{children}</SmoothScrollerProvider>
+        <SmoothScrollerProvider>
+          <div className="m-auto max-w-[650px] min-w-[350px]">{children}</div>
+        </SmoothScrollerProvider>
       </body>
     </html>
   );
