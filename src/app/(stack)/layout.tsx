@@ -1,10 +1,10 @@
-import StackHeader from "@/components/StackHeader";
+import StackHeader from "@/shared/components/StackHeader";
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div>
       <StackHeader />
-      <main>{children}</main>
+      <main className="root-min-h">{children}</main>
     </div>
   );
 }
