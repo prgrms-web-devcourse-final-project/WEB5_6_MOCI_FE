@@ -37,8 +37,6 @@
     /* font-family: var(--font-sans); */
     line-height: var(--line-height-base);
     font-weight: var(--font-weight-base);
-    min-width: 350px; /* 최소너비 350px */
-    max-width: 640px; /* 최대너비 640px */
   }
 }
 
