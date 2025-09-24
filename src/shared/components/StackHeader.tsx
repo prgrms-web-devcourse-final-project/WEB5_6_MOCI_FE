@@ -22,7 +22,12 @@ function SubHeader({ pageTitle }: { pageTitle?: string }) {
   if (pageTitle) {
     headerTitle = pageTitle;
   } else {
-    headerTitle = pageTitleList[pathName];
+    for (const key in pageTitleList) {
+      if (pathName.startsWith(key)) {
+        headerTitle = pageTitleList[key];
+        break;
+      }
+    }
   }
 
   return (
