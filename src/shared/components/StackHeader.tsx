@@ -26,7 +26,7 @@ function SubHeader({ pageTitle }: { pageTitle?: string }) {
   }
 
   return (
-    <header className="flex items-center px-4 bg-lightyellow h-12">
+    <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[650px] min-w-[350px] flex items-center px-4 bg-lightyellow h-12">
       <button
         onClick={handleBack}
         className="flex justify-center items-center w-8 h-full"
