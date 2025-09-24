@@ -132,7 +132,6 @@ function OXQuiz() {
           onClick={goBack}
           disabled={current === 0}
           aria-label="이전문제로 이동"
-          className="enabled:hover:shadow-2xl enabled:hover:scale-y-105 enabled:hover:ring-4 enabled:hover:ring-darkgreen-default enabled:active:shadow-2xl enabled:active:scale-y-105 enabled:active:ring-4 enabled:active:ring-darkgreen-default"
         >
           이전
         </Button>
@@ -143,7 +142,6 @@ function OXQuiz() {
           aria-label={
             current === questions.length - 1 ? "완료" : "다음문제로 이동"
           }
-          className="enabled:hover:shadow-2xl enabled:hover:scale-y-105 enabled:hover:ring-4 enabled:hover:ring-darkgreen-default enabled:active:shadow-2xl enabled:active:scale-y-105 enabled:active:ring-4 enabled:active:ring-darkgreen-default"
         >
           {current === questions.length - 1 ? "완료" : "다음"}
         </Button>
