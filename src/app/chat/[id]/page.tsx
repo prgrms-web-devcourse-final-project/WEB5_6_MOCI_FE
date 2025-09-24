@@ -1,5 +1,5 @@
 "use client";
-import StackHeader from "@/components/StackHeader";
+import StackHeader from "@/shared/components/StackHeader";
 import { usePathname } from "next/navigation";
 
 function Page() {
