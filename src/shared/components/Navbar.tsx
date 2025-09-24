@@ -16,8 +16,8 @@ function Navbar({ ref: outRef, closeNav }: Props) {
       )}
     >
       <div className="flex justify-between items-center mt-3.5">
-        <span className="text-3xl font-bold">바로가기</span>
-        <button onClick={closeNav}>
+        <span className="text-3xl font-bold select-none">바로가기</span>
+        <button className="flex-center w-6 h-6" onClick={closeNav}>
           <CloseIcon />
         </button>
       </div>
