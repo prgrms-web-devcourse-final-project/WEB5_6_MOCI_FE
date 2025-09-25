@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import O from "@/assets/O.svg";
 import X from "@/assets/X.svg";
 import { useState } from "react";
@@ -41,13 +40,13 @@ function OXQuiz() {
   const goNext = () => {
     if (current + 1 < questions.length) {
       setCurrent((c) => c + 1);
-    } else console.log(answers); // TODO : 회원가입 API 호출하기
+    } //  else TODO : 회원가입 API 호출하기
   };
 
   return (
     <>
       {/* aria-live : polite 문제 바뀌면 자동으로 읽어줌 */}
-      <p className="text-2xl font-bold" aria-live="polite" tabIndex={0}>
+      <p className="text-2xl font-bold" aria-live="polite">
         문제
         <span className="text-green-default"> {current + 1}</span> /{" "}
         {questions.length}
@@ -61,7 +60,6 @@ function OXQuiz() {
           className={` ${
             questions[current].question.length > 40 ? "text-[28px]" : "text-3xl"
           } font-bold text-center"`}
-          tabIndex={0}
           aria-live="polite"
         >
           {questions[current].question}
@@ -72,7 +70,7 @@ function OXQuiz() {
           <div className="flex gap-[8vw] justify-center">
             {/* o 버튼 */}
             <label
-              className={`w-1/3 max-w-45 relative aspect-square rounded-lg bg-lightyellow hover:bg-lightgreen active:bg-lightgreen ${
+              className={`p-6 cursor-pointer  rounded-lg bg-lightyellow hover:bg-lightgreen active:bg-lightgreen ${
                 answers[current] === true && "ring-4 ring-green-default"
               }`}
             >
@@ -86,19 +84,12 @@ function OXQuiz() {
                 checked={answers[current] === true}
                 aria-label="o (할 수 있다)"
               />
-              <Image
-                src={O}
-                alt=""
-                fill
-                className=" object-contain p-6 cursor-pointer"
-                priority
-                draggable={false}
-              />
+              <O alt="" draggable={false} />
             </label>
             {/* x버튼 */}
             <label
-              className={`w-1/3 max-w-45 relative aspect-square rounded-lg bg-lightyellow hover:bg-lightgreen active:bg-lightgreen  ${
-                answers[current] === false && "ring-4 ring-green-default"
+              className={`p-6 cursor-pointer  rounded-lg bg-lightyellow hover:bg-lightgreen active:bg-lightgreen ${
+                answers[current] === true && "ring-4 ring-green-default"
               }`}
             >
               <input
@@ -111,14 +102,7 @@ function OXQuiz() {
                 checked={answers[current] === false}
                 aria-label="x (할 수 없다)"
               />
-              <Image
-                src={X}
-                alt=""
-                fill
-                className="object-contain p-6 cursor-pointer"
-                priority
-                draggable={false}
-              />
+              <X alt="" draggable={false} />
             </label>
           </div>
         </fieldset>
