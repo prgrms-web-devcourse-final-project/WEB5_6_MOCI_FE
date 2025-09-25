@@ -1,6 +1,6 @@
 "use client";
 
-import { login } from "@/hooks/auth";
+// import { login } from "@/hooks/auth";
 import Button from "@/shared/components/Button";
 import Input from "@/shared/components/Input";
 import { useRouter } from "next/navigation";
@@ -22,8 +22,8 @@ function LoginForm() {
       alert("로그인 정보를 입력해주세요");
     } else {
       try {
-        const result = await login(form);
-        console.log("로그인성공", result);
+        // const result = await login(form);
+        // TODO : 유저정보 전역상태로 저장
         router.push("/main");
       } catch (e) {
         alert(e);

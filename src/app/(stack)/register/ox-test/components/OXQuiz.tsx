@@ -40,7 +40,7 @@ function OXQuiz() {
   const goNext = () => {
     if (current + 1 < questions.length) {
       setCurrent((c) => c + 1);
-    } else console.log(answers); // TODO : 회원가입 API 호출하기
+    } //  else TODO : 회원가입 API 호출하기
   };
 
   return (
