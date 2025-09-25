@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import O from "@/assets/O.svg";
 import X from "@/assets/X.svg";
 import { useState } from "react";

@@ -26,7 +26,7 @@ function LoginForm() {
         console.log("로그인성공", result);
         router.push("/main");
       } catch (e) {
-        console.error(e);
+        alert(e);
       }
     }
   };
