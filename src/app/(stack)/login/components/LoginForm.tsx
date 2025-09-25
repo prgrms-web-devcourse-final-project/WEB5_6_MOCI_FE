@@ -3,12 +3,14 @@
 // import { login } from "@/hooks/auth";
 import Button from "@/shared/components/Button";
 import Input from "@/shared/components/Input";
+// import { useAuthStore } from "@/store/authStore";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 function LoginForm() {
   const [form, setForm] = useState({ userId: "", password: "" });
   const router = useRouter();
+  // const setUser = useAuthStore((s) => s.setUser);
 
   const handleForm = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -23,7 +25,7 @@ function LoginForm() {
     } else {
       try {
         // const result = await login(form);
-        // TODO : 유저정보 전역상태로 저장
+        // setUser(result.user);
         router.push("/main");
       } catch (e) {
         alert(e);
