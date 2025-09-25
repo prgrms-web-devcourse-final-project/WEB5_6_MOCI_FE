@@ -1,6 +1,6 @@
 "use client";
 
-import LeftArrowIcon from "@/assets/icons/LeftArrowIcon";
+import LeftArrowIcon from "@/assets/icons/leftArrow.svg";
 import { usePathname, useRouter } from "next/navigation";
 
 const pageTitleList: Record<string, string> = {
@@ -22,12 +22,18 @@ function SubHeader({ pageTitle }: { pageTitle?: string }) {
   if (pageTitle) {
     headerTitle = pageTitle;
   } else {
-    headerTitle = pageTitleList[pathName];
+    for (const key in pageTitleList) {
+      if (pathName.startsWith(key)) {
+        headerTitle = pageTitleList[key];
+        break;
+      }
+    }
   }
 
   return (
-    <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[650px] min-w-[350px] flex items-center px-4 bg-lightyellow h-12">
+    <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[650px] min-w-[350px] flex items-center px-4 h-12 shadow-md">
       <button
+        type="button"
         onClick={handleBack}
         className="flex justify-center items-center w-8 h-full"
         aria-label="뒤로가기"

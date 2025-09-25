@@ -1,7 +1,7 @@
 "use client";
 
-import HamburgerIcon from "@/assets/icons/HamburgerIcon";
-import UserIcon from "@/assets/icons/UserIcon";
+import Hamburger from "@/assets/icons/hamburger.svg";
+import UserIcon from "@/assets/icons/user.svg";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
@@ -34,8 +34,12 @@ function MainHeader() {
   return (
     <>
       <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[650px] min-w-[350px] flex justify-between items-center px-4 h-12 z-10 shadow-md">
-        <button className="px-2 h-full" onClick={() => setOpenNav(!openNav)}>
-          <HamburgerIcon />
+        <button
+          type="button"
+          className="px-2 h-full"
+          onClick={() => setOpenNav(!openNav)}
+        >
+          <Hamburger />
         </button>
 
         <Link href={"/main"} aria-label="메인페이지로 이동" className="h-full">
