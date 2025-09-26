@@ -9,7 +9,7 @@ import { cva, VariantProps } from "class-variance-authority";
 const buttonVariants = cva(
   /* 공통스타일지정 
     rounded 8px, inline-flex, 가운데정렬, disabled : 커서🚫 color 변할 때 자연스럽게 변하도록(duration-150) 드래그 x 기본커서 : pointer 포커스되면 ring-2 disabled 색 gray&폰트 dark-gray font-bold*/
-  "rounded-lg  inline-flex shrink-0 items-center justify-center disabled:cursor-not-allowed transition-colors duration-150 select-none cursor-pointer focus-visible:ring-2 disabled:bg-gray disabled:text-darkgray font-bold enabled:hover:shadow-2xl enabled:hover:scale-y-105 enabled:hover:ring-4 enabled:hover:ring-darkgreen-default enabled:active:shadow-2xl enabled:active:scale-y-105 enabled:active:ring-4 enabled:active:ring-darkgreen-default",
+  "rounded-lg  inline-flex shrink-0 items-center justify-center disabled:cursor-not-allowed transition-colors duration-150 select-none cursor-pointer focus-visible:ring-2 disabled:bg-gray disabled:text-darkgray font-bold enabled:hover:shadow-2xl enabled:hover:scale-y-105 enabled:hover:ring-4 enabled:active:shadow-2xl enabled:active:scale-y-105 enabled:active:ring-4",
   {
     variants: {
       size: {
@@ -18,11 +18,11 @@ const buttonVariants = cva(
       },
       color: {
         green:
-          "bg-green-default text-white hover:bg-green-hover active:bg-green-hover", // 초록색 - 글자 흰색
+          "bg-green-default text-white hover:bg-green-hover active:bg-green-hover enabled:active:ring-darkgreen-default enabled:hover:ring-darkgreen-default", // 초록색 - 글자 흰색
         darkgreen:
-          "bg-darkgreen-default text-white hover:bg-darkgreen-hover active:bg-darkgreen-hover", // 짙은초록색 - 글자흰색
+          "bg-darkgreen-default text-white hover:bg-darkgreen-hover active:bg-darkgreen-hover enabled:active:ring-darkgreen-default enabled:hover:ring-darkgreen-default", // 짙은초록색 - 글자흰색
         yellow:
-          "bg-yellow-default text-black hover:bg-yellow-hover active:bg-yellow-hover", // 노란색 - 글자 검정색
+          "bg-yellow-default text-black hover:bg-yellow-hover active:bg-yellow-hover enabled:active:ring-yellow-default enabled:hover:ring-yellow-default", // 노란색 - 글자 검정색
       },
     },
     // 기본값 : 초록 md 사이즈 버튼
