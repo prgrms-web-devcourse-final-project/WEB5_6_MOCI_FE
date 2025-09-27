@@ -10,7 +10,7 @@ export const login = async (formInput: {
         charset: "UTF-8",
       },
       credentials: "include",
-      body: JSON.stringify({ ...formInput, loginType: "PHONE", socialId: "" }),
+      body: JSON.stringify({ ...formInput, loginType: "PHONE" }),
     });
 
     if (!res.ok) {
