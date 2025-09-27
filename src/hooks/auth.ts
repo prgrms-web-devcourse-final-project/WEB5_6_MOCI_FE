@@ -6,11 +6,10 @@ export const login = async (formInput: {
     const res = await fetch("http://localhost:8080/api/v1/auth/login", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        charset: "UTF-8",
+        "Content-Type": "application/json; charset: UTF-8",
       },
       credentials: "include",
-      body: JSON.stringify({ ...formInput, loginType: "PHONE", socialId: "" }),
+      body: JSON.stringify({ ...formInput, loginType: "PHONE" }),
     });
 
     if (!res.ok) {
@@ -23,7 +22,7 @@ export const login = async (formInput: {
     }
 
     const data = await res.json();
-    return data;
+    return data.data.user;
   } catch (e: unknown) {
     if (e instanceof Error) {
       throw new Error(e.message);
