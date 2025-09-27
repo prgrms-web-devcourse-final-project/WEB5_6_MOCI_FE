@@ -21,7 +21,7 @@ function EmailForm() {
         />
       </label>
 
-      <Button type="submit" className="mt-auto" fullWidth>
+      <Button type="submit" className="mt-auto sticky bottom-0" fullWidth>
         이메일 설정하기
       </Button>
     </form>
