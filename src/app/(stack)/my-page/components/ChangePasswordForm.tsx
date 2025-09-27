@@ -6,10 +6,14 @@ import EyeClose from "@/assets/icons/eyeClose.svg";
 import EyeOpen from "@/assets/icons/eyeOpen.svg";
 
 function ChangeButtonForm() {
-  const [hidePassword, setHidePassword] = useState(true);
+  const [hidePW, setHidePW] = useState(true);
+  const [hidePWValidate, setHidePWValidate] = useState(true);
 
   const toggleHidePW = () => {
-    setHidePassword(!hidePassword);
+    setHidePW(!hidePW);
+  };
+  const toggleHidePWValidate = () => {
+    setHidePWValidate(!hidePWValidate);
   };
 
   const changePassword = (e: FormEvent) => {
@@ -20,23 +24,24 @@ function ChangeButtonForm() {
   };
   return (
     <form onSubmit={changePassword} className="flex-1 flex flex-col gap-5">
-      <Input
-        type={hidePassword ? "password" : "text"}
-        placeholder="비밀번호"
-      ></Input>
-      <Input
-        type={hidePassword ? "password" : "text"}
-        placeholder="비밀번호확인"
-      ></Input>
-      <Button
-        color="yellow"
-        hasIcon
-        className="w-fit self-end"
-        onClick={toggleHidePW}
-      >
-        {hidePassword ? "비밀번호보기" : "비밀번호 가리기"}
-        {hidePassword ? <EyeOpen /> : <EyeClose />}
-      </Button>
+      <div className="flex gap-2">
+        <Input
+          type={hidePW ? "password" : "text"}
+          placeholder="비밀번호"
+        ></Input>
+        <button type="button" onClick={toggleHidePW}>
+          {hidePW ? <EyeOpen /> : <EyeClose />}
+        </button>
+      </div>
+      <div className="flex gap-2">
+        <Input
+          type={hidePWValidate ? "password" : "text"}
+          placeholder="비밀번호확인"
+        ></Input>
+        <button type="button" onClick={toggleHidePWValidate}>
+          {hidePWValidate ? <EyeOpen /> : <EyeClose />}
+        </button>
+      </div>
       <Button type="submit" className="mt-auto" fullWidth>
         비밀번호 바꾸기
       </Button>
