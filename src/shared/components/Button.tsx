@@ -23,6 +23,8 @@ const buttonVariants = cva(
           "bg-darkgreen-default text-white hover:bg-darkgreen-hover active:bg-darkgreen-hover enabled:active:ring-darkgreen-default enabled:hover:ring-darkgreen-default", // 짙은초록색 - 글자흰색
         yellow:
           "bg-yellow-default text-black hover:bg-yellow-hover active:bg-yellow-hover enabled:active:ring-yellow-default enabled:hover:ring-yellow-default", // 노란색 - 글자 검정색
+       white:
+          "bg-white text-black border-2 border-yellow-default hover:bg-yellow-hover active:bg-yellow-hover enabled:active:ring-yellow-default enabled:hover:ring-yellow-default", // 흰색 - 글자 검정색  
       },
     },
     // 기본값 : 초록 md 사이즈 버튼

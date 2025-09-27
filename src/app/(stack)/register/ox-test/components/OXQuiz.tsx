@@ -84,12 +84,12 @@ function OXQuiz() {
                 checked={answers[current] === true}
                 aria-label="o (할 수 있다)"
               />
-              <O alt="" draggable={false} />
+              <O  />
             </label>
             {/* x버튼 */}
             <label
               className={`p-6 cursor-pointer  rounded-lg bg-lightyellow hover:bg-lightgreen active:bg-lightgreen ${
-                answers[current] === true && "ring-4 ring-green-default"
+                answers[current] === false && "ring-4 ring-green-default"
               }`}
             >
               <input
@@ -102,7 +102,7 @@ function OXQuiz() {
                 checked={answers[current] === false}
                 aria-label="x (할 수 없다)"
               />
-              <X alt="" draggable={false} />
+              <X />
             </label>
           </div>
         </fieldset>
