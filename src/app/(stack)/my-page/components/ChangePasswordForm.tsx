@@ -29,7 +29,12 @@ function ChangeButtonForm() {
           type={hidePW ? "password" : "text"}
           placeholder="비밀번호"
         ></Input>
-        <button type="button" onClick={toggleHidePW}>
+        <button
+          type="button"
+          onClick={toggleHidePW}
+          aria-label="비밀번호 표시/숨기기"
+          aria-pressed={hidePW}
+        >
           {hidePW ? <EyeOpen /> : <EyeClose />}
         </button>
       </div>
@@ -38,7 +43,12 @@ function ChangeButtonForm() {
           type={hidePWValidate ? "password" : "text"}
           placeholder="비밀번호확인"
         ></Input>
-        <button type="button" onClick={toggleHidePWValidate}>
+        <button
+          type="button"
+          onClick={toggleHidePWValidate}
+          aria-label="비밀번호 표시/숨기기"
+          aria-pressed={hidePWValidate}
+        >
           {hidePWValidate ? <EyeOpen /> : <EyeClose />}
         </button>
       </div>
