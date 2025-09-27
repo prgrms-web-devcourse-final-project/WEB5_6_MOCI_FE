@@ -58,9 +58,11 @@ function RegisterPasswordForm({ onSubmit, isKeyboardOpen, isLoading }: Props) {
       }`}
     >
       <div>
-        <h3 className="text-3xl font-bold">비밀번호를 입력해 주세요.</h3>
+        <h3 className="text-2xl font-bold">비밀번호를 입력해 주세요.</h3>
         <div className="flex gap-2 mt-4">
-          <label htmlFor="password">비밀번호</label>
+          <label htmlFor="password" className="sr-only">
+            비밀번호
+          </label>
           <Input
             id="password"
             placeholder="비밀번호"
@@ -80,7 +82,9 @@ function RegisterPasswordForm({ onSubmit, isKeyboardOpen, isLoading }: Props) {
           </button>
         </div>
         <div className="flex gap-2 mt-4">
-          <label htmlFor="confirmPassword">비밀번호 확인</label>
+          <label htmlFor="confirmPassword" className="sr-only">
+            비밀번호 확인
+          </label>
           <Input
             id="confirmPassword"
             placeholder="비밀번호 확인"

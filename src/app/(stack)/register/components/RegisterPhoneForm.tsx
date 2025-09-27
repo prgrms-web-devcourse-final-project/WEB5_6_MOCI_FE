@@ -46,8 +46,10 @@ function RegisterPhoneForm({ onSubmit, isKeyboardOpen, isLoading }: Props) {
       }`}
     >
       <div>
-        <h3 className="text-3xl font-bold">전화번호를 입력해 주세요.</h3>
-        <label htmlFor="phone">전화번호</label>
+        <h3 className="text-2xl font-bold">전화번호를 입력해 주세요.</h3>
+        <label htmlFor="phone" className="sr-only">
+          전화번호
+        </label>
         <Input
           id="phone"
           placeholder="전화번호"
