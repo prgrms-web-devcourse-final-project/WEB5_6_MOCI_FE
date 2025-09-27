@@ -19,11 +19,15 @@ function UserInfo() {
   const [id, domain] = (user?.email ?? "@").split("@");
 
   return (
-    <div className="w-full flex flex-col items-center rounded-xl border p-5 gap-5">
+    <div className="w-full flex flex-col items-center rounded-xl border px-5 py-10 gap-10">
       <Image
         width={120}
         height={120}
-        src="/logo.png"
+        src=//   ? "userProfile.png" // user?.role === "USER"
+        //   : user?.role === "MENTOR"
+        //   ? "mentoProfile.png"
+        // :
+        "/logo.png"
         alt="프로필이미지"
       ></Image>
       <section aria-label="사용자정보" className="flex-center flex-col gap-2">
