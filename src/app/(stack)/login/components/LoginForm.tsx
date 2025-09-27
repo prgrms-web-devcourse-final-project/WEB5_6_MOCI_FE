@@ -1,14 +1,17 @@
 "use client";
 
-// import { login } from "@/hooks/auth";
+import { login } from "@/hooks/auth";
 import Button from "@/shared/components/Button";
 import Input from "@/shared/components/Input";
+import { useAuthStore } from "@/store/authStore";
+// import { useAuthStore } from "@/store/authStore";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 function LoginForm() {
   const [form, setForm] = useState({ userId: "", password: "" });
   const router = useRouter();
+  const setUser = useAuthStore((s) => s.setUser);
 
   const handleForm = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -22,9 +25,9 @@ function LoginForm() {
       alert("로그인 정보를 입력해주세요");
     } else {
       try {
-        // const result = await login(form);
-        // TODO : 유저정보 전역상태로 저장
-        router.push("/main");
+        const result = await login(form);
+        setUser(result.user);
+        // router.push("/main");
       } catch (e) {
         alert(e);
       }
