@@ -77,9 +77,32 @@ function RegisterForm() {
     setStep(2);
   };
 
-  const handlePhoneSubmit = (phone: string) => {
-    setRegisterUserInfo((prev) => ({ ...prev, phone }));
-    setStep(3);
+  const handlePhoneSubmit = async (phone: string) => {
+    if (isLoading) return;
+    setIsLoading(true);
+    // api 통신 중복검사
+    try {
+      const res = await fetch(`http://localhost:8080/api/v1/users/${phone}`, {
+        method: "GET",
+      });
+      if (res.status === 200) {
+        // ✅ 이미 DB에 있는 번호
+        alert("이미 존재하는 전화번호입니다.");
+        return; // 다음 단계로 진행하지 않음
+      }
+      if (res.status === 404) {
+        // ✅ DB에 없는 번호 → 다음 단계 진행
+        setRegisterUserInfo((prev) => ({ ...prev, phone }));
+        setStep(3);
+        return;
+      }
+      throw new Error("전화번호 중복 확인 실패");
+    } catch (error) {
+      console.error(error);
+      alert("서버 오류가 발생했습니다. 다시 시도해주세요.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handlePasswordSubmit = async (password: string) => {
@@ -135,6 +158,7 @@ function RegisterForm() {
           <RegisterPhoneForm
             isKeyboardOpen={isKeyboardOpen}
             onSubmit={handlePhoneSubmit}
+            isLoading={isLoading}
           />
         );
       case 3:

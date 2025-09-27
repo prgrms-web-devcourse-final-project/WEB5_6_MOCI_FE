@@ -5,9 +5,10 @@ import { useState, useEffect, useRef } from "react";
 interface Props {
   onSubmit: (phone: string) => void;
   isKeyboardOpen: boolean;
+  isLoading: boolean;
 }
 
-function RegisterPhoneForm({ onSubmit, isKeyboardOpen }: Props) {
+function RegisterPhoneForm({ onSubmit, isKeyboardOpen, isLoading }: Props) {
   const [phone, setPhone] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -57,8 +58,13 @@ function RegisterPhoneForm({ onSubmit, isKeyboardOpen }: Props) {
         />
       </div>
 
-      <Button size="md" fullWidth={true} type="submit" disabled={!isComplete}>
-        다음
+      <Button
+        size="md"
+        fullWidth={true}
+        type="submit"
+        disabled={!isComplete || isLoading}
+      >
+        {isLoading ? "처리중..." : "다음"}
       </Button>
     </form>
   );
