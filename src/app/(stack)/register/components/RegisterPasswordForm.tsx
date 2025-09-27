@@ -14,6 +14,7 @@ function RegisterPasswordForm({ onSubmit, isKeyboardOpen, isLoading }: Props) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+
   const [hidePW, setHidePW] = useState(true);
   const [hidePWValidate, setHidePWValidate] = useState(true);
 
@@ -36,6 +37,7 @@ function RegisterPasswordForm({ onSubmit, isKeyboardOpen, isLoading }: Props) {
   const toggleHidePW = () => {
     setHidePW(!hidePW);
   };
+
   const toggleHidePWValidate = () => {
     setHidePWValidate(!hidePWValidate);
   };
@@ -57,39 +59,41 @@ function RegisterPasswordForm({ onSubmit, isKeyboardOpen, isLoading }: Props) {
     >
       <div>
         <h3 className="text-3xl font-bold">비밀번호를 입력해 주세요.</h3>
-        <Input
-          placeholder="비밀번호"
-          type="password"
-          required
-          value={password}
-          ref={inputRef}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button
-          type="button"
-          onClick={toggleHidePW}
-          aria-label="비밀번호 표시/숨기기"
-          aria-pressed={hidePW}
-        >
-          {hidePW ? <EyeOpen /> : <EyeClose />}
-        </button>
-
-        <Input
-          placeholder="비밀번호 확인"
-          type="password"
-          required
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          className="mt-4"
-        />
-        <button
-          type="button"
-          onClick={toggleHidePWValidate}
-          aria-label="비밀번호 표시/숨기기"
-          aria-pressed={hidePWValidate}
-        >
-          {hidePWValidate ? <EyeOpen /> : <EyeClose />}
-        </button>
+        <div className="flex gap-2 mt-4">
+          <Input
+            placeholder="비밀번호"
+            type={hidePW ? "password" : "text"}
+            required
+            value={password}
+            ref={inputRef}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button
+            type="button"
+            onClick={toggleHidePW}
+            aria-label="비밀번호 표시/숨기기"
+            aria-pressed={hidePW}
+          >
+            {hidePW ? <EyeOpen /> : <EyeClose />}
+          </button>
+        </div>
+        <div className="flex gap-2 mt-4">
+          <Input
+            placeholder="비밀번호 확인"
+            type={hidePWValidate ? "password" : "text"}
+            required
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+          <button
+            type="button"
+            onClick={toggleHidePWValidate}
+            aria-label="비밀번호 표시/숨기기"
+            aria-pressed={hidePWValidate}
+          >
+            {hidePWValidate ? <EyeOpen /> : <EyeClose />}
+          </button>
+        </div>
         {passwordsMismatch && (
           <p className="mt-2 text-sm text-red-500">
             비밀번호가 일치하지 않습니다.
