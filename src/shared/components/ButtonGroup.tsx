@@ -35,7 +35,7 @@ function ButtonGroup({items}: ButtonGroupProps) {
       >
            <div className="flex items-center gap-3">
             <span aria-hidden="true">{icon}</span>
-            <span className="text-xl">{label}</span>
+            <span className="text-xl font-semibold">{label}</span>
           </div>
         </Link>
       ))} 
