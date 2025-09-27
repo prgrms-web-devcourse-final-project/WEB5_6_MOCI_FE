@@ -7,9 +7,9 @@ import RegisterPasswordForm from "./RegisterPasswordForm";
 import { useRouter } from "next/navigation";
 
 type RegisterUserInfo = {
-  name: string | null;
-  phone: string | null;
-  password: string | null;
+  name: string;
+  phone: string;
+  password: string;
 };
 
 type Step = 1 | 2 | 3;
@@ -24,9 +24,9 @@ function RegisterForm() {
   const [step, setStep] = useState<Step>(1);
   const [isLoading, setIsLoading] = useState(false);
   const [registerUserInfo, setRegisterUserInfo] = useState<RegisterUserInfo>({
-    name: null,
-    phone: null,
-    password: null,
+    name: "",
+    phone: "",
+    password: "",
   });
 
   useEffect(() => {

@@ -47,7 +47,9 @@ function RegisterPhoneForm({ onSubmit, isKeyboardOpen, isLoading }: Props) {
     >
       <div>
         <h3 className="text-3xl font-bold">전화번호를 입력해 주세요.</h3>
+        <label htmlFor="phone">전화번호</label>
         <Input
+          id="phone"
           placeholder="전화번호"
           required
           value={phone}
@@ -62,7 +64,8 @@ function RegisterPhoneForm({ onSubmit, isKeyboardOpen, isLoading }: Props) {
         size="md"
         fullWidth={true}
         type="submit"
-        disabled={!isComplete || isLoading}
+        aria-disabled={!isComplete || isLoading}
+        aria-busy={isLoading}
       >
         {isLoading ? "처리중..." : "다음"}
       </Button>

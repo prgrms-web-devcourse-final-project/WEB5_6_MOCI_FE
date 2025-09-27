@@ -31,7 +31,9 @@ function RegisterNameForm({ onSubmit, isKeyboardOpen }: Props) {
     >
       <div>
         <h3 className="text-3xl font-bold">이름을 입력해 주세요.</h3>
+        <label htmlFor="name">이름</label>
         <Input
+          id="name"
           placeholder="이름"
           required
           value={value}
@@ -44,7 +46,7 @@ function RegisterNameForm({ onSubmit, isKeyboardOpen }: Props) {
         size="md"
         fullWidth={true}
         type="submit"
-        disabled={!value.trim()} // 입력 없으면 비활성화
+        aria-disabled={!value.trim()} // 입력 없으면 비활성화
       >
         다음
       </Button>

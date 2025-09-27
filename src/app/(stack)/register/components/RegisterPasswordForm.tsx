@@ -60,7 +60,9 @@ function RegisterPasswordForm({ onSubmit, isKeyboardOpen, isLoading }: Props) {
       <div>
         <h3 className="text-3xl font-bold">비밀번호를 입력해 주세요.</h3>
         <div className="flex gap-2 mt-4">
+          <label htmlFor="password">비밀번호</label>
           <Input
+            id="password"
             placeholder="비밀번호"
             type={hidePW ? "password" : "text"}
             required
@@ -78,12 +80,15 @@ function RegisterPasswordForm({ onSubmit, isKeyboardOpen, isLoading }: Props) {
           </button>
         </div>
         <div className="flex gap-2 mt-4">
+          <label htmlFor="confirmPassword">비밀번호 확인</label>
           <Input
+            id="confirmPassword"
             placeholder="비밀번호 확인"
             type={hidePWValidate ? "password" : "text"}
             required
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
+            aria-describedby="confirmPassword-error"
           />
           <button
             type="button"
@@ -95,7 +100,7 @@ function RegisterPasswordForm({ onSubmit, isKeyboardOpen, isLoading }: Props) {
           </button>
         </div>
         {passwordsMismatch && (
-          <p className="mt-2 text-sm text-red-500">
+          <p id="confirmPassword-error" className="mt-2 text-sm text-red-500">
             비밀번호가 일치하지 않습니다.
           </p>
         )}
@@ -106,7 +111,8 @@ function RegisterPasswordForm({ onSubmit, isKeyboardOpen, isLoading }: Props) {
         fullWidth={true}
         type="submit"
         color="darkgreen"
-        disabled={!isValid || isLoading}
+        aria-disabled={!isValid || isLoading}
+        aria-busy={isLoading}
       >
         {isLoading ? "처리중..." : "회원가입 완료"}
       </Button>
