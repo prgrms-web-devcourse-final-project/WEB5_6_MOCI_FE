@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "../shared/styles/globals.css";
 import { pretendard } from "./fonts";
+import AuthProvider from "@/provider/AuthProvider";
 
 export const metadata: Metadata = {
   title: "디딤돌",
@@ -15,9 +16,11 @@ export default function RootLayout({
   return (
     <html lang="ko-KR" className={pretendard.variable}>
       <body className={`antialiased`}>
+        {/* <AuthProvider> */}
         <div className="m-auto max-w-[650px] min-w-[350px] h-dvh overflow-y-hidden">
           {children}
         </div>
+        {/* </AuthProvider> */}
       </body>
     </html>
   );
