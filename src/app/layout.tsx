@@ -15,7 +15,9 @@ export default function RootLayout({
   return (
     <html lang="ko-KR" className={pretendard.variable}>
       <body className={`antialiased`}>
-        <div className="m-auto max-w-[650px] min-w-[350px]">{children}</div>
+        <div className="m-auto max-w-[650px] min-w-[350px] h-dvh overflow-y-hidden">
+          {children}
+        </div>
       </body>
     </html>
   );
