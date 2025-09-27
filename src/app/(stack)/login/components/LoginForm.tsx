@@ -26,7 +26,7 @@ function LoginForm() {
     } else {
       try {
         const result = await login(form);
-        localStorage.setItem("userId", result.userId);
+        // localStorage.setItem("userId", result.userId);
         setUser(result.user);
         router.push("/main");
       } catch (e) {
