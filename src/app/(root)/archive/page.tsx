@@ -9,6 +9,7 @@ import ButtonGroup from "@/shared/components/ButtonGroup";
 import Button from "@/shared/components/Button";
 import ArchiveCard from "./components/ArchiveCard";
 import Input from "@/shared/components/Input";
+import Pagination from "@/shared/components/Pagination";
 
 function Page() {
   const items = [
@@ -79,7 +80,7 @@ function Page() {
             }}
           />
         </ul>
-        {/* <Pagination/> */}
+        <Pagination totalPages={5} currentPage={1} />
       </div>
     </div>
   );
