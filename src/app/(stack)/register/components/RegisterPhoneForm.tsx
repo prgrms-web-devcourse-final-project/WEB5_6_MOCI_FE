@@ -53,6 +53,7 @@ function RegisterPhoneForm({ onSubmit, isKeyboardOpen, isLoading }: Props) {
         <Input
           id="phone"
           placeholder="전화번호"
+          className="mt-4"
           required
           value={phone}
           ref={inputRef}

@@ -30,13 +30,14 @@ function RegisterNameForm({ onSubmit, isKeyboardOpen }: Props) {
       }`}
     >
       <div>
-        <h3 className="text-3xl font-bold">이름을 입력해 주세요.</h3>
+        <h3 className="text-2xl font-bold">이름을 입력해 주세요.</h3>
         <label htmlFor="name" className="sr-only">
           이름
         </label>
         <Input
           id="name"
           placeholder="이름"
+          className="mt-4"
           required
           value={value}
           ref={inputRef}
