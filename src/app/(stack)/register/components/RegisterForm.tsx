@@ -5,6 +5,8 @@ import RegisterNameForm from "./RegisterNameForm";
 import RegisterPhoneForm from "./RegisterPhoneForm";
 import RegisterPasswordForm from "./RegisterPasswordForm";
 import { useRouter } from "next/navigation";
+import { checkDuplicateId } from "@/api/checkDuplicateId";
+import { register } from "@/api/register";
 
 type RegisterUserInfo = {
   name: string;
@@ -82,23 +84,19 @@ function RegisterForm() {
     setIsLoading(true);
     // api 통신 중복검사
     try {
-      const res = await fetch(`http://localhost:8080/api/v1/users/${phone}`, {
-        method: "GET",
-      });
-      if (res.status === 200) {
-        // ✅ 이미 DB에 있는 번호
+      const result = await checkDuplicateId(phone);
+
+      if (result === "EXISTS") {
         alert("이미 존재하는 전화번호입니다.");
-        return; // 다음 단계로 진행하지 않음
-      }
-      if (res.status === 404) {
-        // ✅ DB에 없는 번호 → 다음 단계 진행
-        setRegisterUserInfo((prev) => ({ ...prev, phone }));
-        setStep(3);
         return;
       }
-      throw new Error("전화번호 중복 확인 실패");
-    } catch (error) {
-      console.error(error);
+
+      if (result === "NOT_FOUND") {
+        setRegisterUserInfo((prev) => ({ ...prev, phone }));
+        setStep(3);
+      }
+    } catch (err) {
+      console.error(err);
       alert("서버 오류가 발생했습니다. 다시 시도해주세요.");
     } finally {
       setIsLoading(false);
@@ -112,25 +110,13 @@ function RegisterForm() {
     //api 통신
 
     try {
-      const res = await fetch("http://localhost:8080/api/v1/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          loginType: "PHONE",
-          digitalLevelAnswers: [false, false, false, false, false],
-          name: registerUserInfo.name,
-          email: "",
-          userId: registerUserInfo.phone,
-          password,
-        }),
+      const data = await register({
+        name: registerUserInfo.name,
+        phone: registerUserInfo.phone,
+        password,
       });
 
-      if (!res.ok) {
-        throw new Error("회원가입 실패");
-      }
-
       //TODO: 회원가입 성공 알림창 띄우고 테스트 페이지로 이동한다고 유저에게 알려주기
-      const data = await res.json();
       console.log("회원가입 성공:", data);
 
       //로그인 페이지로 이동
