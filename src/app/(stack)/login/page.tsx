@@ -21,13 +21,14 @@ function Page() {
         </Link>
       </Button>
       <nav aria-label="소셜로그인 버튼" className="flex-center gap-10 py-5">
-        <button
+        <Link
+          href={"http://localhost:8080/oauth2/authorization/kakao"}
           type="button"
           className="cursor-pointer"
           aria-label="카카오 소셜 로그인"
         >
           <KakaoLogin />
-        </button>
+        </Link>
         <button
           type="button"
           className="cursor-pointer"
