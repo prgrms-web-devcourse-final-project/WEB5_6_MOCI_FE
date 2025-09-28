@@ -3,7 +3,7 @@ export const login = async (formInput: {
   password: string;
 }) => {
   try {
-    const res = await fetch("http://localhost:8080/api/v1/auth/login", {
+    const res = await fetch("http://localhost:8080/api/v1/auth/token", {
       method: "POST",
       headers: {
         "Content-Type": "application/json; charset: UTF-8",

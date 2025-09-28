@@ -1,6 +1,6 @@
 "use client";
 
-import { login } from "@/hooks/auth";
+import { login } from "@/api/login";
 import Button from "@/shared/components/Button";
 import Input from "@/shared/components/Input";
 import { useAuthStore } from "@/store/authStore";
