@@ -10,9 +10,15 @@ import Button from "@/shared/components/Button";
 import ArchiveCard from "./components/ArchiveCard";
 import Input from "@/shared/components/Input";
 import Pagination from "@/shared/components/Pagination";
+import Link from "next/link";
 
-function Page({ searchParams }: { searchParams: { page?: string } }) {
-  const currentPage = Number(searchParams.page || 1);
+async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ page: string }>;
+}) {
+  const { page } = await searchParams;
+  const currentPage = Number(page || 1);
   const items = [
     { icon: <KaKaoIcon />, label: "카카오톡", href: "/archive" },
     { icon: <KTXLogo />, label: "KTX", href: "/archive" },
@@ -43,10 +49,15 @@ function Page({ searchParams }: { searchParams: { page?: string } }) {
         fullWidth
         hasIcon
         color="darkgreen"
-        className="w-[calc(100%-8px)] self-center mt-2"
+        className="w-[calc(100%-8px)] self-center mt-2 p-0"
       >
-        <RightArrow />
-        홈으로 이동
+        <Link
+          href="/main"
+          className="flex items-center gap-2.5 w-full h-full px-4 py-3"
+        >
+          <RightArrow />
+          홈으로 이동
+        </Link>
       </Button>
       <div className="h-[calc(100dvh-110px)] overflow-y-auto">
         <h1 className="text-3xl text-darkgreen-default font-bold px-3 py-2">
@@ -81,6 +92,7 @@ function Page({ searchParams }: { searchParams: { page?: string } }) {
             }}
           />
         </ul>
+        {/* totalPage 알아오기 */}
         <Pagination totalPages={18} currentPage={currentPage} />
       </div>
     </div>

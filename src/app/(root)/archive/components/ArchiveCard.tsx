@@ -22,13 +22,13 @@ function ArchiveCard({
       >
         <Image
           src={imgsrc ?? "/logo.png"}
-          width={200}
+          width={150}
           height={120}
           alt="아카이브이미지"
           style={
             imgsrc
               ? { width: "100%", height: "auto", overflow: "hidden" }
-              : { overflow: "hidden" }
+              : { width: "auto", height: "auto", overflow: "hidden" }
           }
         ></Image>
       </div>
