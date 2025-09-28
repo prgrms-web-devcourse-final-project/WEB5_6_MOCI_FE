@@ -11,7 +11,8 @@ import ArchiveCard from "./components/ArchiveCard";
 import Input from "@/shared/components/Input";
 import Pagination from "@/shared/components/Pagination";
 
-function Page() {
+function Page({ searchParams }: { searchParams: { page?: string } }) {
+  const currentPage = Number(searchParams.page || 1);
   const items = [
     { icon: <KaKaoIcon />, label: "카카오톡", href: "/archive" },
     { icon: <KTXLogo />, label: "KTX", href: "/archive" },
@@ -80,7 +81,7 @@ function Page() {
             }}
           />
         </ul>
-        <Pagination totalPages={5} currentPage={1} />
+        <Pagination totalPages={18} currentPage={currentPage} />
       </div>
     </div>
   );

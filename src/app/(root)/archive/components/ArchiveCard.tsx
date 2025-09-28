@@ -16,7 +16,7 @@ function ArchiveCard({
     hover:ring-4 hover:ring-green-default hover:shadow-xl hover:shadow-darkgray "
     >
       <div
-        className={`bg-white rounded-lg overflow-clip aspect-[5/4] max-h-90${
+        className={`bg-white rounded-lg overflow-clip aspect-[5/4] max-h-80 ${
           imgsrc ? "" : " flex-center"
         }`}
       >
@@ -28,7 +28,7 @@ function ArchiveCard({
           style={
             imgsrc
               ? { width: "100%", height: "auto", overflow: "hidden" }
-              : undefined
+              : { overflow: "hidden" }
           }
         ></Image>
       </div>
