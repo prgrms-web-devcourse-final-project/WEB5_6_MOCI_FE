@@ -51,7 +51,7 @@ function ChangeButtonForm() {
             aria-label="비밀번호 표시/숨기기"
             aria-pressed={hidePWValidate}
           >
-            {hidePWValidate ? <EyeOpen /> : <EyeClose />}
+            {hidePWValidate ? <EyeClose /> : <EyeOpen />}
           </button>
         </div>
         <p className="text-xl text-red-500">{errorMessage}</p>
