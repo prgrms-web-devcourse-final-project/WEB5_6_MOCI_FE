@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 function Page() {
   return (
     <div className="w-full flex-1 overflow-hidden px-[10vw] sm:px-16 flex-center flex-col scroll-auto gap-2.5">
-      <h2 className="text-4xl font-bold self-center mb-15">로그인</h2>
+      <h2 className="text-4xl font-bold self-center mb-8">로그인</h2>
       <LoginForm />
       <Button color="darkgreen" fullWidth className="w-9/10 p-0">
         <Link href="/register" className="w-full h-full px-4 py-3">
