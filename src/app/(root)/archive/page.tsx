@@ -59,7 +59,7 @@ async function Page({
           홈으로 이동
         </Link>
       </Button>
-      <div className="h-[calc(100dvh-110px)] overflow-y-auto">
+      <div className="flex-1 overflow-y-auto">
         <h1 className="text-3xl text-darkgreen-default font-bold px-3 py-2">
           자주 찾는 서비스
         </h1>
