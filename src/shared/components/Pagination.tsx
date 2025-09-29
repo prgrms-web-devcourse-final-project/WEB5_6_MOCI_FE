@@ -7,11 +7,13 @@ interface PagenationType {
   currentPage: number;
 }
 function Pagination({ totalPages, currentPage }: PagenationType) {
-  const totalPageGroup = Math.ceil(totalPages / 5);
-  const currentGroup = Math.ceil(currentPage / 5);
+  const PAGE_GROUP_SIZE = 5;
 
-  const startPage = (currentGroup - 1) * 5 + 1;
-  const endPage = Math.min(startPage + 4, totalPages);
+  const totalPageGroup = Math.ceil(totalPages / PAGE_GROUP_SIZE);
+  const currentGroup = Math.ceil(currentPage / PAGE_GROUP_SIZE);
+
+  const startPage = (currentGroup - 1) * PAGE_GROUP_SIZE + 1;
+  const endPage = Math.min(startPage + PAGE_GROUP_SIZE - 1, totalPages);
 
   const pages = Array.from(
     { length: endPage - startPage + 1 },
