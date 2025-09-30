@@ -4,6 +4,8 @@ import { useState } from "react";
 import StepCategory from "./StepCategory";
 import StepQuestion from "./StepQuestion";
 import StepTarget from "./StepTarget";
+import { createChatRoom } from "@/api/createChatRoom";
+import { useRouter } from "next/navigation";
 
 
 type ChatFormData = {
@@ -19,9 +21,25 @@ export default function CreateChatForm() {
     question: "",
     target: "",
   });
+  const router = useRouter();
 
   const next = () => setStep((s) => s + 1);
 
+  const handleSubmit = async() => {
+
+    try{
+      const {id} = await createChatRoom(
+        formData.category,//카테고리
+        formData.question,//질문
+        formData.target //질문 대상
+      );
+
+      console.log("채팅방생성완료", id); // 추후 console 지우기
+      router.push(`/chat/${id}`) ;
+    }catch(e){
+      alert(e);
+    }
+  }
   return (
     <>
       {step === 0 && (
@@ -42,10 +60,7 @@ export default function CreateChatForm() {
         <StepTarget
           value={formData.target}
           onSelect={(target) => setFormData({ ...formData, target })}
-          onSubmit={() => {
-            console.log("채팅방생성완료", formData); //추후에 console 지우기
-            // TODO: API 호출 →채팅방 ID 응답-> /chat/[id] 이동
-          }}
+          onSubmit={handleSubmit}
         />
       )}
     </>
