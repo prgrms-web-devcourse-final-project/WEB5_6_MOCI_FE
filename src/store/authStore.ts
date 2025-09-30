@@ -34,7 +34,6 @@ export const useAuthStore = create<AuthState>((set) => ({
       });
       if (res.ok) {
         const data = await res.json();
-        console.log(data);
         set({ user: data.user });
       } else {
         set({ user: null });

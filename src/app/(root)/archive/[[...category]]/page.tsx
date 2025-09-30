@@ -13,27 +13,38 @@ import Input from "@/shared/components/Input";
 import Pagination from "@/shared/components/Pagination";
 import Link from "next/link";
 import { getArchiveList } from "@/api/getArchiveList";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import ArchiveCard from "../components/ArchiveCard";
 
 const matchCategory = {
-  kakaotalk: "카카오톡",
-  ktx: "교통",
-  youtube: "유튜브",
-  coupang: "쿠팡",
-  delivery: "배달",
-  bus: "버스",
-  all: "전체자료",
+  kakaotalk: { text: "카카오톡", cat: "KAKAO_TALK" },
+  ktx: { text: "교통", cat: "KTX" },
+  youtube: { text: "유튜브", cat: "YOUTUBE" },
+  coupang: { text: "쿠팡", cat: "COUPANG" },
+  delivery: { text: "배달", cat: "BAEMIN" },
+  bus: { text: "버스", cat: "INTERCITY_BUS" },
+  all: { text: "전체자료", cat: undefined },
 } as const;
 
+const matchCatResponse = {
+  KAKAO_TALK: "kakaotalk",
+  YOUTUBE: "youtube",
+  KTX: "ktx",
+  INTERCITY_BUS: "bus",
+  BAEMIN: "delivery",
+  COUPANG: "coupang",
+};
+
 type CategoryKey = keyof typeof matchCategory;
+export type ResponseCatKey = keyof typeof matchCatResponse;
 // type CategoryValue = (typeof matchCategory)[CategoryKey];
 
 interface ArchiveType {
   id: number;
   title: string;
-  thumbnail: string | null;
+  thumbnail: string | null; // 파일업로드 기능 완료되면 수정필요
   createdAt: string;
+  category: ResponseCatKey;
 }
 
 interface ArchiveResponseType {
@@ -53,7 +64,6 @@ async function Page({
   const { page, keyword } = await searchParams;
   const param = await params;
   const category = param?.category ?? "all";
-  console.log(category);
   const currentPage = Number(page || 1);
   const items = [
     {
@@ -103,10 +113,11 @@ async function Page({
   ];
 
   const archiveList: ArchiveResponseType = await getArchiveList({
+    category: matchCategory[category].cat,
     keyword: keyword,
     page: String(currentPage - 1),
   });
-  console.log(archiveList);
+
   if (!archiveList) notFound();
   return (
     <div className="flex-1 flex flex-col gap-2">
@@ -131,10 +142,7 @@ async function Page({
         <div className="bg-lightyellow p-3 h-80">
           <ButtonGroup items={items} />
         </div>
-        <form
-          className="flex justify-between items-center gap-3 px-5 py-3"
-          // onSubmit={searchArchive}
-        >
+        <form className="flex justify-between items-center gap-3 px-5 py-3">
           <label htmlFor="keyword" className="sr-only">
             검색
           </label>
@@ -143,26 +151,35 @@ async function Page({
             name="keyword"
             id="keyword"
             placeholder="검색어를 입력하세요"
+            defaultValue={keyword}
           />
           <Button color="darkgreen">검색</Button>
         </form>
         <div className="flex justify-between items-center">
           <h1 className="text-3xl text-darkgreen-default font-bold px-5 py-3">
-            {matchCategory[category]}
+            {matchCategory[category].text}
           </h1>
         </div>
         <ul className="p-5 pt-0 flex flex-col gap-5">
-          {archiveList.archives.map(({ id, title, thumbnail, createdAt }) => (
-            <ArchiveCard
-              key={id}
-              cardInfo={{
-                imgsrc: thumbnail,
-                title: title,
-                category: "카카오톡",
-                createdAt: createdAt.slice(0, 10),
-              }}
-            />
-          ))}
+          {archiveList.archives ? (
+            archiveList.archives.map(
+              ({ id, title, thumbnail, createdAt, category }) => (
+                <ArchiveCard
+                  key={id}
+                  cardInfo={{
+                    imgsrc: thumbnail,
+                    title: title,
+                    category:
+                      matchCategory[matchCatResponse[category] as CategoryKey]
+                        .text,
+                    createdAt: createdAt.slice(0, 10),
+                  }}
+                />
+              )
+            )
+          ) : (
+            <p className="flex-center">자료가 없습니다</p>
+          )}
         </ul>
         <Pagination
           totalPages={archiveList.totalPages}
