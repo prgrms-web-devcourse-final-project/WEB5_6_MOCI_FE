@@ -33,7 +33,7 @@ function MainHeader() {
 
   return (
     <>
-      <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[650px] min-w-[350px] flex justify-between items-center px-4 h-12 z-10 shadow-md">
+      <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[650px] min-w-[350px] flex justify-between items-center px-4 h-12 z-10 shadow-md bg-white">
         <button
           type="button"
           className="px-2 h-full"

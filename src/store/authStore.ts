@@ -36,6 +36,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         set({ user: data.data });
       } else if (res.status === 401) {
         set({ user: null });
+
       } else {
         console.error("사용자 정보를 가져오는데 실패하였습니다");
         set({ user: null });
