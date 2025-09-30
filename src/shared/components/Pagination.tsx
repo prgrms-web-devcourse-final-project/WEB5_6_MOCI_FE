@@ -5,9 +5,10 @@ import Front from "@/assets/icons/rightArrow_.svg";
 interface PagenationType {
   totalPages: number;
   currentPage: number;
+  keyword?: string;
 }
-function Pagination({ totalPages, currentPage }: PagenationType) {
-  const PAGE_GROUP_SIZE = 5;
+function Pagination({ totalPages, currentPage, keyword }: PagenationType) {
+  const PAGE_GROUP_SIZE = 10;
 
   const totalPageGroup = Math.ceil(totalPages / PAGE_GROUP_SIZE);
   const currentGroup = Math.ceil(currentPage / PAGE_GROUP_SIZE);
@@ -24,7 +25,7 @@ function Pagination({ totalPages, currentPage }: PagenationType) {
     <div className="flex-center gap-2 p-5">
       {currentGroup > 1 && (
         <Link
-          href={`?page=${startPage - 1}`}
+          href={`?${keyword ? `keyword=${keyword}&` : ""}page=${startPage - 1}`}
           className="mr-2 flex-center hover:scale-125"
         >
           <Back />
@@ -34,7 +35,7 @@ function Pagination({ totalPages, currentPage }: PagenationType) {
       {pages.map((page) => (
         <Link
           key={page}
-          href={`?page=${page}`}
+          href={`?${keyword ? `keyword=${keyword}&` : ""}page=${page}`}
           className={`w-10 h-10 flex-center rounded-full text-lg  ${
             page === currentPage ? "text-white bg-green-default" : ""
           } font-bold`}
@@ -44,7 +45,7 @@ function Pagination({ totalPages, currentPage }: PagenationType) {
       ))}
       {currentGroup < totalPageGroup && (
         <Link
-          href={`?page=${endPage + 1}`}
+          href={`?${keyword ? `keyword=${keyword}&` : ""}page=${endPage + 1}`}
           className="pl-2 flex-center hover:scale-125"
         >
           <Front />
