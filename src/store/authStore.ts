@@ -22,24 +22,39 @@ export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   setUser: (user: User) => set({ user }),
   fetchUser: async () => {
-    const userId = localStorage.getItem("userId");
-    if (!userId) set({ user: null });
-    else {
-      const res = await fetch(`http://localhost:8080/api/v1/users/${userId}`, {
+    try {
+      const res = await fetch(`http://localhost:8080/api/v1/users/me`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json; charset: UTF-8",
         },
         credentials: "include",
       });
+
       if (res.ok) {
         const data = await res.json();
-        set({ user: data.user });
-      } else {
+        set({ user: data.data });
+      } else if (res.status === 401) {
         set({ user: null });
-        localStorage.removeItem("userId");
+
+      } else {
+        console.error("사용자 정보를 가져오는데 실패하였습니다");
+        set({ user: null });
       }
+    } catch (err) {
+      console.error(err);
+      set({ user: null });
     }
   },
-  logout: () => set({ user: null }),
+  logout: async () => {
+    const res = await fetch(`http://localhost:8080/api/v1/auth/logout`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+    if (res.ok) {
+      set({ user: null });
+    } else {
+      alert("로그아웃에 실패하였습니다");
+    }
+  },
 }));

@@ -50,8 +50,7 @@ function LoginForm() {
     } else {
       try {
         const result = await login(form);
-        // localStorage.setItem("userId", result.userId);
-        setUser(result.user);
+        setUser(result);
         router.push("/main");
       } catch (e) {
         alert(e);
