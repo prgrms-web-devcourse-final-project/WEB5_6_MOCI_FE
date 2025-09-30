@@ -16,16 +16,16 @@ function StepTarget({value, onSelect,onSubmit}: StepTargetProps) {
        <div className="flex flex-col w-full gap-8">
         <Button 
           fullWidth
-          onClick={()=> onSelect("Mentor")}
-          className={value === "Mentor" ? "bg-green-hover ring-4 ring-darkgreen-default" : ""}
+          onClick={()=> onSelect("mentor")}
+          className={value === "mentor" ? "bg-green-hover ring-4 ring-darkgreen-default" : ""}
         >
           멘토에게 질문하기
         </Button>
 
         <Button 
           fullWidth
-          onClick={()=> onSelect("AI")}
-          className={`mb-25 ${value === "AI" ? "bg-green-hover ring-4 ring-darkgreen-default" : ""}`}
+          onClick={()=> onSelect("ai")}
+          className={`mb-25 ${value === "ai" ? "bg-green-hover ring-4 ring-darkgreen-default" : ""}`}
         >
           AI에게 질문하기
         </Button>
