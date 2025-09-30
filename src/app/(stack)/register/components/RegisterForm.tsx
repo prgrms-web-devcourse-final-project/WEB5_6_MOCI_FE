@@ -96,8 +96,10 @@ function RegisterForm() {
         setStep(3);
       }
     } catch (err) {
-      console.error(err);
-      alert("서버 오류가 발생했습니다. 다시 시도해주세요.");
+      // checkDuplicateId 에서 throw한 Error 메시지를 그대로 사용
+      if (err instanceof Error) {
+        alert(err.message);
+      }
     } finally {
       setIsLoading(false);
     }
