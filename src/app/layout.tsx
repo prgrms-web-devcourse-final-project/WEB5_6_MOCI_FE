@@ -17,9 +17,9 @@ export default function RootLayout({
     <html lang="ko-KR" className={pretendard.variable}>
       <body className={`antialiased`}>
         <AuthProvider>
-        <div className="m-auto max-w-[650px] min-w-[350px] h-dvh overflow-y-hidden">
-          {children}
-        </div>
+          <div className="m-auto max-w-[650px] min-w-[350px] h-dvh overflow-y-hidden">
+            {children}
+          </div>
         </AuthProvider>
       </body>
     </html>
