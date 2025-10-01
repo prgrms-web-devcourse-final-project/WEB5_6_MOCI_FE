@@ -11,27 +11,31 @@ function WriteForm() {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async () => {
-    // if (isLoading) return;
-    // setIsLoading(true);
-    console.log(title, category, description);
+    if (isLoading) return;
+    setIsLoading(true);
 
-    {
-      /*try {
+    try {
       const res = await fetch(
         "http://localhost:8080/api/v1/admin/archive/public",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            title: "",
-            description: "",
-            category: "",
+            title,
+            description,
+            category,
             subCategory: "",
-            fileIds: [],
+            fileIds,
           }),
         }
       );
-    } catch (error) {}*/
+      if (!res.ok) {
+        throw new Error("작성 글 업로드 실패");
+      }
+    } catch (error) {
+      console.error("작성된 글 업로드 중 오류 발생:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 

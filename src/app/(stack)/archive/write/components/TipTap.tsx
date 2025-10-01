@@ -1,5 +1,6 @@
 "use client";
 
+import { uploadFile } from "@/api/uploadFile";
 import Button from "@/shared/components/Button";
 import Image from "@tiptap/extension-image";
 import { EditorContent, useEditor } from "@tiptap/react";
@@ -37,23 +38,15 @@ function TipTapEditor({ onChange }: Props) {
     return null;
   }
 
-  // 파일 업로드 함수
+  // 이미지 파일 업로드
   const handleImageUpload = async (file: File) => {
-    const formData = new FormData();
-    formData.append("uploadFile", file);
+    try {
+      const { url } = await uploadFile(file);
 
-    const res = await fetch("http://localhost:8080/api/v1/file", {
-      method: "POST",
-      body: formData,
-    });
-    const data = await res.json();
-
-    // 서버에서 반환된 URL 삽입
-    editor
-      .chain()
-      .focus()
-      .setImage({ src: `http://localhost:8080/uploads/${data.data.file_url}` })
-      .run();
+      editor.chain().focus().setImage({ src: url }).run();
+    } catch (error) {
+      console.error("이미지 업로드 중 오류 발생:", error);
+    }
   };
 
   return (
@@ -95,7 +88,7 @@ function TipTapEditor({ onChange }: Props) {
       {/* 에디터 */}
       <EditorContent
         editor={editor}
-        className="w-full h-[320px] resize-none px-4 py-3 rounded-md text-black border-black/25 outline-none"
+        className="w-full min-h-[320px] resize-none px-4 py-3 rounded-md text-black border-black/25 outline-none"
       />
     </div>
   );
