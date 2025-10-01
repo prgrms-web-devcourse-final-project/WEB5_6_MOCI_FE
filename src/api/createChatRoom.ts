@@ -31,9 +31,13 @@ export const createChatRoom = async (
 
     const json = await res.json();
 
-    return {id:json.data.id};
-    
-
+    //target별로 방 ID 다르게 받기
+    const roomId =
+      target === "ai"
+        ? json.data.userMessage.roomId
+        : json.data.id;
+        
+    return { id: roomId, target };
   }catch(e){
     if(e instanceof Error){
       throw new Error(e.message);

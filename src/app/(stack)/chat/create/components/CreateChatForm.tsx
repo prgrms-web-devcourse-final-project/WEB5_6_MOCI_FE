@@ -28,14 +28,18 @@ export default function CreateChatForm() {
   const handleSubmit = async() => {
 
     try{
-      const {id} = await createChatRoom(
+      const {id, target} = await createChatRoom(
         formData.category,//카테고리
         formData.question,//질문
         formData.target //질문 대상
       );
 
       console.log("채팅방생성완료", id); // 추후 console 지우기
-      router.push(`/chat/${id}`) ;
+      if(target === "ai"){
+        router.push(`/chat/${id}/AI`);
+      }else{
+        router.push(`/chat/${id}/mento`);
+      }
     }catch(e){
       alert(e);
     }
