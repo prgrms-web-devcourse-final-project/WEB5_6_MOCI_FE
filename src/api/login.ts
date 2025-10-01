@@ -2,8 +2,10 @@ export const login = async (formInput: {
   userId: string;
   password: string;
 }) => {
+  formInput.userId = formInput.userId.replace(/-/g, ""); // 하이픈 제거
+
   try {
-    const res = await fetch("http://localhost:8080/api/v1/auth/token", {
+    const res = await fetch("http://localhost:8080/api/v1/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json; charset: UTF-8",

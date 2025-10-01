@@ -78,7 +78,7 @@ function RegisterPasswordForm({ onSubmit, isKeyboardOpen, isLoading }: Props) {
             aria-label="비밀번호 표시/숨기기"
             aria-pressed={hidePW}
           >
-            {hidePW ? <EyeOpen /> : <EyeClose />}
+            {hidePW ? <EyeClose /> : <EyeOpen />}
           </button>
         </div>
         <div className="flex gap-2 mt-4">
@@ -100,7 +100,7 @@ function RegisterPasswordForm({ onSubmit, isKeyboardOpen, isLoading }: Props) {
             aria-label="비밀번호 표시/숨기기"
             aria-pressed={hidePWValidate}
           >
-            {hidePWValidate ? <EyeOpen /> : <EyeClose />}
+            {hidePWValidate ? <EyeClose /> : <EyeOpen />}
           </button>
         </div>
         {passwordsMismatch && (
