@@ -1,7 +1,7 @@
 
 export const createChatRoom = async (
   category:string,
-  title:string,
+  question:string,
   target:string
   ) => {
   let endpoint;
@@ -20,8 +20,8 @@ export const createChatRoom = async (
       },
       credentials: "include",
       body: JSON.stringify({
-        title, //=> content나 question이 들어가야할 듯함
         category,
+        question,
       }),
     });
 
