@@ -153,12 +153,19 @@ async function Page({
             placeholder="검색어를 입력하세요"
             defaultValue={keyword}
           />
-          <Button color="darkgreen">검색</Button>
+          <Button type="submit" color="darkgreen">
+            검색
+          </Button>
         </form>
-        <div className="flex justify-between items-center">
-          <h1 className="text-3xl text-darkgreen-default font-bold px-5 py-3">
+        <div className="flex justify-between items-center p-5 ">
+          <h1 className="text-3xl text-darkgreen-default font-bold ">
             {matchCategory[category].text}
           </h1>
+          <Button className="p-0">
+            <Link href="/archive" className="px-4 py-3">
+              검색초기화
+            </Link>
+          </Button>
         </div>
         <ul className="p-5 pt-0 flex flex-col gap-5">
           {archiveList.archives ? (
@@ -167,6 +174,7 @@ async function Page({
                 <ArchiveCard
                   key={id}
                   cardInfo={{
+                    id,
                     imgsrc: thumbnail,
                     title: title,
                     category:
