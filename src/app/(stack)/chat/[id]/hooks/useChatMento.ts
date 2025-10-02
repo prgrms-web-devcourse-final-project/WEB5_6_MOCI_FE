@@ -60,6 +60,7 @@ export default function useChatMento() {
 
     client.activate();
     clientRef.current = client;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const disconnect = useCallback(() => {
