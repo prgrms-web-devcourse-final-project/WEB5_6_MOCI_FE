@@ -4,9 +4,9 @@ import Button from "@/shared/components/Button";
 import StackHeader from "@/shared/components/StackHeader";
 // import { useEffect, useRef, useState } from "react";
 
-import ChatList from "../components/ChatList";
+import ChatListMento from "../components/ChatListMento";
 
-async function Page({ params }: { params: Promise<{ id: number }> }) {
+async function Page({ params }: { params: Promise<{ id: string }> }) {
   const param = await params;
   const id = param.id;
   // const pathName = usePathname();
@@ -88,7 +88,7 @@ async function Page({ params }: { params: Promise<{ id: number }> }) {
             </p>
           </>
         </div>
-        <ChatList id={id} />
+        <ChatListMento id={id} />
       </main>
     </>
   );
