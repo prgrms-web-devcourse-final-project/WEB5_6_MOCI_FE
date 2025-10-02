@@ -1,5 +1,6 @@
 export interface APIerror {
   status: number;
+  message: string;
 }
 
 export const getChatMsgMento = async (roomId: number) => {
@@ -15,7 +16,7 @@ export const getChatMsgMento = async (roomId: number) => {
   );
   const data = await res.json();
   if (!res.ok) {
-    const error: APIerror = { status: data.status };
+    const error: APIerror = { status: data.code, message: data.message };
     throw error;
   }
   return data.data;
