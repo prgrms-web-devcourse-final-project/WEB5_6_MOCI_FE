@@ -15,7 +15,7 @@ export const getChatMsgMento = async (roomId: number) => {
   );
   const data = await res.json();
   if (!res.ok) {
-    const error: APIerror = { status: data.status };
+    const error: APIerror = { status: data.code };
     throw error;
   }
   return data.data;
