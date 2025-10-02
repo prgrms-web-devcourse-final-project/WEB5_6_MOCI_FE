@@ -1,0 +1,16 @@
+@layer utilities {
+  /*헤더 높이 고정: 48px*/
+  .root-min-h {
+    min-height: 100dvh;
+    padding-top: 3rem;
+    padding-bottom: env(safe-area-inset-bottom);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

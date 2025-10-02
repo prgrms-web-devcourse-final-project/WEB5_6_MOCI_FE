@@ -1,0 +1,33 @@
+@theme {
+  /* green */
+  --color-green-default: #008b09;
+  --color-green-hover: #007507;
+
+  /* darkgreen */
+  --color-darkgreen-default: #0e3d18;
+  --color-darkgreen-hover: #3e7d4d;
+
+  /* yellow */
+  --color-yellow-default: #ffc51b;
+  --color-yellow-hover: #ffe38c;
+
+  /* lightyellow = header 색상 */
+  --color-lightyellow: #fefeea;
+  --color-lightgreen: #e5e5c5;
+
+  /* white, black */
+  --color-white: #ffffff;
+  --color-black: #020617;
+
+  /*gray = disabled*/
+  --color-gray: #d2d2d2;
+  --color-darkgray: #444444;
+}
+
+/* 다크모드관련 */
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+} */
