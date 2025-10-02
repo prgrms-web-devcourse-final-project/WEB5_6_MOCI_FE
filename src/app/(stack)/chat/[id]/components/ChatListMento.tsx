@@ -40,6 +40,7 @@ function ChatListMento({ id }: { id: string }) {
     return () => {
       disconnect();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const onSendMessage = () => {

@@ -1,4 +1,4 @@
-import UserIcon from "@/assets/icons/user.svg";
+// import UserIcon from "@/assets/icons/user.svg";
 import Button from "@/shared/components/Button";
 import ButtonGroup from "@/shared/components/ButtonGroup";
 import Image from "next/image";
