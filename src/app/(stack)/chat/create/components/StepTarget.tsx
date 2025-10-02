@@ -1,10 +1,11 @@
 "use client";
 
 import Button from "@/shared/components/Button";
+import { ChatTarget } from "@/types/chat";
 
 type StepTargetProps = {
-  value : string;
-  onSelect: (target: string) => void;
+  value : ChatTarget;
+  onSelect: (target: ChatTarget) => void;
   onSubmit: () => void;
 }
 
