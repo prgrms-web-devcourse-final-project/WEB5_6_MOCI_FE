@@ -13,7 +13,7 @@ import Input from "@/shared/components/Input";
 import Pagination from "@/shared/components/Pagination";
 import Link from "next/link";
 import { getArchiveList } from "@/api/getArchiveList";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import ArchiveCard from "../components/ArchiveCard";
 
 const matchCategory = {
