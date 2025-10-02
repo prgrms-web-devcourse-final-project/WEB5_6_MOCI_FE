@@ -22,6 +22,10 @@ export default function useChatMento() {
         alert("채팅방 조회 권한이 없습니다");
         router.push("/main");
       }
+      if ((e as APIerror).status === 404) {
+        alert("채팅방이 존재하지 않습니다");
+        router.push("/main");
+      }
     }
 
     const client = new Client({
