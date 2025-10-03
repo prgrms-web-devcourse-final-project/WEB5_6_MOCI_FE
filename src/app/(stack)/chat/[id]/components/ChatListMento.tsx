@@ -71,9 +71,9 @@ function ChatListMento({ id }: { id: string }) {
           !messages || messages.length === 0 ? (
             <p className="text-xl text-center">채팅이 없습니다</p>
           ) : (
-            messages.map(({ sender, content }, i) => (
+            messages.map(({ id, sender, content }, i) => (
               <Chat
-                key={i} // messageId로 수정해야될 것 같음
+                key={id}
                 text={content}
                 sender={name === sender ? "me" : "others"}
               />
@@ -91,7 +91,7 @@ function ChatListMento({ id }: { id: string }) {
         <input
           name="chatInputField"
           id="chatInputField"
-          className="flex-1 bg-white rounded-full border-2 text-xl p-3 resize-none h-fit"
+          className="flex-1 bg-white rounded-full border-2 text-xl p-3 resize-none h-fit min-w-0"
           placeholder="질문을 입력하세요"
           onChange={handleText}
           value={text}

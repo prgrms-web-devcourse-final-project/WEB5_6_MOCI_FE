@@ -4,7 +4,12 @@ import SockJS from "sockjs-client";
 import { useCallback, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
-export type Message = { sender: string; content: string };
+export type Message = {
+  id: number;
+  sender: string;
+  content: string;
+  createdAt: string;
+};
 
 export default function useChatMento() {
   const [connectionStatus, setConnectionStatus] = useState("연결되지않음");
@@ -26,6 +31,13 @@ export default function useChatMento() {
         alert("채팅방이 존재하지 않습니다");
         router.push("/main");
       }
+      if ((e as APIerror).status === 401) {
+        alert(
+          "로그인을 하셔야 채팅방에 입장하실 수 있습니다. 로그인페이지로 이동합니다."
+        );
+        router.push("/login");
+      }
+      return;
     }
 
     const client = new Client({
@@ -51,7 +63,6 @@ export default function useChatMento() {
         const receivedMessage = JSON.parse(message.body);
         setMessages((prevMessages) => [...prevMessages, receivedMessage]);
       });
-      getChatMsgMento(Number(roomId));
     };
 
     client.onDisconnect = () => {

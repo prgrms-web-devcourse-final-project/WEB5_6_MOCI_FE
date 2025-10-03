@@ -1,14 +1,23 @@
 // import { usePathname } from "next/navigation";
 import Help from "@/assets/icons/help.svg";
-import Button from "@/shared/components/Button";
 import StackHeader from "@/shared/components/StackHeader";
 // import { useEffect, useRef, useState } from "react";
 
 import ChatListMento from "../components/ChatListMento";
+import ChatRoomButton from "../components/ChatRoomButton";
 
-async function Page({ params }: { params: Promise<{ id: string }> }) {
+async function Page({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ category: string; question: string }>;
+}) {
   const param = await params;
+  const searchParam = await searchParams;
   const id = param.id;
+  const category = searchParam.category;
+  const question = searchParam.question;
   // const pathName = usePathname();
 
   // const [containerHeight, setContainerHeight] = useState<string>("100%");
@@ -73,9 +82,7 @@ async function Page({ params }: { params: Promise<{ id: string }> }) {
       <StackHeader />
       <main className="relative max-h-[calc(100dvh-48px)] flex flex-col flex-1 min-h-0">
         <div className="h-20 p-3 flex-center absolute left-0 right-0 shrink-0">
-          <Button color="yellow" className="px-15 rounded-full">
-            AI에게 물어보기
-          </Button>
+          <ChatRoomButton id={id} category={category} question={question} />
           <>
             <button
               type="button"
