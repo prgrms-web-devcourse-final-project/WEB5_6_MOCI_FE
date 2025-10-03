@@ -120,7 +120,7 @@ async function Page({
 
   if (!archiveList) notFound();
   return (
-    <div className="flex-1 flex flex-col gap-2">
+    <div className="flex flex-col gap-2 max-h-[calc(100dvh-48px)]">
       <Button
         fullWidth
         hasIcon
