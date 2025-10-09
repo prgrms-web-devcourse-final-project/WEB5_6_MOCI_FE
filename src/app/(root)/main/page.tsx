@@ -1,7 +1,7 @@
 // "use client";
 // import { useAuthStore } from "@/store/authStore";
-import ManagerMain from "./components/ManagerMain";
-import MenteeMain from "./components/MenteeMain";
+// import ManagerMain from "./components/ManagerMain";
+// import MenteeMain from "./components/MenteeMain";
 import MentorMain from "./components/MentorMain";
 
 function Page() {

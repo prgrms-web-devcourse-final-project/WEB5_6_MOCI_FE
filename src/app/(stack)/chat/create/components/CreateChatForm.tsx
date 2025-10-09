@@ -4,14 +4,16 @@ import { useState } from "react";
 import StepCategory from "./StepCategory";
 import StepQuestion from "./StepQuestion";
 import StepTarget from "./StepTarget";
-import { createChatRoom } from "@/api/createChatRoom";
 import { useRouter } from "next/navigation";
+import { ChatTarget } from "@/types/chat";
+import { createAIChatRoom } from "@/api/createAIChatRoom";
+import { createMentorChatRoom } from "@/api/createMentorChatRoom";
 
 
 type ChatFormData = {
   category: string;
   question: string;
-  target: string;
+  target: ChatTarget;
 };
 
 export default function CreateChatForm() {
@@ -19,7 +21,7 @@ export default function CreateChatForm() {
   const [formData, setFormData] = useState<ChatFormData>({
     category: "",
     question: "",
-    target: "",
+    target: "" as ChatTarget,
   });
   const router = useRouter();
 
@@ -28,14 +30,18 @@ export default function CreateChatForm() {
   const handleSubmit = async() => {
 
     try{
-      const {id} = await createChatRoom(
-        formData.category,//카테고리
-        formData.question,//질문
-        formData.target //질문 대상
-      );
+       const result =
+        formData.target === "ai"
+          ? await createAIChatRoom(formData.category, formData.question)
+          : await createMentorChatRoom(formData.category, formData.question);
 
-      console.log("채팅방생성완료", id); // 추후 console 지우기
-      router.push(`/chat/${id}`) ;
+      console.log("채팅방생성완료", result.id); // 추후 console 지우기
+
+      if(result.target === "ai"){
+        router.push(`/chat/${result.id}/ai`);
+      }else{
+        router.push(`/chat/${result.id}/mentor`);
+      }
     }catch(e){
       alert(e);
     }

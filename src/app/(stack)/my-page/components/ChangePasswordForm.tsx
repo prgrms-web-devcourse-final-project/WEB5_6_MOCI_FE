@@ -8,7 +8,7 @@ import EyeOpen from "@/assets/icons/eyeOpen.svg";
 function ChangeButtonForm() {
   const [hidePW, setHidePW] = useState(true);
   const [hidePWValidate, setHidePWValidate] = useState(true);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage /*setErrorMessage*/] = useState("");
 
   const toggleHidePW = () => {
     setHidePW(!hidePW);
