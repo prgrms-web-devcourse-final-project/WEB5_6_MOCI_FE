@@ -1,14 +1,10 @@
 "use client";
-
-import { useAuthStore } from "@/store/authStore";
-import { useEffect } from "react";
+import { useAuth } from "@/api/auth";
+import Spinner from "@/shared/components/Spinner";
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
-  const fetchUser = useAuthStore((s) => s.fetchUser);
-
-  useEffect(() => {
-    fetchUser();
-  }, [fetchUser]);
+  const { user, isLoading } = useAuth();
+  if (isLoading && !user) return <Spinner />;
   return <>{children}</>;
 }
 
