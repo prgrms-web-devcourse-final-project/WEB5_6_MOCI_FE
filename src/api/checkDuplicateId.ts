@@ -1,5 +1,7 @@
+import { BASE_URL } from "./constants/config";
+
 export const checkDuplicateId = async (phone: string) => {
-  const res = await fetch(`http://localhost:8080/api/v1/users/phone-check`, {
+  const res = await fetch(`${BASE_URL}/api/v1/users/phone-check`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",

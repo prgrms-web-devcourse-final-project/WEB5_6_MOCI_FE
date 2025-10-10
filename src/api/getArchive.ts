@@ -1,15 +1,14 @@
+import { BASE_URL } from "./constants/config";
+
 export const getArchive = async (id: number) => {
   try {
-    const res = await fetch(
-      `https://api.mydidimdol.com/api/v1/archive/public/${id}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json; charset: UTF-8",
-        },
-        credentials: "include",
-      }
-    );
+    const res = await fetch(`${BASE_URL}/api/v1/archive/public/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json; charset: UTF-8",
+      },
+      credentials: "include",
+    });
     if (!res.ok) {
       throw new Error("교육자료 불러오기에 실패하였습니다");
     }

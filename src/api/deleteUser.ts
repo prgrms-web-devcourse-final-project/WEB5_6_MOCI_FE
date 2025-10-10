@@ -1,5 +1,7 @@
+import { BASE_URL } from "./constants/config";
+
 export const deleteUser = async (confirmed: boolean) => {
-  const res = await fetch(`http://localhost:8080/api/v1/users/me`, {
+  const res = await fetch(`${BASE_URL}/api/v1/users/me`, {
     method: "DELETE",
     headers: { "Content-Type": "application/json" },
     credentials: "include",

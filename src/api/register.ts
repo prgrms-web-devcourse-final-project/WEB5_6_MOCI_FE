@@ -1,9 +1,11 @@
+import { BASE_URL } from "./constants/config";
+
 export const register = async (data: {
   name: string;
   phone: string;
   password: string;
 }) => {
-  const res = await fetch("http://localhost:8080/api/v1/auth/register", {
+  const res = await fetch(`${BASE_URL}api/v1/auth/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

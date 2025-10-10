@@ -1,6 +1,8 @@
+import { BASE_URL } from "./constants/config";
+
 export const changePW = async (newPW: string, confirmNewPW: string) => {
   try {
-    const res = await fetch(`http://localhost:8080/api/v1/users/password`, {
+    const res = await fetch(`${BASE_URL}/api/v1/users/password`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

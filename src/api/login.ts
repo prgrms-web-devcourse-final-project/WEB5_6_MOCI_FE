@@ -1,3 +1,5 @@
+import { BASE_URL } from "./constants/config";
+
 export const login = async (formInput: {
   userId: string;
   password: string;
@@ -5,7 +7,7 @@ export const login = async (formInput: {
   formInput.userId = formInput.userId.replace(/-/g, ""); // 하이픈 제거
 
   try {
-    const res = await fetch("https://api.mydidimdol.com/api/v1/auth/login", {
+    const res = await fetch(`${BASE_URL}/api/v1/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json; charset: UTF-8",
