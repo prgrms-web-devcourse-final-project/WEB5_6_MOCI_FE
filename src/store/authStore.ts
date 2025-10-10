@@ -1,3 +1,4 @@
+import { BASE_URL } from "@/api/constants/config";
 import { create } from "zustand";
 
 type User = {
@@ -26,7 +27,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     })),
   fetchUser: async () => {
     try {
-      const res = await fetch(`https://api.mydidimdol.com/api/v1/users/me`, {
+      const res = await fetch(`${BASE_URL}/api/v1/users/me`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json; charset: UTF-8",
@@ -49,7 +50,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
   },
   logout: async () => {
-    const res = await fetch(`http://api.mydidimdol.com/api/v1/auth/logout`, {
+    const res = await fetch(`${BASE_URL}/api/v1/auth/logout`, {
       method: "DELETE",
       credentials: "include",
     });
