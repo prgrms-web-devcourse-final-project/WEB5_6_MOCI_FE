@@ -8,15 +8,7 @@ import useChatMento from "../hooks/useChatMento";
 import ChatRoomButton from "./ChatRoomButton";
 import Help from "@/assets/icons/help.svg";
 
-function ChatListMento({
-  id,
-  category,
-  question,
-}: {
-  id: string;
-  category: string;
-  question: string;
-}) {
+function ChatListMento({ id }: { id: string }) {
   const [text, setText] = useState("");
   const sectionRef = useRef<HTMLDivElement | null>(null);
 
@@ -76,9 +68,7 @@ function ChatListMento({
       <div className="h-20 p-3 flex-center absolute left-0 right-0 shrink-0">
         <ChatRoomButton
           id={id}
-          category={category}
-          question={question}
-          hasmento={messages.length > 2}
+          hasmento={messages?.find((m) => m.sender !== name) ? true : false}
           end={messages?.at(-1)?.id === null}
         />
         <>

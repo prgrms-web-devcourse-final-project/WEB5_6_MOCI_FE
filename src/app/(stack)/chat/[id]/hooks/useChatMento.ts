@@ -31,7 +31,7 @@ export default function useChatMento() {
         alert("채팅방이 존재하지 않습니다");
         router.push("/main");
       }
-      if ((e as APIerror).status === 401) {
+      if (String((e as APIerror).status) === "401") {
         alert(
           "로그인을 하셔야 채팅방에 입장하실 수 있습니다. 로그인페이지로 이동합니다."
         );

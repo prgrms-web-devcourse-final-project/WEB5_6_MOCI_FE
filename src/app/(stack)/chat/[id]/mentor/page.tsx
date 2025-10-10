@@ -4,18 +4,9 @@ import StackHeader from "@/shared/components/StackHeader";
 
 import ChatListMento from "../components/ChatListMento";
 
-async function Page({
-  params,
-  searchParams,
-}: {
-  params: Promise<{ id: string }>;
-  searchParams: Promise<{ category: string; question: string }>;
-}) {
+async function Page({ params }: { params: Promise<{ id: string }> }) {
   const param = await params;
-  const searchParam = await searchParams;
   const id = param.id;
-  const category = searchParam.category;
-  const question = searchParam.question;
   // const pathName = usePathname();
 
   // const [containerHeight, setContainerHeight] = useState<string>("100%");
@@ -79,7 +70,7 @@ async function Page({
     <>
       <StackHeader />
       <main className="relative max-h-[calc(100dvh-48px)] flex flex-col flex-1 min-h-0">
-        <ChatListMento id={id} category={category} question={question} />
+        <ChatListMento id={id} />
       </main>
     </>
   );

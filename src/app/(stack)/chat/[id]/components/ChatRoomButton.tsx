@@ -6,39 +6,48 @@ import { createAIChatRoom } from "@/api/createAIChatRoom";
 import { APIerror } from "@/api/getChatMsgMento";
 import { deleteMentoChatRoom } from "@/api/deleteMentoChatRoom";
 import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { getMentorChatRoomInfo } from "@/api/getMentorChatRoomInfo";
 
 function ChatRoomButton({
   id,
-  category,
-  question,
   hasmento,
   end,
 }: {
   id: string;
-  category: string;
-  question: string;
   hasmento: boolean;
   end: boolean;
 }) {
   const router = useRouter();
   const role = useAuthStore((s) => s.user?.role);
-  const formData = {
-    category,
-    question,
-    target: "ai",
-  };
+  const [chatRoomInfo, setChatRoomInfo] = useState<{
+    id: number;
+    category: string;
+    question: string;
+  }>();
+
+  useEffect(() => {
+    async function getChatRoomInfo() {
+      const res = await getMentorChatRoomInfo(id);
+      setChatRoomInfo(res);
+    }
+    getChatRoomInfo();
+  }, [id]);
+
   const endChat = async () => {
     await endChatByMento(id);
   };
-  const askToAI = async () => {
+  const askToAI = async (e: React.MouseEvent) => {
+    e.preventDefault();
     try {
+      if (!chatRoomInfo) return;
       const aiChatRoom = await createAIChatRoom(
-        formData.category,
-        formData.question
+        chatRoomInfo.category,
+        chatRoomInfo.question
       );
 
-      await deleteMentoChatRoom(id);
       router.push(`/chat/${aiChatRoom.id}/ai`);
+      await deleteMentoChatRoom(id);
     } catch (e) {
       const error = e as APIerror;
       alert(error.message);

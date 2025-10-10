@@ -38,9 +38,7 @@ export default function CreateChatForm() {
       if (result.target === "ai") {
         router.push(`/chat/${result.id}/ai`);
       } else {
-        router.push(
-          `/chat/${result.id}/mentor?category=${result.category}&question=${result.question}`
-        );
+        router.push(`/chat/${result.id}/mentor`);
       }
     } catch (e) {
       alert(e);
