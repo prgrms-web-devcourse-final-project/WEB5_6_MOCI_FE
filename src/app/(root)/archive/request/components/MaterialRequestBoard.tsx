@@ -6,31 +6,20 @@ import { useAuthStore } from "@/store/authStore";
 import { 
   ArchiveRequestListItem, 
   ArchiveRequestListResponseDto,
+  ArchiveRequestListApiResponse,
   RequestStatus 
 } from "@/types/archiveRequest";
 import { getArchiveRequestList } from "@/api/archiveRequest";
+import { FILTER_CATEGORY_OPTIONS, FilterCategory } from "@/constants/archiveRequest";
 import RequestFilter from "./RequestFilter";
 import RequestList from "./RequestList";
 import RequestItem from "./RequestItem";
-
-// 카테고리 옵션 (실제로는 BE에서 카테고리 정보를 받아와야 할 수도 있음)
-const categoryOptions = [
-  { value: "ALL", label: "전체" },
-  { value: "KAKAO", label: "카카오톡" },
-  { value: "YOUTUBE", label: "유튜브" },
-  { value: "KTX", label: "KTX" },
-  { value: "COUPANG", label: "쿠팡" },
-  { value: "BUS", label: "버스" },
-  { value: "DELIVERY", label: "배달" },
-];
-
-type Category = "ALL" | "KAKAO" | "YOUTUBE" | "KTX" | "COUPANG" | "BUS" | "DELIVERY";
 
 function MaterialRequestBoard() {
   const router = useRouter();
   const user = useAuthStore((s) => s.user);
   const [requests, setRequests] = useState<ArchiveRequestListItem[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<Category>("ALL");
+  const [selectedCategory, setSelectedCategory] = useState<FilterCategory>("ALL");
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -49,6 +38,7 @@ function MaterialRequestBoard() {
       requesterName: "김멘토",
       status: "PENDING",
       createdAt: "2024-01-15T10:30:00Z",
+      category: "KAKAO",
     },
     {
       id: 2,
@@ -56,6 +46,7 @@ function MaterialRequestBoard() {
       requesterName: "이멘토",
       status: "APPROVED",
       createdAt: "2024-01-14T14:20:00Z",
+      category: "YOUTUBE",
     },
     {
       id: 3,
@@ -63,6 +54,7 @@ function MaterialRequestBoard() {
       requesterName: "박멘토",
       status: "REJECTED",
       createdAt: "2024-01-13T09:15:00Z",
+      category: "KTX",
     },
   ];
 
@@ -75,11 +67,21 @@ function MaterialRequestBoard() {
     try {
       const response = await getArchiveRequestList(page, 10);
       console.log("API 응답:", response);
-      setRequests(response.requests);
-      setCurrentPage(response.currentPage);
-      setTotalPages(response.totalPages);
-      setTotalElements(response.totalElements);
-      console.log("상태 업데이트 완료 - requests:", response.requests);
+      console.log("API 응답 구조:", JSON.stringify(response, null, 2));
+      
+      // API 응답 구조 확인 및 안전한 처리
+      const requests = (response as any)?.data?.requests || (response as any)?.requests || [];
+      const currentPage = (response as any)?.data?.currentPage || (response as any)?.currentPage || 0;
+      const totalPages = (response as any)?.data?.totalPages || (response as any)?.totalPages || 0;
+      const totalElements = (response as any)?.data?.totalElements || (response as any)?.totalElements || 0;
+      
+      console.log("파싱된 데이터:", { requests, currentPage, totalPages, totalElements });
+      
+      setRequests(Array.isArray(requests) ? requests : []);
+      setCurrentPage(currentPage);
+      setTotalPages(totalPages);
+      setTotalElements(totalElements);
+      console.log("상태 업데이트 완료 - requests:", requests);
     } catch (error) {
       console.error("요청 목록 로딩 실패:", error);
       console.error("에러 상세:", error);
@@ -117,14 +119,38 @@ function MaterialRequestBoard() {
 
   // 카테고리 필터링 (클라이언트 사이드 필터링, 실제로는 서버 사이드 필터링이 필요할 수 있음)
   const filteredRequests = selectedCategory === "ALL" 
-    ? requests 
-    : requests.filter(request => {
-        // BE DTO에는 category 필드가 없으므로, 임시로 title에서 카테고리 추출
-        // 실제로는 BE에서 카테고리 정보를 제공해야 함
-        return true; // 임시로 모든 요청 표시
+    ? (requests || [])
+    : (requests || []).filter(request => {
+        // 제목에서 카테고리 추출하여 필터링
+        const title = request.title.toUpperCase();
+        
+        switch (selectedCategory) {
+          case "KAKAO":
+            return title.includes('카카오톡') || title.includes('KAKAO');
+          case "YOUTUBE":
+            return title.includes('유튜브') || title.includes('YOUTUBE');
+          case "KTX":
+            return title.includes('KTX');
+          case "COUPANG":
+            return title.includes('쿠팡') || title.includes('COUPANG');
+          case "BUS":
+            return title.includes('버스') || title.includes('BUS');
+          case "DELIVERY":
+            return title.includes('배달') || title.includes('DELIVERY');
+          case "ETC":
+            // 기타는 다른 카테고리에 해당하지 않는 것들
+            return !title.includes('카카오톡') && !title.includes('KAKAO') &&
+                   !title.includes('유튜브') && !title.includes('YOUTUBE') &&
+                   !title.includes('KTX') &&
+                   !title.includes('쿠팡') && !title.includes('COUPANG') &&
+                   !title.includes('버스') && !title.includes('BUS') &&
+                   !title.includes('배달') && !title.includes('DELIVERY');
+          default:
+            return true;
+        }
       });
 
-  const handleCategoryChange = (category: Category) => {
+  const handleCategoryChange = (category: FilterCategory) => {
     setSelectedCategory(category);
   };
 
@@ -165,7 +191,8 @@ function MaterialRequestBoard() {
     setIsLoading(true);
     try {
       const { updateArchiveRequestStatus } = await import("@/api/archiveRequest");
-      await updateArchiveRequestStatus(requestId, newStatus);
+      const response = await updateArchiveRequestStatus(requestId, newStatus);
+      console.log("상태 변경 응답:", response);
       
       // 상태 변경 후 목록 새로고침
       await fetchRequests(currentPage);
@@ -188,9 +215,9 @@ function MaterialRequestBoard() {
       {/* 필터 및 액션 영역 */}
       <div className="px-6 py-4">
         <RequestFilter
-          categories={categoryOptions}
+          categories={FILTER_CATEGORY_OPTIONS}
           selectedCategory={selectedCategory}
-          onCategoryChange={(category) => handleCategoryChange(category as Category)}
+          onCategoryChange={(category) => handleCategoryChange(category as FilterCategory)}
           onRequestCreate={handleRequestCreate}
           canCreateRequest={isMentor}
         />

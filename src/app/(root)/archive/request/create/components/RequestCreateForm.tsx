@@ -7,6 +7,24 @@ import { CreateArchiveRequestDto } from "@/types/archiveRequest";
 import { createArchiveRequest } from "@/api/archiveRequest";
 import Button from "@/shared/components/Button";
 import Input from "@/shared/components/Input";
+import { CATEGORY_OPTIONS } from "@/constants/archiveRequest";
+import KakaoTalkLogo from "@/assets/logos/KakaoTalk_logo.svg";
+import YouTubeLogo from "@/assets/logos/YouTube_logo.svg";
+import KTXLogo from "@/assets/logos/KTX_logo.svg";
+import CoupangLogo from "@/assets/logos/Coupang_logo.svg";
+import BusLogo from "@/assets/logos/Bus_logo.svg";
+import DeliveryLogo from "@/assets/logos/Delivery_logo.svg";
+
+// 카테고리별 아이콘 매핑
+const categoryIcons: Record<string, React.ComponentType<any>> = {
+  KAKAO: KakaoTalkLogo,
+  YOUTUBE: YouTubeLogo,
+  KTX: KTXLogo,
+  COUPANG: CoupangLogo,
+  BUS: BusLogo,
+  DELIVERY: DeliveryLogo,
+  ETC: KakaoTalkLogo, // 기타는 기본 아이콘 사용
+};
 
 function RequestCreateForm() {
   const router = useRouter();
@@ -15,6 +33,7 @@ function RequestCreateForm() {
   const [formData, setFormData] = useState<CreateArchiveRequestDto>({
     title: "",
     description: "",
+    category: "",
   });
 
   // 권한 체크
@@ -40,15 +59,15 @@ function RequestCreateForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.title.trim() || !formData.description.trim()) {
-      alert("제목과 내용을 모두 입력해주세요.");
+    if (!formData.title.trim() || !formData.description.trim() || !formData.category) {
+      alert("제목, 내용, 카테고리를 모두 입력해주세요.");
       return;
     }
 
     setIsLoading(true);
     try {
-      const newRequest = await createArchiveRequest(formData);
-      console.log("요청 생성:", newRequest);
+      const response = await createArchiveRequest(formData);
+      console.log("요청 생성 응답:", response);
       
       // 성공 시 목록으로 이동
       alert("요청이 성공적으로 등록되었습니다.");
@@ -61,23 +80,6 @@ function RequestCreateForm() {
     }
   };
 
-  const handleDelete = async () => {
-    if (!confirm("정말 삭제하시겠습니까?")) return;
-    
-    setIsLoading(true);
-    try {
-      // TODO: API 호출
-      console.log("요청 삭제");
-      
-      alert("삭제되었습니다.");
-      router.push("/material-request");
-    } catch (error) {
-      console.error("삭제 실패:", error);
-      alert("삭제에 실패했습니다.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleBack = () => {
     router.back();
@@ -105,7 +107,40 @@ function RequestCreateForm() {
       {/* 폼 영역 */}
       <div className="flex-1 px-6 py-4">
         <form onSubmit={handleSubmit} className="flex flex-col h-full">
-          <div className="flex-1 space-y-6">
+          <div className="flex-1 flex flex-col gap-5">
+            {/* 카테고리 */}
+            <div>
+              <label htmlFor="category" className="block text-lg font-medium mb-2">
+                카테고리
+              </label>
+              <div className="flex items-center gap-3">
+                {/* 카테고리 아이콘 미리보기 */}
+                {formData.category && categoryIcons[formData.category] && (
+                  <div className="flex-shrink-0">
+                    {(() => {
+                      const IconComponent = categoryIcons[formData.category];
+                      return <IconComponent className="w-8 h-8" />;
+                    })()}
+                  </div>
+                )}
+                
+                <select
+                  id="category"
+                  name="category"
+                  value={formData.category}
+                  onChange={handleInputChange}
+                  className="flex-1 h-[48px] px-3 border border-black rounded-lg text-xl focus:outline-none focus:border-green-default focus:border-2"
+                  required
+                >
+                  {CATEGORY_OPTIONS.map(option => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
             {/* 제목 */}
             <div>
               <label htmlFor="title" className="block text-lg font-medium mb-2">
@@ -133,21 +168,21 @@ function RequestCreateForm() {
                 value={formData.description}
                 onChange={handleInputChange}
                 placeholder="요청 내용을 자세히 입력해주세요"
-                className="flex-1 w-full px-3 py-2 border border-black rounded-lg text-xl focus:outline-none focus:border-green-default focus:border-2 resize-none"
+                className="flex-1 w-full px-3 py-2 border border-black rounded-lg text-xl focus:outline-none focus:border-green-default focus:border-2 resize-none placeholder:text-gray"
                 required
               />
             </div>
           </div>
 
           {/* 버튼 영역 */}
-          <div className="space-y-4 pt-6">
-            <div className="flex gap-4">
+          <div className="pt-6">
+            <div className="flex gap-3 w-full">
               <Button
                 type="button"
                 color="green"
                 onClick={handleBack}
                 disabled={isLoading}
-                className="flex-1 h-12"
+                className="flex-1"
               >
                 취소
               </Button>
@@ -155,30 +190,9 @@ function RequestCreateForm() {
                 type="submit"
                 color="darkgreen"
                 disabled={isLoading}
-                className="flex-1 h-12"
+                className="flex-1"
               >
                 {isLoading ? "등록 중..." : "등록하기"}
-              </Button>
-            </div>
-            
-            <div className="flex gap-4">
-              <Button
-                type="button"
-                color="green"
-                onClick={handleBack}
-                disabled={isLoading}
-                className="flex-1 h-12"
-              >
-                수정
-              </Button>
-              <Button
-                type="button"
-                color="darkgreen"
-                onClick={handleDelete}
-                disabled={isLoading}
-                className="flex-1 h-12"
-              >
-                {isLoading ? "처리 중..." : "삭제"}
               </Button>
             </div>
           </div>

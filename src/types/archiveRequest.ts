@@ -25,6 +25,7 @@ export interface ArchiveRequestResponseDto {
   reviewedBy?: ReviewedBy; // 승인/거절 시에만 존재
   createdAt: string;
   updatedAt: string;
+  category?: string; // 카테고리 정보 추가
 }
 
 // 목록 조회 시 응답의 개별 요청
@@ -34,6 +35,7 @@ export interface ArchiveRequestListItem {
   requesterName: string;
   status: RequestStatus;
   createdAt: string;
+  category?: string; // 카테고리 정보 추가
 }
 
 // 목록 조회 시 응답
@@ -44,10 +46,16 @@ export interface ArchiveRequestListResponseDto {
   requests: ArchiveRequestListItem[];
 }
 
+// 백엔드 실제 응답 구조 (data 래핑)
+export interface ArchiveRequestListApiResponse {
+  data: ArchiveRequestListResponseDto;
+}
+
 // 요청 생성/수정 시 요청 데이터
 export interface CreateArchiveRequestDto {
   title: string;
   description: string;
+  category?: string; // 카테고리 정보 추가
 }
 
 // 상태 수정 시 요청 데이터
