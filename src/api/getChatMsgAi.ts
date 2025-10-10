@@ -1,3 +1,4 @@
+import { BASE_URL } from "./constants/config";
 
 export async function getChatMsgAi(roomId: number): Promise<
   {
@@ -9,16 +10,16 @@ export async function getChatMsgAi(roomId: number): Promise<
   }[]
 > {
   const res = await fetch(
-    `http://localhost:8080/api/v1/chat/ai/rooms/${roomId}/messages`,
+    `${BASE_URL}/api/v1/chat/ai/rooms/${roomId}/messages`,
     {
       method: "GET",
-      headers: { 
-        "Content-Type": "application/json" 
+      headers: {
+        "Content-Type": "application/json",
       },
       credentials: "include",
     }
   );
 
- const data = await res.json();
- return data;  
+  const data = await res.json();
+  return data;
 }
