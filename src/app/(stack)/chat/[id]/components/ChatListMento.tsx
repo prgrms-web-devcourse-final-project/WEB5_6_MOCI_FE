@@ -71,11 +71,13 @@ function ChatListMento({ id }: { id: string }) {
           !messages || messages.length === 0 ? (
             <p className="text-xl text-center">채팅이 없습니다</p>
           ) : (
-            messages.map(({ id, sender, content }, i) => (
+            messages.map(({ id, sender, content }) => (
               <Chat
                 key={id}
                 text={content}
-                sender={name === sender ? "me" : "others"}
+                sender={
+                  name === sender ? (id === null ? "system" : "me") : "others"
+                }
               />
             ))
           )
@@ -92,11 +94,20 @@ function ChatListMento({ id }: { id: string }) {
           name="chatInputField"
           id="chatInputField"
           className="flex-1 bg-white rounded-full border-2 text-xl p-3 resize-none h-fit min-w-0"
-          placeholder="질문을 입력하세요"
+          placeholder={
+            messages?.at(-1)?.id === null
+              ? "채팅방이 종료되었습니다"
+              : "질문을 입력하세요"
+          }
           onChange={handleText}
           value={text}
+          disabled={messages?.at(-1)?.id === null}
         />
-        <Button type="submit" className="cursor-pointer">
+        <Button
+          type="submit"
+          className="cursor-pointer"
+          disabled={messages?.at(-1)?.id === null}
+        >
           보내기
         </Button>
       </form>
