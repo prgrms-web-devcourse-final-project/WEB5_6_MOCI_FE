@@ -13,7 +13,7 @@ import EyeOpen from "@/assets/icons/eyeOpen.svg";
 function LoginForm() {
   const [hidePW, setHidePW] = useState(true);
   const [form, setForm] = useState({ userId: "", password: "" });
-  const [errorMessage, setErrorMessage] =
+  const [errorMessage /*setErrorMessage*/] =
     useState("전화번호는 숫자만 입력해주세요");
   const router = useRouter();
   const setUser = useAuthStore((s) => s.setUser);

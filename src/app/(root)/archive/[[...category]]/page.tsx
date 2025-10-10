@@ -13,7 +13,7 @@ import Input from "@/shared/components/Input";
 import Pagination from "@/shared/components/Pagination";
 import Link from "next/link";
 import { getArchiveList } from "@/api/getArchiveList";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import ArchiveCard from "../components/ArchiveCard";
 
 const matchCategory = {
@@ -120,7 +120,7 @@ async function Page({
 
   if (!archiveList) notFound();
   return (
-    <div className="flex-1 flex flex-col gap-2">
+    <div className="flex flex-col gap-2 max-h-[calc(100dvh-48px)]">
       <Button
         fullWidth
         hasIcon
