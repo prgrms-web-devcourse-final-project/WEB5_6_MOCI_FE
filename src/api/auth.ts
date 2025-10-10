@@ -40,9 +40,9 @@ export const useAuth = () => {
 
   useEffect(() => {
     if (error) {
-      logout();
+      setUser(null);
     }
-  }, [error, logout]);
+  }, [error, logout, setUser]);
 
   return { user, isLoading, error, refetch, logout };
 };

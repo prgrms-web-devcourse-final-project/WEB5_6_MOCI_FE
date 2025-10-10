@@ -13,13 +13,13 @@ type User = {
 
 interface AuthState {
   user: User | null;
-  setUser: (user: User) => void;
+  setUser: (user: User | null) => void;
   logout: () => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
-  setUser: (user: User) => set({ user }),
+  setUser: (user: User | null) => set({ user }),
   logout: async () => {
     const res = await fetch("http://localhost:8080/api/v1/auth/logout", {
       method: "DELETE",
