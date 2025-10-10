@@ -5,6 +5,8 @@ import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { useAuthStore } from "@/store/authStore";
 import Button from "@/shared/components/Button";
 import useChatMento from "../hooks/useChatMento";
+import ChatRoomButton from "./ChatRoomButton";
+import Help from "@/assets/icons/help.svg";
 
 function ChatListMento({ id }: { id: string }) {
   const [text, setText] = useState("");
@@ -63,6 +65,24 @@ function ChatListMento({ id }: { id: string }) {
 
   return (
     <>
+      <div className="h-20 p-3 flex-center absolute left-0 right-0 shrink-0">
+        <ChatRoomButton
+          id={id}
+          hasmento={messages?.find((m) => m.sender !== name) ? true : false}
+          end={messages?.at(-1)?.id === null}
+        />
+        <>
+          <button
+            type="button"
+            className="bg-lightgreen p-2 rounded-full absolute top-auto right-2 hover:bg-lightyellow hover:scale-105 hover:ring-4 hover:ring-yellow-default active:bg-lightyellow active:scale-105 active:ring-4 active:ring-yellow-default  peer cursor-pointer"
+          >
+            <Help />
+          </button>
+          <p className="absolute -top-11.5 right-1 z-1000 p-2 bg-yellow-hover text-xl rounded-lg font-bold hidden peer-hover:block peer-active:block">
+            채팅방 이용방법을 확인하려면 클릭하세요
+          </p>
+        </>
+      </div>
       <section
         ref={sectionRef}
         className="my-20 min-h-0 flex-1 flex flex-col overflow-y-auto"
@@ -71,11 +91,13 @@ function ChatListMento({ id }: { id: string }) {
           !messages || messages.length === 0 ? (
             <p className="text-xl text-center">채팅이 없습니다</p>
           ) : (
-            messages.map(({ sender, content }, i) => (
+            messages.map(({ id, sender, content }) => (
               <Chat
-                key={i} // messageId로 수정해야될 것 같음
+                key={id}
                 text={content}
-                sender={name === sender ? "me" : "others"}
+                sender={
+                  name === sender ? (id === null ? "system" : "me") : "others"
+                }
               />
             ))
           )
@@ -91,12 +113,21 @@ function ChatListMento({ id }: { id: string }) {
         <input
           name="chatInputField"
           id="chatInputField"
-          className="flex-1 bg-white rounded-full border-2 text-xl p-3 resize-none h-fit"
-          placeholder="질문을 입력하세요"
+          className="flex-1 bg-white rounded-full border-2 text-xl p-3 resize-none h-fit min-w-0"
+          placeholder={
+            messages?.at(-1)?.id === null
+              ? "채팅방이 종료되었습니다"
+              : "질문을 입력하세요"
+          }
           onChange={handleText}
           value={text}
+          disabled={messages?.at(-1)?.id === null}
         />
-        <Button type="submit" className="cursor-pointer">
+        <Button
+          type="submit"
+          className="cursor-pointer"
+          disabled={messages?.at(-1)?.id === null}
+        >
           보내기
         </Button>
       </form>
