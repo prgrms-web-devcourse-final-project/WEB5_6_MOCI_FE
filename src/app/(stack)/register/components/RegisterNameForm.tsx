@@ -49,7 +49,8 @@ function RegisterNameForm({ onSubmit, isKeyboardOpen }: Props) {
         size="md"
         fullWidth={true}
         type="submit"
-        aria-disabled={!value.trim()} // 입력 없으면 비활성화
+        disabled={!value.trim()}
+        aria-disabled={!value.trim()}
       >
         다음
       </Button>
