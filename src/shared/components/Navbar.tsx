@@ -1,16 +1,17 @@
 import CloseIcon from "@/assets/icons/close.svg";
 import { RefObject } from "react";
+import NavItems from "./NavItems";
 
 interface Props {
-  ref: RefObject<HTMLDivElement | null>;
+  navRef: RefObject<HTMLDivElement | null>;
   closeNav: () => void;
 }
 
-function Navbar({ ref: outRef, closeNav }: Props) {
+function Navbar({ navRef: outRef, closeNav }: Props) {
   return (
     <aside
       ref={outRef}
-      className="fixed top-12 right-1/2 -translate-x-1/2 w-full h-full max-w-[650px] min-w-[350px] bg-white inset-shadow-sm px-4 flex flex-col gap-4 insert-0 z-10 opacity-0"
+      className="fixed top-12 right-1/2 -translate-x-1/2 w-full h-[calc(100dvh-48px)] max-w-[650px] min-w-[350px] bg-white inset-shadow-sm px-4 flex flex-col gap-5  z-10 opacity-0"
     >
       <div className="flex justify-between items-center mt-3.5">
         <span className="text-3xl font-bold select-none">바로가기</span>
@@ -19,9 +20,7 @@ function Navbar({ ref: outRef, closeNav }: Props) {
         </button>
       </div>
       <ul>
-        <li>메뉴1</li>
-        <li>메뉴2</li>
-        <li>메뉴3</li>
+        <NavItems closeNav={closeNav} />
       </ul>
     </aside>
   );
