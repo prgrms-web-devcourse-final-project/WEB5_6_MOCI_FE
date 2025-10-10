@@ -1,10 +1,8 @@
 // import { usePathname } from "next/navigation";
-import Help from "@/assets/icons/help.svg";
 import StackHeader from "@/shared/components/StackHeader";
 // import { useEffect, useRef, useState } from "react";
 
 import ChatListMento from "../components/ChatListMento";
-import ChatRoomButton from "../components/ChatRoomButton";
 
 async function Page({
   params,
@@ -81,21 +79,7 @@ async function Page({
     <>
       <StackHeader />
       <main className="relative max-h-[calc(100dvh-48px)] flex flex-col flex-1 min-h-0">
-        <div className="h-20 p-3 flex-center absolute left-0 right-0 shrink-0">
-          <ChatRoomButton id={id} category={category} question={question} />
-          <>
-            <button
-              type="button"
-              className="bg-lightgreen p-2 rounded-full absolute top-auto right-2 hover:bg-lightyellow hover:scale-105 hover:ring-4 hover:ring-yellow-default active:bg-lightyellow active:scale-105 active:ring-4 active:ring-yellow-default  peer cursor-pointer"
-            >
-              <Help />
-            </button>
-            <p className="absolute -top-11.5 right-1 z-1000 p-2 bg-yellow-hover text-xl rounded-lg font-bold hidden peer-hover:block peer-active:block">
-              채팅방 이용방법을 확인하려면 클릭하세요
-            </p>
-          </>
-        </div>
-        <ChatListMento id={id} />
+        <ChatListMento id={id} category={category} question={question} />
       </main>
     </>
   );

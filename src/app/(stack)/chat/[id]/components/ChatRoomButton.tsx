@@ -11,10 +11,14 @@ function ChatRoomButton({
   id,
   category,
   question,
+  hasmento,
+  end,
 }: {
   id: string;
   category: string;
   question: string;
+  hasmento: boolean;
+  end: boolean;
 }) {
   const router = useRouter();
   const role = useAuthStore((s) => s.user?.role);
@@ -41,14 +45,31 @@ function ChatRoomButton({
     }
   };
 
+  const createNewChat = () => {
+    router.push("/chat/create");
+  };
+
   return (
     <>
       {role === "MENTOR" ? (
         <Button color="yellow" className="px-10 rounded-full" onClick={endChat}>
           채팅종료하기
         </Button>
+      ) : end ? (
+        <Button
+          color="yellow"
+          className="px-10 rounded-full"
+          onClick={createNewChat}
+        >
+          새로운 채팅방 생성하기
+        </Button>
       ) : (
-        <Button color="yellow" className="px-15 rounded-full" onClick={askToAI}>
+        <Button
+          color="yellow"
+          className="px-15 rounded-full"
+          onClick={askToAI}
+          disabled={hasmento}
+        >
           AI에게 물어보기
         </Button>
       )}

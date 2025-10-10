@@ -5,8 +5,18 @@ import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { useAuthStore } from "@/store/authStore";
 import Button from "@/shared/components/Button";
 import useChatMento from "../hooks/useChatMento";
+import ChatRoomButton from "./ChatRoomButton";
+import Help from "@/assets/icons/help.svg";
 
-function ChatListMento({ id }: { id: string }) {
+function ChatListMento({
+  id,
+  category,
+  question,
+}: {
+  id: string;
+  category: string;
+  question: string;
+}) {
   const [text, setText] = useState("");
   const sectionRef = useRef<HTMLDivElement | null>(null);
 
@@ -63,6 +73,26 @@ function ChatListMento({ id }: { id: string }) {
 
   return (
     <>
+      <div className="h-20 p-3 flex-center absolute left-0 right-0 shrink-0">
+        <ChatRoomButton
+          id={id}
+          category={category}
+          question={question}
+          hasmento={messages.length > 2}
+          end={messages?.at(-1)?.id === null}
+        />
+        <>
+          <button
+            type="button"
+            className="bg-lightgreen p-2 rounded-full absolute top-auto right-2 hover:bg-lightyellow hover:scale-105 hover:ring-4 hover:ring-yellow-default active:bg-lightyellow active:scale-105 active:ring-4 active:ring-yellow-default  peer cursor-pointer"
+          >
+            <Help />
+          </button>
+          <p className="absolute -top-11.5 right-1 z-1000 p-2 bg-yellow-hover text-xl rounded-lg font-bold hidden peer-hover:block peer-active:block">
+            채팅방 이용방법을 확인하려면 클릭하세요
+          </p>
+        </>
+      </div>
       <section
         ref={sectionRef}
         className="my-20 min-h-0 flex-1 flex flex-col overflow-y-auto"
