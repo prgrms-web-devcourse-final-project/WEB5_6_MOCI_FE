@@ -1,11 +1,13 @@
 import React from "react";
+import ReactMarkdown from "react-markdown";
 
 interface ChatType {
   text: string;
   sender: "me" | "others";
+  isMarkdown?: boolean;
 }
 
-function Chat({ text, sender }: ChatType) {
+function Chat({ text, sender, isMarkdown = false }: ChatType) {
   return (
     <div
       className={`relative w-fit h-fit p-3 text-xl rounded-lg m-5
@@ -15,7 +17,11 @@ function Chat({ text, sender }: ChatType) {
               : "bg-white border-2"
           }`}
     >
-      {text}
+      {isMarkdown ? (
+        <ReactMarkdown>{text}</ReactMarkdown>
+      ) : (
+        <p className="whitespace-pre-wrap">{text}</p>
+      )}
     </div>
   );
 }
