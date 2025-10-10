@@ -1,7 +1,7 @@
 export const getArchive = async (id: number) => {
   try {
     const res = await fetch(
-      `http://localhost:8080/api/v1/archive/public/${id}`,
+      `https://api.mydidimdol.com/api/v1/archive/public/${id}`,
       {
         method: "GET",
         headers: {

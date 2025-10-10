@@ -11,11 +11,11 @@ export const getArchiveList = async ({
 }) => {
   const requestAPIUrl = category
     ? keyword // 카테고리 o
-      ? `http://localhost:8080/api/v1/archive/public?category=${category}&keyword=${keyword}&page=${page}&size=10&sort=createdAt`
-      : `http://localhost:8080/api/v1/archive/public?category=${category}&page=${page}&size=10&sort=createdAt`
+      ? `https://api.mydidimdol.com/api/v1/archive/public?category=${category}&keyword=${keyword}&page=${page}&size=10&sort=createdAt`
+      : `https://api.mydidimdol.com/api/v1/archive/public?category=${category}&page=${page}&size=10&sort=createdAt`
     : keyword // 카테고리 x
-    ? `http://localhost:8080/api/v1/archive/public?keyword=${keyword}&page=${page}&size=10&sort=createdAt`
-    : `http://localhost:8080/api/v1/archive/public?page=${page}&size=10&sort=createdAt`;
+    ? `https://api.mydidimdol.com/api/v1/archive/public?keyword=${keyword}&page=${page}&size=10&sort=createdAt`
+    : `https://api.mydidimdol.com/api/v1/archive/public?page=${page}&size=10&sort=createdAt`;
 
   try {
     const res = await fetch(requestAPIUrl, {

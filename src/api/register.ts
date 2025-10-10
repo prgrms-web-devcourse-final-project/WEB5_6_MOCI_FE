@@ -8,9 +8,7 @@ export const register = async (data: {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       loginType: "PHONE",
-      digitalLevelAnswers: [false, false, false, false, false],
       name: data.name,
-      email: "",
       userId: data.phone,
       password: data.password,
     }),
