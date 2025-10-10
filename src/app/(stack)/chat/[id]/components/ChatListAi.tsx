@@ -1,12 +1,11 @@
 "use client";
 
 import { getChatMsgAi } from "@/api/getChatMsgAi";
-import { useEffect, useState } from "react";
+import { postChatMsgAi } from "@/api/postChatMsgAi";
+import { useEffect, useState, useRef, FormEvent } from "react";
 import Chat from "./Chat";
 import Button from "@/shared/components/Button";
 import Plus from "@/assets/icons/plus.svg";
-import { useRouter } from "next/navigation";
-
 
 type AiMessage = {
   id: number;
@@ -16,69 +15,124 @@ type AiMessage = {
   createdAt: string;
 };
 
-
 function ChatListAi({ id }: { id: number }) {
   const [chatList, setChatList] = useState<AiMessage[]>([]);
-  const [loading, setLoading] = useState(true);
-  const router = useRouter();
+  const [loading, setLoading] = useState(true); 
+  const [inputValue, setInputValue] = useState("");
+  const [sending, setSending] = useState(false);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
 
+  //스크롤 맨 아래로
+  const scrollToBottom = () => {
+    if (sectionRef.current) {
+      sectionRef.current.scrollTo({
+        top: sectionRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  };
 
-   useEffect(() => {
+  //첫 메시지 불러오기
+  useEffect(() => {
     const getChats = async () => {
       try {
         const chats = await getChatMsgAi(id);
         setChatList(chats || []);
       } catch (err) {
-        // if ((err as APIerror).status === 500) {
-        //         alert("채팅방 조회 권한이 없습니다");
-        //         router.push("/main");
-        //       }
-        //       if ((err as APIerror).status === 404) {
-        //         alert("채팅방이 존재하지 않습니다");
-        //         router.push("/main");
-        //       }
-        console.error("채팅 불러오기 실패",err); //추후 console 지우기
-        setChatList([]); 
+        console.error("채팅 불러오기 실패", err);//console 지우기
+        setChatList([]);
       } finally {
         setLoading(false);
       }
     };
     getChats();
-  }, [id, router]);
+  }, [id]);
 
-  if (loading) {
-    return <p className="text-xl">메시지 불러오는 중...</p> }
+  //새 메시지가 생길 때마다 스크롤
+  useEffect(() => {
+    if (!loading) scrollToBottom();
+  }, [chatList, loading]);
+
+  // 메시지 전송
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!inputValue.trim() || sending) return;
+
+    setSending(true);
+    const content = inputValue;
+    setInputValue("");
+
+    try {
+      const { userMessage, aiMessage } = await postChatMsgAi(id, content);
+
+      setChatList((prev) => [
+        ...prev,
+        { ...userMessage, senderType: "HUMAN" },
+        { ...aiMessage, senderType: "AI" },
+      ]);
+    } catch (err) {
+      console.error("메시지 전송 실패", err);//콘솔 지우기
+      alert("메시지를 보낼 수 없습니다.");
+    } finally {
+      setSending(false);
+      scrollToBottom(); 
+    }
+  };
+
+  //엔터키 전송, 쉬프트 엔터 줄바꿈
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(e);
+    }
+  };
+
+  if (loading) return <p className="text-xl">메시지 불러오는 중...</p>;
 
   return (
     <>
-    <section className="my-20 min-h-0 flex-1 flex flex-col overflow-y-auto">
-      {!chatList || chatList.length === 0 ? (
-        <p className="text-xl">채팅이 없습니다</p>
-      ) : (
-        chatList.map((msg) => (
-          <Chat
-            key={msg.id}
-            text={msg.content}
-            sender={msg.senderType === "HUMAN" ? "me" : "others"}
-          />
-        ))
-      )}
-    </section>
-    <form className="bg-lightyellow h-20 flex  justify-between items-center p-3 shrink-0 absolute bottom-0 left-0 right-0 gap-3">
-        <Plus className="top-auto cursor-pointer" />
+      <section
+        ref={sectionRef}
+        className="my-20 min-h-0 flex-1 flex flex-col overflow-y-auto"
+        aria-live="polite"
+        aria-label="AI 채팅 메시지 목록"
+      >
+        {!chatList || chatList.length === 0 ? (
+          <p className="text-xl" aria-live="polite">채팅이 없습니다</p>
+        ) : (
+          chatList.map((msg) => (
+            <Chat
+              key={msg.id}
+              text={msg.content}
+              sender={msg.senderType === "HUMAN" ? "me" : "others"}
+              isMarkdown={msg.senderType === "AI"}
+            />
+          ))
+        )}
+      </section>
+
+      <form
+        onSubmit={handleSubmit}
+        className="bg-lightyellow h-20 flex justify-between items-center p-3 shrink-0 absolute bottom-0 left-0 right-0 gap-3"
+      >
+        <Plus className="top-auto cursor-pointer" aria-hidden="true"/>
         <textarea
           name="chatInputField"
           id="chatInputField"
           className="flex-1 bg-white rounded-full border-2 text-xl p-3 resize-none h-fit"
           rows={1}
           placeholder="질문을 입력하세요"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          onKeyDown={handleKeyDown}
+          aria-label="메시지 입력창"
         />
-        <Button type="submit" className="cursor-pointer">
-          보내기
+        <Button type="submit" className="cursor-pointer" disabled={sending}  aria-label="메시지 보내기">
+          {sending ? "전송 중..." : "보내기"}
         </Button>
       </form>
     </>
   );
 }
 
-export default ChatListAi
+export default ChatListAi;
