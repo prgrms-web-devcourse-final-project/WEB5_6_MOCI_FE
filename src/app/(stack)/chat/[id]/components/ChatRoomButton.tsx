@@ -25,14 +25,15 @@ function ChatRoomButton({
     category: string;
     question: string;
   }>();
+  const user = useAuthStore((s) => s.user);
 
   useEffect(() => {
     async function getChatRoomInfo() {
       const res = await getMentorChatRoomInfo(id);
       setChatRoomInfo(res);
     }
-    getChatRoomInfo();
-  }, [id]);
+    if (user && user.role === "USER") getChatRoomInfo();
+  }, [id, user]);
 
   const endChat = async () => {
     await endChatByMento(id);
@@ -40,7 +41,7 @@ function ChatRoomButton({
   const askToAI = async (e: React.MouseEvent) => {
     e.preventDefault();
     try {
-      if (!chatRoomInfo) return;
+      if (!chatRoomInfo || user?.role !== "USER") return;
       const aiChatRoom = await createAIChatRoom(
         chatRoomInfo.category,
         chatRoomInfo.question

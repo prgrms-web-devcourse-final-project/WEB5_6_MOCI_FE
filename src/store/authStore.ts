@@ -13,14 +13,14 @@ type User = {
 
 interface AuthState {
   user: User | null;
-  setUser: (user: User) => void;
+  setUser: (user: User | null) => void;
   fetchUser: () => Promise<void>;
   logout: () => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
-  setUser: (user: User) => set({ user }),
+  setUser: (user: User | null) => set({ user }),
   fetchUser: async () => {
     try {
       const res = await fetch(`http://localhost:8080/api/v1/users/me`, {
@@ -36,7 +36,6 @@ export const useAuthStore = create<AuthState>((set) => ({
         set({ user: data.data });
       } else if (res.status === 401) {
         set({ user: null });
-
       } else {
         console.error("사용자 정보를 가져오는데 실패하였습니다");
         set({ user: null });
