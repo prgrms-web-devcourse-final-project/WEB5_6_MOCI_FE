@@ -23,6 +23,8 @@ export const createMentorChatRoom = async (
   const json = await res.json();
   return {
     id: json.data.id,
+    category: json.data.category,
+    question: json.data.question,
     target: "mentor" as const,
   };
 };

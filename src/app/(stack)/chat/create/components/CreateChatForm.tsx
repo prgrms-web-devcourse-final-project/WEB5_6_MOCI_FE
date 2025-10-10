@@ -9,8 +9,7 @@ import { ChatTarget } from "@/types/chat";
 import { createAIChatRoom } from "@/api/createAIChatRoom";
 import { createMentorChatRoom } from "@/api/createMentorChatRoom";
 
-
-type ChatFormData = {
+export type ChatFormData = {
   category: string;
   question: string;
   target: ChatTarget;
@@ -27,25 +26,24 @@ export default function CreateChatForm() {
 
   const next = () => setStep((s) => s + 1);
 
-  const handleSubmit = async() => {
-
-    try{
-       const result =
+  const handleSubmit = async () => {
+    try {
+      const result =
         formData.target === "ai"
           ? await createAIChatRoom(formData.category, formData.question)
           : await createMentorChatRoom(formData.category, formData.question);
 
       console.log("채팅방생성완료", result.id); // 추후 console 지우기
 
-      if(result.target === "ai"){
+      if (result.target === "ai") {
         router.push(`/chat/${result.id}/ai`);
-      }else{
+      } else {
         router.push(`/chat/${result.id}/mentor`);
       }
-    }catch(e){
+    } catch (e) {
       alert(e);
     }
-  }
+  };
   return (
     <>
       {step === 0 && (

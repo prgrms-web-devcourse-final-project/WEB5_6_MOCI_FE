@@ -1,14 +1,19 @@
-"use client";
 // import { usePathname } from "next/navigation";
 import Help from "@/assets/icons/help.svg";
-import Button from "@/shared/components/Button";
 import StackHeader from "@/shared/components/StackHeader";
-import Plus from "@/assets/icons/plus.svg";
-
 // import { useEffect, useRef, useState } from "react";
-import Chat from "../components/Chat";
+import ChatListAi from "../components/ChatListAi";
+import type { Metadata } from "next";
 
-function Page() {
+export const metadata: Metadata = {
+  title: "AI 채팅방",
+  description: "AI 채팅방",
+};
+
+
+async function Page({ params }: { params: Promise<{ id: number }> }) {
+  const param = await params;
+  const id = param.id; 
   // const pathName = usePathname();
 
   // const [containerHeight, setContainerHeight] = useState<string>("100%");
@@ -84,36 +89,7 @@ function Page() {
             채팅방 이용방법을 확인하려면 클릭하세요
           </p>
         </div>
-        <section
-          // ref={sectionRef}
-          className="my-20 min-h-0 flex-1 flex flex-col overflow-y-auto"
-        >
-          <Chat text="안녕하세요" sender="me" />
-          <Chat text="안녕하세요" sender="others" />
-          <Chat text="안녕하세요" sender="me" />
-          <Chat text="안녕하세요" sender="others" />
-          <Chat text="안녕하세요" sender="me" />
-          <Chat text="안녕하세요" sender="others" />
-          <Chat text="안녕하세요" sender="me" />
-          <Chat text="안녕하세요" sender="others" />
-          <Chat text="안녕하세요" sender="me" />
-          <Chat text="안녕하세요" sender="others" />
-          <Chat text="안녕하세요" sender="me" />
-          <Chat text="안녕하세요" sender="others" />
-        </section>
-        <form className="bg-lightyellow h-20 flex  justify-between items-center p-3 shrink-0 absolute bottom-0 left-0 right-0 gap-3">
-          <Plus className="top-auto cursor-pointer" />
-          <textarea
-            name="chatInputField"
-            id="chatInputField"
-            className="flex-1 bg-white rounded-full border-2 text-xl p-3 resize-none h-fit"
-            rows={1}
-            placeholder="질문을 입력하세요"
-          />
-          <Button type="submit" className="cursor-pointer">
-            보내기
-          </Button>
-        </form>
+        <ChatListAi id={id} />
       </main>
     </>
   );
