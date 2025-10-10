@@ -38,6 +38,16 @@ function ManagerMain() {
           교육 자료실로 이동
         </Link>
       </Button>
+      
+      <Button color="yellow" fullWidth hasIcon className="p-0">
+        <Link
+          href="/archive/request"
+          className="flex items-center gap-2.5 w-full h-full px-4 py-3"
+        >
+          <RightArrow className="text-black" />
+          자료요청게시판
+        </Link>
+      </Button>
     </div>
 
     {/*전체 채팅방*/}

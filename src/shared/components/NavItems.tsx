@@ -37,7 +37,7 @@ function NavItems({ closeNav }: { closeNav: () => void }) {
     {
       href: "/archive/request",
       show: user !== null && user.role !== "USER",
-      itemName: "자료요청페이지",
+      itemName: "자료요청게시판",
       selected: "/archive/request" === pathname,
     },
   ];
