@@ -1,7 +1,3 @@
-// export interface APIerror {
-//   status: number;
-//   message: string;
-// }
 
 export async function getChatMsgAi(roomId: number): Promise<
   {
@@ -24,9 +20,5 @@ export async function getChatMsgAi(roomId: number): Promise<
   );
 
  const data = await res.json();
-  //  if (!res.ok) {
-  //    const error: APIerror = { status: data.code, message: data.message };
-  //    throw error;
-  //  }
-   return data.data;
+ return data;  
 }
