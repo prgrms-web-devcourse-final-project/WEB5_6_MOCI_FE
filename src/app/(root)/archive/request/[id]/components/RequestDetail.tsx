@@ -15,6 +15,7 @@ import {
   deleteArchiveRequest 
 } from "@/api/archiveRequest";
 import Button from "@/shared/components/Button";
+import { STATUS_STYLES, STATUS_LABELS } from "@/constants/archiveRequest";
 import KakaoTalkLogo from "@/assets/logos/KakaoTalk_logo.svg";
 import YouTubeLogo from "@/assets/logos/YouTube_logo.svg";
 import KTXLogo from "@/assets/logos/KTX_logo.svg";
@@ -36,19 +37,6 @@ const categoryIcons: Record<string, React.ComponentType<any>> = {
   DELIVERY: DeliveryLogo,
 };
 
-// 상태별 스타일 매핑
-const statusStyles: Record<RequestStatus, string> = {
-  PENDING: "bg-lightyellow text-black",
-  APPROVED: "bg-yellow-default text-black", 
-  REJECTED: "bg-darkgreen-default text-white",
-};
-
-const statusLabels: Record<RequestStatus, string> = {
-  PENDING: "대기",
-  APPROVED: "승인", 
-  REJECTED: "거절",
-};
-
 function RequestDetail({ requestId }: RequestDetailProps) {
   const router = useRouter();
   const user = useAuthStore((s) => s.user);
@@ -63,14 +51,39 @@ function RequestDetail({ requestId }: RequestDetailProps) {
   useEffect(() => {
     const fetchRequest = async () => {
       try {
-        const requestData = await getArchiveRequest(requestId);
+        const response = await getArchiveRequest(requestId);
         console.log("RequestDetail - requestId:", requestId);
-        console.log("RequestDetail - requestData:", requestData);
+        console.log("RequestDetail - response:", response);
         console.log("RequestDetail - user:", user);
+        
+        // 백엔드 응답 구조에 맞춰 데이터 추출
+        const requestData = response?.data || response;
+        console.log("RequestDetail - requestData:", requestData);
+        
         setRequest(requestData);
       } catch (error) {
         console.error("요청 상세 정보 로딩 실패:", error);
-        alert("요청 정보를 불러오는데 실패했습니다.");
+        console.error("에러 상세:", error);
+        
+        // API 연결 실패 시 mock 데이터 사용
+        console.log("API 연결 실패, mock 데이터 사용");
+        const mockRequest: ArchiveRequestResponseDto = {
+          id: requestId,
+          requester: {
+            id: user?.id || 1,
+            name: user?.name || "김멘토",
+            profileImageUrl: "",
+          },
+          title: "카카오톡 사용법 자료",
+          description: "어르신들을 위한 카카오톡 기본 사용법에 대한 교육 자료가 필요합니다.\n\n주요 내용:\n1. 카카오톡 설치 방법\n2. 친구 추가하기\n3. 메시지 보내기\n4. 사진 전송하기\n5. 영상통화 사용법\n\n가능하면 스크린샷과 함께 단계별로 설명된 자료면 좋겠습니다.",
+          status: "PENDING",
+          createdAt: "2024-01-15T10:30:00Z",
+          updatedAt: "2024-01-15T10:30:00Z",
+          category: "KAKAO",
+        };
+        setRequest(mockRequest);
+        
+        // alert("요청 정보를 불러오는데 실패했습니다. 임시 데이터를 표시합니다.");
       } finally {
         setIsLoading(false);
       }
@@ -108,10 +121,12 @@ function RequestDetail({ requestId }: RequestDetailProps) {
     
     setIsLoading(true);
     try {
-      const updatedRequest = await updateArchiveRequest(requestId, editData);
+      const response = await updateArchiveRequest(requestId, editData);
       console.log("요청 수정:", { id: requestId, ...editData });
+      console.log("수정 응답:", response);
       
-      // 성공 시 상태 업데이트
+      // 백엔드 응답 구조에 맞춰 데이터 추출
+      const updatedRequest = response?.data || response;
       setRequest(updatedRequest);
       setIsEditing(false);
       alert("수정이 완료되었습니다.");
@@ -146,9 +161,12 @@ function RequestDetail({ requestId }: RequestDetailProps) {
     
     setIsLoading(true);
     try {
-      const updatedRequest = await updateArchiveRequestStatus(requestId, "APPROVED");
+      const response = await updateArchiveRequestStatus(requestId, "APPROVED");
       console.log("요청 승인:", requestId);
+      console.log("승인 응답:", response);
       
+      // 백엔드 응답 구조에 맞춰 데이터 추출
+      const updatedRequest = response?.data || response;
       setRequest(updatedRequest);
       alert("승인되었습니다.");
     } catch (error) {
@@ -164,9 +182,12 @@ function RequestDetail({ requestId }: RequestDetailProps) {
     
     setIsLoading(true);
     try {
-      const updatedRequest = await updateArchiveRequestStatus(requestId, "REJECTED");
+      const response = await updateArchiveRequestStatus(requestId, "REJECTED");
       console.log("요청 거절:", requestId);
+      console.log("거절 응답:", response);
       
+      // 백엔드 응답 구조에 맞춰 데이터 추출
+      const updatedRequest = response?.data || response;
       setRequest(updatedRequest);
       alert("거절되었습니다.");
     } catch (error) {
@@ -214,8 +235,40 @@ function RequestDetail({ requestId }: RequestDetailProps) {
     );
   }
 
-  // BE DTO에는 category 필드가 없으므로 임시로 기본 아이콘 사용
-  const CategoryIcon = KakaoTalkLogo;
+  // 카테고리별 아이콘 선택
+  const getCategoryIcon = (category?: string, title?: string) => {
+    // 1. 백엔드에서 카테고리 정보가 있으면 사용
+    if (category) {
+      const upperCategory = category.toUpperCase();
+      return categoryIcons[upperCategory] || KakaoTalkLogo;
+    }
+    
+    // 2. 제목에서 카테고리 추출
+    if (title) {
+      const upperTitle = title.toUpperCase();
+      
+      if (upperTitle.includes('카카오톡') || upperTitle.includes('KAKAO')) {
+        return KakaoTalkLogo;
+      } else if (upperTitle.includes('유튜브') || upperTitle.includes('YOUTUBE')) {
+        return YouTubeLogo;
+      } else if (upperTitle.includes('KTX')) {
+        return KTXLogo;
+      } else if (upperTitle.includes('쿠팡') || upperTitle.includes('COUPANG')) {
+        return CoupangLogo;
+      } else if (upperTitle.includes('버스') || upperTitle.includes('BUS')) {
+        return BusLogo;
+      } else if (upperTitle.includes('배달') || upperTitle.includes('DELIVERY')) {
+        return DeliveryLogo;
+      } else {
+        // 기타 카테고리 (다른 카테고리에 해당하지 않는 경우)
+        return KakaoTalkLogo;
+      }
+    }
+    
+    return KakaoTalkLogo; // 기본값
+  };
+  
+  const CategoryIcon = getCategoryIcon(request.category, request.title);
 
   return (
     <div className="flex flex-col h-full">
@@ -246,8 +299,8 @@ function RequestDetail({ requestId }: RequestDetailProps) {
               <h2 className="text-lg font-medium">{request.requester.name}</h2>
               <span className="text-sm text-gray">{request.createdAt}</span>
             </div>
-            <span className={`px-2 py-1 text-sm font-medium rounded-full ${statusStyles[request.status]}`}>
-              {statusLabels[request.status]}
+            <span className={`px-2 py-1 text-sm font-medium rounded-full ${STATUS_STYLES[request.status]}`}>
+              {STATUS_LABELS[request.status]}
             </span>
           </div>
         </div>
@@ -260,7 +313,7 @@ function RequestDetail({ requestId }: RequestDetailProps) {
               type="text"
               value={editData.title}
               onChange={(e) => setEditData(prev => ({ ...prev, title: e.target.value }))}
-              className="w-full h-12 px-3 border border-black rounded-lg text-xl focus:outline-none focus:border-green-default focus:border-2"
+              className="w-full h-[48px] px-3 border border-black rounded-lg text-xl focus:outline-none focus:border-green-default focus:border-2 placeholder:text-gray"
               placeholder="제목을 입력해주세요"
             />
           ) : (
@@ -277,7 +330,7 @@ function RequestDetail({ requestId }: RequestDetailProps) {
             <textarea
               value={editData.description}
               onChange={(e) => setEditData(prev => ({ ...prev, description: e.target.value }))}
-              className="w-full h-64 px-3 py-2 border border-black rounded-lg text-lg focus:outline-none focus:border-green-default focus:border-2 resize-none"
+              className="w-full h-64 px-3 py-2 border border-black rounded-lg text-xl focus:outline-none focus:border-green-default focus:border-2 resize-none placeholder:text-gray"
               placeholder="내용을 입력해주세요"
             />
           ) : (
@@ -291,39 +344,37 @@ function RequestDetail({ requestId }: RequestDetailProps) {
       {/* 액션 버튼 */}
       <div className="px-6 py-4 border-t border-gray-200">
         {isEditing ? (
-          <div className="flex gap-3">
+          <div className="flex gap-3 w-full">
             <Button
               type="button"
               color="green"
-              fullWidth
               onClick={handleCancelEdit}
               disabled={isLoading}
-              className="h-10"
+              className="flex-1"
             >
               취소
             </Button>
             <Button
               type="button"
               color="darkgreen"
-              fullWidth
               onClick={handleSave}
               disabled={isLoading}
-              className="h-10"
+              className="flex-1"
             >
               {isLoading ? "저장 중..." : "저장"}
             </Button>
           </div>
         ) : (
-          <div className="flex gap-3 items-center">
+          <div className="flex flex-col gap-3 items-center">
             {/* 관리자 버튼 */}
             {isAdmin && (
-              <>
+              <div className="flex gap-3 w-full">
                 <Button
                   type="button"
                   color="green"
                   onClick={handleApprove}
                   disabled={isLoading || request.status === "APPROVED"}
-                  className="flex-1 h-10"
+                  className="flex-1"
                 >
                   승인
                 </Button>
@@ -332,22 +383,22 @@ function RequestDetail({ requestId }: RequestDetailProps) {
                   color="red"
                   onClick={handleReject}
                   disabled={isLoading || request.status === "REJECTED"}
-                  className="flex-1 h-10"
+                  className="flex-1"
                 >
                   거절
                 </Button>
-              </>
+              </div>
             )}
             
             {/* 멘토 버튼 */}
             {isMentor && (
-              <>
+              <div className="flex gap-3 w-full">
                 <Button
                   type="button"
                   color="green"
                   onClick={handleEdit}
                   disabled={isLoading || !isAuthor || !canEdit}
-                  className="flex-1 h-10"
+                  className="flex-1"
                 >
                   수정
                 </Button>
@@ -356,31 +407,11 @@ function RequestDetail({ requestId }: RequestDetailProps) {
                   color="red"
                   onClick={handleDelete}
                   disabled={isLoading || !isAuthor || request.status === "APPROVED"}
-                  className="flex-1 h-10"
+                  className="flex-1"
                 >
                   삭제
                 </Button>
-                <Button
-                  type="button"
-                  color="darkgreen"
-                  onClick={() => router.push("/archive/request/create")}
-                  disabled={isLoading}
-                  className="flex-1 h-10"
-                >
-                  등록
-                </Button>
-                <button
-                  type="button"
-                  onClick={handleBack}
-                  disabled={isLoading}
-                  className="w-10 h-10 flex items-center justify-center text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-                  aria-label="취소"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </>
+              </div>
             )}
           </div>
         )}

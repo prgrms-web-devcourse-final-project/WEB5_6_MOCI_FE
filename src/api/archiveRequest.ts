@@ -1,6 +1,7 @@
 import {
   ArchiveRequestResponseDto,
   ArchiveRequestListResponseDto,
+  ArchiveRequestListApiResponse,
   CreateArchiveRequestDto,
   UpdateArchiveRequestStatusDto,
   RequestStatus
@@ -9,8 +10,8 @@ import {
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
 
 // 요청 목록 조회
-export async function getArchiveRequestList(page: number = 0, size: number = 10): Promise<ArchiveRequestListResponseDto> {
-  const url = `${BASE_URL}/api/archive-requests?page=${page}&size=${size}`;
+export async function getArchiveRequestList(page: number = 0, size: number = 10): Promise<ArchiveRequestListApiResponse> {
+  const url = `${BASE_URL}/api/v1/archive-requests?page=${page}&size=${size}`;
   console.log("API 요청 URL:", url);
   console.log("BASE_URL:", BASE_URL);
   
@@ -38,7 +39,7 @@ export async function getArchiveRequestList(page: number = 0, size: number = 10)
 
 // 요청 상세 조회
 export async function getArchiveRequest(id: number): Promise<ArchiveRequestResponseDto> {
-  const response = await fetch(`${BASE_URL}/api/archive-requests/${id}`, {
+  const response = await fetch(`${BASE_URL}/api/v1/archive-requests/${id}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -55,7 +56,7 @@ export async function getArchiveRequest(id: number): Promise<ArchiveRequestRespo
 
 // 요청 생성
 export async function createArchiveRequest(data: CreateArchiveRequestDto): Promise<ArchiveRequestResponseDto> {
-  const response = await fetch(`${BASE_URL}/api/archive-requests`, {
+  const response = await fetch(`${BASE_URL}/api/v1/archive-requests`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -73,7 +74,7 @@ export async function createArchiveRequest(data: CreateArchiveRequestDto): Promi
 
 // 요청 수정
 export async function updateArchiveRequest(id: number, data: CreateArchiveRequestDto): Promise<ArchiveRequestResponseDto> {
-  const response = await fetch(`${BASE_URL}/api/archive-requests/${id}`, {
+  const response = await fetch(`${BASE_URL}/api/v1/archive-requests/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -91,7 +92,7 @@ export async function updateArchiveRequest(id: number, data: CreateArchiveReques
 
 // 요청 상태 수정 (승인/거절)
 export async function updateArchiveRequestStatus(id: number, status: RequestStatus): Promise<ArchiveRequestResponseDto> {
-  const response = await fetch(`${BASE_URL}/api/archive-requests/${id}/status`, {
+  const response = await fetch(`${BASE_URL}/api/v1/archive-requests/${id}/status`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
@@ -109,7 +110,7 @@ export async function updateArchiveRequestStatus(id: number, status: RequestStat
 
 // 요청 삭제
 export async function deleteArchiveRequest(id: number): Promise<void> {
-  const response = await fetch(`${BASE_URL}/api/archive-requests/${id}`, {
+  const response = await fetch(`${BASE_URL}/api/v1/archive-requests/${id}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
@@ -124,7 +125,7 @@ export async function deleteArchiveRequest(id: number): Promise<void> {
 
 // 대기중 요청 개수 조회
 export async function getPendingRequestCount(): Promise<number> {
-  const response = await fetch(`${BASE_URL}/api/archive-requests/pending-count`, {
+  const response = await fetch(`${BASE_URL}/api/v1/archive-requests/pending/count`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Button from "@/shared/components/Button";
-import PlusIcon from "@/assets/icons/plus.svg";
 
 interface CategoryOption {
   value: string;
@@ -86,9 +85,8 @@ function RequestFilter({
         <Button
           color="darkgreen"
           onClick={onRequestCreate}
-          className="h-12 px-4 flex items-center gap-2"
+          className="h-12 px-4"
         >
-          <PlusIcon className="w-5 h-5" />
           요청하기
         </Button>
       )}
