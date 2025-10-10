@@ -3,6 +3,9 @@ import O from "@/assets/O.svg";
 import X from "@/assets/X.svg";
 import { useState } from "react";
 import Button from "@/shared/components/Button";
+import { updateDigitalLevel } from "@/api/updateDigitalLevel";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/store/authStore";
 
 // 문제
 const questions = [
@@ -26,6 +29,11 @@ function OXQuiz() {
   const [answers, setAnswers] = useState<(boolean | null)[]>(
     Array(questions.length).fill(null)
   );
+  const [error, setError] = useState<string | null>(null);
+
+  const router = useRouter();
+
+  const { user, setUser } = useAuthStore();
 
   // ox에 따라 true/false로 답 저장하기
   const handleAnswer = (value: "o" | "x") => {
@@ -37,12 +45,26 @@ function OXQuiz() {
   // 이전 문제로 이동
   const goBack = () => current > 0 && setCurrent((c) => c - 1);
 
-  const goNext = () => {
+  const goNext = async () => {
     if (current + 1 < questions.length) {
       setCurrent((c) => c + 1);
-    } //  else TODO : 회원가입 API 호출하기
+    } else {
+      try {
+        const data = await updateDigitalLevel(answers);
+        const level = data.data.digitalLevel;
+        setUser({ ...user, digitalLevel: level });
+        router.push("/main");
+      } catch (err) {
+        if (err instanceof Error) {
+          setError(err.message);
+          alert(error);
+        } else {
+          setError("알 수 없는 오류가 발생했습니다.");
+          alert(error);
+        }
+      }
+    }
   };
-
   return (
     <>
       {/* aria-live : polite 문제 바뀌면 자동으로 읽어줌 */}
@@ -84,7 +106,7 @@ function OXQuiz() {
                 checked={answers[current] === true}
                 aria-label="o (할 수 있다)"
               />
-              <O  />
+              <O />
             </label>
             {/* x버튼 */}
             <label
@@ -133,5 +155,4 @@ function OXQuiz() {
     </>
   );
 }
-
 export default OXQuiz;
