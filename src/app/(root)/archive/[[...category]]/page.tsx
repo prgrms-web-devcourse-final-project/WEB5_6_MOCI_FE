@@ -58,12 +58,11 @@ async function Page({
   searchParams,
   params,
 }: {
-  searchParams: Promise<{ page: string; keyword: string }>;
-  params?: Promise<{ category: CategoryKey }>;
+  searchParams: { page: string; keyword: string };
+  params?: { category: CategoryKey[] };
 }) {
-  const { page, keyword } = await searchParams;
-  const param = await params;
-  const category = param?.category ?? "all";
+  const { page, keyword } = searchParams;
+  const category = params?.category?.[0] ?? "all";
   const currentPage = Number(page || 1);
   const items = [
     {
