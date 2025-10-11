@@ -15,14 +15,14 @@ import CoupangLogo from "@/assets/logos/Coupang_logo.svg";
 import BusLogo from "@/assets/logos/Bus_logo.svg";
 import DeliveryLogo from "@/assets/logos/Delivery_logo.svg";
 
-// 카테고리별 아이콘 매핑
+// 카테고리별 아이콘 매핑 (백엔드 RequestCategory enum에 맞춤)
 const categoryIcons: Record<string, React.ComponentType<any>> = {
-  KAKAO: KakaoTalkLogo,
+  KAKAO_TALK: KakaoTalkLogo,
   YOUTUBE: YouTubeLogo,
   KTX: KTXLogo,
+  INTERCITY_BUS: BusLogo,
+  BAEMIN: DeliveryLogo,
   COUPANG: CoupangLogo,
-  BUS: BusLogo,
-  DELIVERY: DeliveryLogo,
   ETC: KakaoTalkLogo, // 기타는 기본 아이콘 사용
 };
 

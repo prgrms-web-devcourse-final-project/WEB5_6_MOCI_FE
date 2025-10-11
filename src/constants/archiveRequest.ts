@@ -1,27 +1,27 @@
 // 자료요청 관련 상수들
 import { RequestStatus } from "@/types/archiveRequest";
 
-// 카테고리 옵션
+// 카테고리 옵션 (백엔드 RequestCategory enum에 맞춤)
 export const CATEGORY_OPTIONS = [
   { value: "", label: "카테고리를 선택해주세요" },
-  { value: "KAKAO", label: "카카오톡" },
+  { value: "KAKAO_TALK", label: "카카오톡" },
   { value: "YOUTUBE", label: "유튜브" },
   { value: "KTX", label: "KTX" },
+  { value: "INTERCITY_BUS", label: "시외버스" },
+  { value: "BAEMIN", label: "배달의민족" },
   { value: "COUPANG", label: "쿠팡" },
-  { value: "BUS", label: "버스" },
-  { value: "DELIVERY", label: "배달" },
   { value: "ETC", label: "기타" },
 ] as const;
 
-// 필터용 카테고리 옵션 (전체 포함)
+// 필터용 카테고리 옵션 (전체 포함) - 백엔드 RequestCategory enum에 맞춤
 export const FILTER_CATEGORY_OPTIONS = [
   { value: "ALL", label: "전체" },
-  { value: "KAKAO", label: "카카오톡" },
+  { value: "KAKAO_TALK", label: "카카오톡" },
   { value: "YOUTUBE", label: "유튜브" },
   { value: "KTX", label: "KTX" },
+  { value: "INTERCITY_BUS", label: "시외버스" },
+  { value: "BAEMIN", label: "배달의민족" },
   { value: "COUPANG", label: "쿠팡" },
-  { value: "BUS", label: "버스" },
-  { value: "DELIVERY", label: "배달" },
   { value: "ETC", label: "기타" },
 ];
 
