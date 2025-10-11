@@ -69,7 +69,10 @@ function ChatListMento({ id }: { id: string }) {
         <ChatRoomButton
           id={id}
           hasmento={messages?.find((m) => m.sender !== name) ? true : false}
-          end={messages?.at(-1)?.id === null}
+          end={
+            messages?.at(-1)?.id === null ||
+            messages?.at(-1)?.sender === "System"
+          }
         />
         <>
           <button
@@ -96,7 +99,11 @@ function ChatListMento({ id }: { id: string }) {
                 key={id}
                 text={content}
                 sender={
-                  name === sender ? (id === null ? "system" : "me") : "others"
+                  id === null || sender === "System"
+                    ? "system"
+                    : name === sender
+                    ? "me"
+                    : "others"
                 }
               />
             ))
@@ -113,7 +120,7 @@ function ChatListMento({ id }: { id: string }) {
         <input
           name="chatInputField"
           id="chatInputField"
-          className="flex-1 bg-white rounded-full border-2 text-xl p-3 resize-none h-fit min-w-0"
+          className="flex-1 bg-white rounded-full border-2 text-xl p-3 resize-none h-fit min-w-0 disabled:bg-gray"
           placeholder={
             messages?.at(-1)?.id === null
               ? "채팅방이 종료되었습니다"
@@ -121,7 +128,7 @@ function ChatListMento({ id }: { id: string }) {
           }
           onChange={handleText}
           value={text}
-          disabled={messages?.at(-1)?.id === null}
+          disabled={messages?.at(-1)?.id === null || user?.role === "ADMIN"}
         />
         <Button
           type="submit"

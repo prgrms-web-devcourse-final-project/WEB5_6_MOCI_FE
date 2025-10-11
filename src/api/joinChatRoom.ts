@@ -1,11 +1,11 @@
 import { BASE_URL } from "./constants/config";
 import { APIerror } from "./getChatMsgMento";
 
-export const deleteMentoChatRoom = async (roomId: string) => {
+export const joinChatRoom = async (id: number) => {
   const res = await fetch(
-    `${BASE_URL}/api/v1/chat/mentor/mentee/room/${roomId}`,
+    `${BASE_URL}/api/v1/chat/mentor/mentor/room/join/${id}`,
     {
-      method: "DELETE",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json; charset: UTF-8",
       },
