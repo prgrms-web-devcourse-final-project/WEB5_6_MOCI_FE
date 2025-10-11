@@ -1,7 +1,7 @@
 import { BASE_URL } from "./constants/config";
 
 export const createAIChatRoom = async (category: string, question: string) => {
-  const res = await fetch(`${BASE_URL}api/v1/chat/ai/room`, {
+  const res = await fetch(`${BASE_URL}/api/v1/chat/ai/room`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
