@@ -17,11 +17,11 @@ type PublicChatRoomCardProps = {
   category: string;
   digital_level: string;
   // hasAlarm : boolean; //추후 알림 기능 구현시 사용
-  onEnter: () => void; 
-}
+  onEnter?: () => void;
+};
 
 function PublicChatRoomCard({
-  mentee_nickname,
+  // mentee_nickname,
   title,
   category,
   digital_level,
@@ -41,27 +41,35 @@ function PublicChatRoomCard({
           />
         </div>
         <div>
-          <p className="text-sm text-darkgray">멘티 : {mentee_nickname}</p>
+          {/* <p className="text-sm text-darkgray">멘티 : {mentee_nickname}</p> */}
           <p className="text-xl font-semibold">{title}</p>
           <div className="flex gap-2 mt-1">
-            <span className="px-4 py-1 text-sm bg-lightgreen rounded-2xl">Lv.{digital_level}</span>
-            <span className="px-4 py-1 text-sm bg-lightgreen rounded-2xl">{category}</span>
+            {digital_level !== "" && (
+              <span className="px-4 py-1 text-sm bg-lightgreen rounded-2xl">
+                Lv.{digital_level}
+              </span>
+            )}
+            <span className="px-4 py-1 text-sm bg-lightgreen rounded-2xl">
+              {category}
+            </span>
           </div>
         </div>
       </div>
 
       {/*입장하기 버튼 */}
-      <div className="relative">
-        <Button
-          onClick={onEnter}
-          color="darkgreen"
-          size="sm"
-          className="text-lg"
-        >
-          입장하기
-        </Button>
-      </div>
+      {onEnter && (
+        <div className="relative">
+          <Button
+            onClick={onEnter}
+            color="darkgreen"
+            size="sm"
+            className="text-lg"
+          >
+            입장하기
+          </Button>
+        </div>
+      )}
     </div>
-  )
+  );
 }
-export default PublicChatRoomCard
+export default PublicChatRoomCard;

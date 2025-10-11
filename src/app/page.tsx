@@ -1,7 +1,7 @@
 // import UserIcon from "@/assets/icons/user.svg";
 import Button from "@/shared/components/Button";
 import ButtonGroup from "@/shared/components/ButtonGroup";
-import Image from "next/image";
+// import Image from "next/image";
 import Link from "next/link";
 import KaKaoIcon from "@/assets/logos/KakaoTalk_logo.svg";
 import KTXLogo from "@/assets/logos/KTX_logo.svg";
@@ -43,7 +43,7 @@ export default function Home() {
           />
           <p className="text-sm">멘토 매칭 서비스</p>
         </div> */}
-        <LandingSwiper/>
+        <LandingSwiper />
       </section>
 
       <section className="bg-lightyellow flex-[3] flex flex-col px-6 py-6">
