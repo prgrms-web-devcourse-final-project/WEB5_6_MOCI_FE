@@ -1,12 +1,13 @@
 // import UserIcon from "@/assets/icons/user.svg";
 import Button from "@/shared/components/Button";
 import ButtonGroup from "@/shared/components/ButtonGroup";
-import Image from "next/image";
+// import Image from "next/image";
 import Link from "next/link";
 import KaKaoIcon from "@/assets/logos/KakaoTalk_logo.svg";
 import KTXLogo from "@/assets/logos/KTX_logo.svg";
 import YouTubeLogo from "@/assets/logos/YouTube_logo.svg";
 import CoupangLogo from "@/assets/logos/Coupang_logo.svg";
+import LandingSwiper from "./components/LandingSwiper/LandingSwiper";
 
 const items = [
   { icon: <KaKaoIcon />, label: "카카오톡", href: "/archive/kakaotalk" },
@@ -31,7 +32,7 @@ export default function Home() {
   return (
     <div className="flex flex-col h-[100dvh]">
       <section className="min-w-[15rem] flex-[2] flex justify-center items-center px-6 py-6">
-        <div className="w-full h-full border border-darkgreen-default rounded-lg flex flex-col justify-center items-center">
+        {/* <div className="w-full h-full border border-darkgreen-default rounded-lg flex flex-col justify-center items-center">
           <Image
             src="/logo.png"
             alt="디딤돌 로고"
@@ -41,7 +42,8 @@ export default function Home() {
             priority
           />
           <p className="text-sm">멘토 매칭 서비스</p>
-        </div>
+        </div> */}
+        <LandingSwiper />
       </section>
 
       <section className="bg-lightyellow flex-[3] flex flex-col px-6 py-6">

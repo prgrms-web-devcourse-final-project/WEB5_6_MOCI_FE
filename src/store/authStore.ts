@@ -14,14 +14,14 @@ type User = {
 
 interface AuthState {
   user: User | null;
-  setUser: (user: Partial<User>) => void;
+  setUser: (user: Partial<User> | null) => void;
   fetchUser: () => Promise<void>;
   logout: () => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
-  setUser: (user: Partial<User>) =>
+  setUser: (user: Partial<User> | null) =>
     set((state) => ({
       user: state.user ? { ...state.user, ...user } : (user as User),
     })),
