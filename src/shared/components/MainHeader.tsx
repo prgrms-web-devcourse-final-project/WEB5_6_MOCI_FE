@@ -7,26 +7,27 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import Navbar from "./Navbar";
 import gsap from "gsap";
+import Button from "./Button";
+import { useAuthStore } from "@/store/authStore";
 
 function MainHeader() {
   const [openNav, setOpenNav] = useState(false);
   const navRef = useRef(null);
+  const user = useAuthStore((s) => s.user);
 
   useEffect(() => {
     if (openNav) {
       gsap.to(navRef.current, {
         x: "100%",
-        opacity: 100,
+        opacity: 1,
         duration: 0.6,
         ease: "power2.out",
       });
-    }
-    if (!openNav) {
+    } else {
       gsap.to(navRef.current, {
         x: 0,
         opacity: 0,
-        duration: 0.6,
-        ease: "power2.out",
+        duration: 0.3,
       });
     }
   }, [openNav]);
@@ -42,7 +43,11 @@ function MainHeader() {
           <Hamburger />
         </button>
 
-        <Link href={"/main"} aria-label="메인페이지로 이동" className="h-full">
+        <Link
+          href={"/main"}
+          aria-label="메인페이지로 이동"
+          className="h-full absolute top-auto right-1/2 translate-x-1/2"
+        >
           <Image
             src={"/logo.png"}
             aria-label="로고 이미지"
@@ -51,16 +56,24 @@ function MainHeader() {
             height={40}
           />
         </Link>
-        <Link
-          href={"/my-page"}
-          aria-label="내 정보 페이지로 이동"
-          className="flex flex-col justify-center items-center h-full px-2"
-        >
-          <UserIcon />
-          <span className="text-sm font-normal">내 정보</span>
-        </Link>
+        {user ? (
+          <Link
+            href={"/my-page"}
+            aria-label="내 정보 페이지로 이동"
+            className="flex flex-col justify-center items-center h-full px-2"
+          >
+            <UserIcon />
+            <span className="text-sm font-normal">내 정보</span>
+          </Link>
+        ) : (
+          <Button className="px-2.5 py-1.5 hover:scale-y-100 active:scale-y-100">
+            <Link href={"/login"} aria-label="로그인페이지로 이동">
+              로그인
+            </Link>
+          </Button>
+        )}
       </header>
-      <Navbar ref={navRef} closeNav={() => setOpenNav(false)} />
+      <Navbar navRef={navRef} closeNav={() => setOpenNav(false)} />
     </>
   );
 }

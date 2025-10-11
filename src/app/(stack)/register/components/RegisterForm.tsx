@@ -112,14 +112,14 @@ function RegisterForm() {
     //api 통신
 
     try {
-      const data = await register({
+      await register({
         name: registerUserInfo.name,
         phone: registerUserInfo.phone,
         password,
       });
 
       //TODO: 회원가입 성공 알림창 띄우고 테스트 페이지로 이동한다고 유저에게 알려주기
-      console.log("회원가입 성공:", data);
+      alert("회원가입 완료");
 
       //로그인 페이지로 이동
       router.push("/login");
