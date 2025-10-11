@@ -10,10 +10,16 @@ import {
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
 
 // 요청 목록 조회
-export async function getArchiveRequestList(page: number = 0, size: number = 10): Promise<ArchiveRequestListApiResponse> {
-  const url = `${BASE_URL}/api/v1/archive-requests?page=${page}&size=${size}`;
-  console.log("API 요청 URL:", url);
-  console.log("BASE_URL:", BASE_URL);
+export async function getArchiveRequestList(
+  page: number = 0, 
+  size: number = 10, 
+  category?: string
+): Promise<ArchiveRequestListApiResponse> {
+  // 카테고리 파라미터 추가 (ALL이면 파라미터 제외)
+  let url = `${BASE_URL}/api/v1/archive-requests?page=${page}&size=${size}`;
+  if (category && category !== 'ALL') {
+    url += `&category=${category}`;
+  }
   
   const response = await fetch(url, {
     method: 'GET',
@@ -23,9 +29,6 @@ export async function getArchiveRequestList(page: number = 0, size: number = 10)
     credentials: 'include', // 쿠키 포함
   });
 
-  console.log("API 응답 상태:", response.status, response.statusText);
-  console.log("API 응답 헤더:", response.headers);
-
   if (!response.ok) {
     const errorText = await response.text();
     console.error("API 에러 응답:", errorText);
@@ -33,7 +36,6 @@ export async function getArchiveRequestList(page: number = 0, size: number = 10)
   }
 
   const data = await response.json();
-  console.log("API 응답 데이터:", data);
   return data;
 }
 
@@ -74,6 +76,8 @@ export async function createArchiveRequest(data: CreateArchiveRequestDto): Promi
 
 // 요청 수정
 export async function updateArchiveRequest(id: number, data: CreateArchiveRequestDto): Promise<ArchiveRequestResponseDto> {
+  console.log("요청 수정 API 호출:", { id, data });
+  
   const response = await fetch(`${BASE_URL}/api/v1/archive-requests/${id}`, {
     method: 'PUT',
     headers: {
@@ -83,8 +87,12 @@ export async function updateArchiveRequest(id: number, data: CreateArchiveReques
     body: JSON.stringify(data),
   });
 
+  console.log("수정 API 응답 상태:", response.status, response.statusText);
+
   if (!response.ok) {
-    throw new Error('요청 수정에 실패했습니다.');
+    const errorText = await response.text();
+    console.error("수정 API 에러 응답:", errorText);
+    throw new Error(`요청 수정에 실패했습니다. (${response.status}: ${errorText})`);
   }
 
   return response.json();
