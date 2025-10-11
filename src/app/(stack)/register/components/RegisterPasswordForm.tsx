@@ -42,6 +42,8 @@ function RegisterPasswordForm({ onSubmit, isKeyboardOpen, isLoading }: Props) {
     setHidePWValidate(!hidePWValidate);
   };
 
+  const isPasswordValidLength = password.length !== 0 && password.length < 8;
+
   const passwordsMismatch =
     confirmPassword.length > 0 && password !== confirmPassword;
 
@@ -71,6 +73,7 @@ function RegisterPasswordForm({ onSubmit, isKeyboardOpen, isLoading }: Props) {
             value={password}
             ref={inputRef}
             onChange={(e) => setPassword(e.target.value)}
+            minLength={8}
           />
           <button
             type="button"
@@ -81,6 +84,11 @@ function RegisterPasswordForm({ onSubmit, isKeyboardOpen, isLoading }: Props) {
             {hidePW ? <EyeClose /> : <EyeOpen />}
           </button>
         </div>
+        {isPasswordValidLength && (
+          <p id="confirmPassword-error" className="mt-2 text-sm text-red-500">
+            비밀번호는 8자 이상으로 입력해주세요.
+          </p>
+        )}
         <div className="flex gap-2 mt-4">
           <label htmlFor="confirmPassword" className="sr-only">
             비밀번호 확인
@@ -115,6 +123,7 @@ function RegisterPasswordForm({ onSubmit, isKeyboardOpen, isLoading }: Props) {
         fullWidth={true}
         type="submit"
         color="darkgreen"
+        disabled={!isValid || isLoading}
         aria-disabled={!isValid || isLoading}
         aria-busy={isLoading}
       >

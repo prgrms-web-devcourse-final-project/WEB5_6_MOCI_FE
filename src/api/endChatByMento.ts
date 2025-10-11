@@ -1,8 +1,9 @@
+import { BASE_URL } from "./constants/config";
 import { APIerror } from "./getChatMsgMento";
 
 export const endChatByMento = async (roomId: string) => {
   const res = await fetch(
-    `http://localhost:8080/api/v1/chat/mentor/mentor/room/exit/${roomId}`,
+    `${BASE_URL}/api/v1/chat/mentor/mentor/room/exit/${roomId}`,
     {
       method: "PUT",
       headers: {
