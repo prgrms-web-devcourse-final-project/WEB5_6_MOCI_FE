@@ -123,6 +123,7 @@ function RegisterPasswordForm({ onSubmit, isKeyboardOpen, isLoading }: Props) {
         fullWidth={true}
         type="submit"
         color="darkgreen"
+        disabled={!isValid || isLoading}
         aria-disabled={!isValid || isLoading}
         aria-busy={isLoading}
       >

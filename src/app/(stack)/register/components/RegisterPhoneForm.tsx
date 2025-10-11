@@ -67,6 +67,7 @@ function RegisterPhoneForm({ onSubmit, isKeyboardOpen, isLoading }: Props) {
         size="md"
         fullWidth={true}
         type="submit"
+        disabled={!isComplete || isLoading}
         aria-disabled={!isComplete || isLoading}
         aria-busy={isLoading}
       >
