@@ -13,17 +13,20 @@ type User = {
 
 interface AuthState {
   user: User | null;
-  setUser: (user: User | null) => void;
+  setUser: (user: Partial<User>) => void;
   fetchUser: () => Promise<void>;
   logout: () => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
-  setUser: (user: User | null) => set({ user }),
+  setUser: (user: Partial<User>) =>
+    set((state) => ({
+      user: state.user ? { ...state.user, ...user } : (user as User),
+    })),
   fetchUser: async () => {
     try {
-      const res = await fetch(`http://localhost:8080/api/v1/users/me`, {
+      const res = await fetch(`https://api.mydidimdol.com/api/v1/users/me`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json; charset: UTF-8",
@@ -46,7 +49,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
   },
   logout: async () => {
-    const res = await fetch(`http://localhost:8080/api/v1/auth/logout`, {
+    const res = await fetch(`http://api.mydidimdol.com/api/v1/auth/logout`, {
       method: "DELETE",
       credentials: "include",
     });
