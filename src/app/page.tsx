@@ -8,23 +8,22 @@ import KTXLogo from "@/assets/logos/KTX_logo.svg";
 import YouTubeLogo from "@/assets/logos/YouTube_logo.svg";
 import CoupangLogo from "@/assets/logos/Coupang_logo.svg";
 
-/*TODO : href 수정 필요 */
 const items = [
-  { icon: <KaKaoIcon />, label: "카카오톡", href: "/archive" },
-  { icon: <KTXLogo />, label: "KTX", href: "/archive" },
+  { icon: <KaKaoIcon />, label: "카카오톡", href: "/archive/kakaotalk" },
+  { icon: <KTXLogo />, label: "KTX", href: "/archive/ktx" },
   {
     icon: (
       <YouTubeLogo className="rounded-lg border border-gray-100 object-contain" />
     ),
     label: "유튜브",
-    href: "/archive",
+    href: "/archive/youtube",
   },
   {
     icon: (
       <CoupangLogo className="bg-white rounded-lg border border-gray-100 object-contain" />
     ),
     label: "쿠팡",
-    href: "/archive",
+    href: "/archive/coupang",
   },
 ];
 
