@@ -3,7 +3,7 @@ import { APIerror } from "./getChatMsgMento";
 
 export const deleteMentoChatRoom = async (roomId: string) => {
   const res = await fetch(
-    `${BASE_URL}api/v1/chat/mentor/mentee/room/${roomId}`,
+    `${BASE_URL}/api/v1/chat/mentor/mentee/room/${roomId}`,
     {
       method: "DELETE",
       headers: {
