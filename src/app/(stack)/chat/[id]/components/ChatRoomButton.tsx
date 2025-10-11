@@ -29,14 +29,31 @@ function ChatRoomButton({
 
   useEffect(() => {
     async function getChatRoomInfo() {
-      const res = await getMentorChatRoomInfo(id);
-      setChatRoomInfo(res);
+      try {
+        const res = await getMentorChatRoomInfo(id);
+        setChatRoomInfo(res);
+      } catch (e) {
+        console.error(e);
+        return;
+      }
     }
-    if (user && user.role === "USER") getChatRoomInfo();
+    if (user && user.role === "USER")
+      try {
+        getChatRoomInfo();
+      } catch (e) {
+        const error = e as APIerror;
+        alert(error.message);
+      }
   }, [id, user]);
 
   const endChat = async () => {
-    await endChatByMento(id);
+    try {
+      await endChatByMento(id);
+      router.replace("/main");
+    } catch (e) {
+      const error = e as APIerror;
+      alert(error.message);
+    }
   };
   const askToAI = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -47,7 +64,7 @@ function ChatRoomButton({
         chatRoomInfo.question
       );
 
-      router.push(`/chat/${aiChatRoom.id}/ai`);
+      router.replace(`/chat/${aiChatRoom.id}/ai`);
       await deleteMentoChatRoom(id);
     } catch (e) {
       const error = e as APIerror;
@@ -62,7 +79,12 @@ function ChatRoomButton({
   return (
     <>
       {role === "MENTOR" ? (
-        <Button color="yellow" className="px-10 rounded-full" onClick={endChat}>
+        <Button
+          color="yellow"
+          className="px-10 rounded-full"
+          onClick={endChat}
+          disabled={end}
+        >
           채팅종료하기
         </Button>
       ) : end ? (
