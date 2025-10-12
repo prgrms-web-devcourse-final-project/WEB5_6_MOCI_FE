@@ -11,9 +11,16 @@ import Help from "@/assets/icons/help.svg";
 function ChatListMento({ id }: { id: string }) {
   const [text, setText] = useState("");
   const sectionRef = useRef<HTMLDivElement | null>(null);
+  const [isComposing, setIsComposing] = useState(false);
 
-  const { messages, connect, disconnect, sendMessage, connectionStatus } =
-    useChatMento();
+  const {
+    messages,
+    connect,
+    disconnect,
+    sendMessage,
+    connectionStatus,
+    clientRef,
+  } = useChatMento();
 
   const scrollToBottom = () => {
     if (sectionRef.current) {
@@ -29,12 +36,13 @@ function ChatListMento({ id }: { id: string }) {
     if (connectionStatus === "연결되었습니다") scrollToBottom();
   }, [messages, connectionStatus]);
 
-  // // 클라이언트 없으면 연결해제
-  // useEffect(() => {
-  //   if (clientRef.current) {
-  //     clientRef.current.deactivate();
-  //   }
-  // }, []);
+  // 클라이언트 없으면 연결해제
+  useEffect(() => {
+    if (clientRef.current) {
+      clientRef.current.deactivate();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     connect(id);
@@ -52,12 +60,27 @@ function ChatListMento({ id }: { id: string }) {
 
   const send = (e: FormEvent) => {
     e.preventDefault();
+    if (isComposing) return;
     onSendMessage();
   };
 
   const handleText = (e: ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
     setText(e.target.value);
+  };
+
+  const handleCompositionStart = () => {
+    setIsComposing(true);
+  };
+
+  const handleCompositionEnd = () => {
+    setIsComposing(false);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && !isComposing) {
+      e.preventDefault();
+      onSendMessage();
+    }
   };
 
   const user = useAuthStore((s) => s.user);
@@ -128,7 +151,10 @@ function ChatListMento({ id }: { id: string }) {
           }
           onChange={handleText}
           value={text}
+          onCompositionStart={handleCompositionStart}
+          onCompositionEnd={handleCompositionEnd}
           disabled={messages?.at(-1)?.id === null || user?.role === "ADMIN"}
+          onKeyDown={handleKeyDown}
         />
         <Button
           type="submit"
