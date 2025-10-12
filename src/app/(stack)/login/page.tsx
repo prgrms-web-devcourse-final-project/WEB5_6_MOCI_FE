@@ -6,8 +6,6 @@ import LoginForm from "./components/LoginForm";
 import Button from "@/shared/components/Button";
 import Link from "next/link";
 import { BASE_URL } from "@/api/constants/config";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "로그인",
@@ -15,13 +13,6 @@ export const metadata: Metadata = {
 };
 
 async function Page() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("accessToken");
-
-  if (token) {
-    redirect("/main");
-  }
-
   return (
     <div className="w-full flex-1 overflow-hidden px-[10vw] sm:px-16 flex-center flex-col scroll-auto gap-2.5">
       <h2 className="text-4xl font-bold self-center mb-8">로그인</h2>
