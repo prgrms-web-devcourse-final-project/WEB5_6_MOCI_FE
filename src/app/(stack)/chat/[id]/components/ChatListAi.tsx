@@ -64,13 +64,24 @@ function ChatListAi({ id }: { id: number }) {
     const content = inputValue;
     setInputValue("");
 
+    //유저 메시지를 화면에 먼저 추가
+    setChatList((prev) => [
+      ...prev,
+      {
+        id: Date.now(), // 프론트에서 임시 ID
+        roomId: id,
+        senderType: "HUMAN",
+        content,
+        createdAt: new Date().toISOString(),
+      },
+    ]);
+
     try {
-      const { userMessage, aiMessage } = await postChatMsgAi(id, content);
+      const { aiMessage } = await postChatMsgAi(id, content);
 
       setChatList((prev) => [
         ...prev,
-        { ...userMessage, senderType: "HUMAN" },
-        { ...aiMessage, senderType: "AI" },
+        { ...aiMessage, senderType: "AI" }
       ]);
     } catch (err) {
       console.error("메시지 전송 실패", err); //콘솔 지우기

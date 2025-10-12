@@ -15,6 +15,7 @@ import Link from "next/link";
 import { getArchiveList } from "@/api/getArchiveList";
 import { notFound } from "next/navigation";
 import ArchiveCard from "../components/ArchiveCard";
+import ArchiveButtons from "../components/ArchiveButtons";
 
 const matchCategory = {
   kakaotalk: { text: "카카오톡", cat: "KAKAO_TALK" },
@@ -161,11 +162,7 @@ async function Page({
           <h1 className="text-3xl text-darkgreen-default font-bold ">
             {matchCategory[category].text}
           </h1>
-          <Button className="p-0">
-            <Link href="/archive" className="px-4 py-3">
-              검색초기화
-            </Link>
-          </Button>
+          <ArchiveButtons />
         </div>
         <ul className="p-5 pt-0 flex flex-col gap-5">
           {archiveList.archives ? (
