@@ -1,7 +1,7 @@
 "use client";
 
 import { getChatMsgAi } from "@/api/getChatMsgAi";
-import { postChatMsgAi } from "@/api/postChatMsgAi";
+import { postChatMsgAiStream } from "@/api/postChatMsgAiStream"; //  새로 만든 스트리밍 함수
 import { useEffect, useState, useRef, FormEvent } from "react";
 import Chat from "./Chat";
 import Button from "@/shared/components/Button";
@@ -9,7 +9,7 @@ import Plus from "@/assets/icons/plus.svg";
 import { useAuthStore } from "@/store/authStore";
 
 type AiMessage = {
-  id: number;
+  id: number | string;
   roomId: number;
   senderType: "HUMAN" | "AI";
   content: string;
@@ -24,7 +24,7 @@ function ChatListAi({ id }: { id: number }) {
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const user = useAuthStore((s) => s.user);
 
-  //스크롤 맨 아래로
+  // 스크롤 맨 아래로
   const scrollToBottom = () => {
     if (sectionRef.current) {
       sectionRef.current.scrollTo({
@@ -34,14 +34,14 @@ function ChatListAi({ id }: { id: number }) {
     }
   };
 
-  //첫 메시지 불러오기
+  // 첫 메시지 불러오기
   useEffect(() => {
     const getChats = async () => {
       try {
         const chats = await getChatMsgAi(id);
         setChatList(chats || []);
       } catch (err) {
-        console.error("채팅 불러오기 실패", err); //console 지우기
+        console.error("채팅 불러오기 실패", err);
         setChatList([]);
       } finally {
         setLoading(false);
@@ -50,7 +50,7 @@ function ChatListAi({ id }: { id: number }) {
     getChats();
   }, [id]);
 
-  //새 메시지가 생길 때마다 스크롤
+  // 새 메시지가 생길 때마다 스크롤
   useEffect(() => {
     if (!loading) scrollToBottom();
   }, [chatList, loading]);
@@ -64,11 +64,11 @@ function ChatListAi({ id }: { id: number }) {
     const content = inputValue;
     setInputValue("");
 
-    //유저 메시지를 화면에 먼저 추가
+    // 유저 메시지를 먼저 추가
     setChatList((prev) => [
       ...prev,
       {
-        id: Date.now(), // 프론트에서 임시 ID
+        id: crypto.randomUUID(),
         roomId: id,
         senderType: "HUMAN",
         content,
@@ -76,23 +76,46 @@ function ChatListAi({ id }: { id: number }) {
       },
     ]);
 
-    try {
-      const { aiMessage } = await postChatMsgAi(id, content);
+    // AI 메시지 "빈 껍데기" 하나 추가 → 이후 chunk마다 업데이트
+    const aiMsgId = crypto.randomUUID();
+    setChatList((prev) => [
+      ...prev,
+      {
+        id: aiMsgId,
+        roomId: id,
+        senderType: "AI",
+        content: "",
+        createdAt: new Date().toISOString(),
+      },
+    ]);
 
-      setChatList((prev) => [
-        ...prev,
-        { ...aiMessage, senderType: "AI" }
-      ]);
-    } catch (err) {
-      console.error("메시지 전송 실패", err); //콘솔 지우기
-      alert("메시지를 보낼 수 없습니다.");
+    try {
+      await postChatMsgAiStream(
+        id,
+        content,
+        (msg) => {
+          // chunk가 들어올 때마다 AI 메시지 업데이트
+          setChatList((prev) =>
+            prev.map((m) =>
+              m.id === aiMsgId
+                ? { ...m, content: m.content + (msg + "\n") } // 줄바꿈 보존
+                : m
+            )
+          );
+        },
+        () => console.log("스트리밍 연결됨"),
+        (err) => {
+          console.error("메시지 전송 실패", err);
+          alert("메시지를 보낼 수 없습니다.");
+        }
+      );
     } finally {
       setSending(false);
       scrollToBottom();
     }
   };
 
-  //엔터키 전송, 쉬프트 엔터 줄바꿈
+  // 엔터키 전송, 쉬프트 엔터 줄바꿈
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
