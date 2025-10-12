@@ -75,9 +75,12 @@ export default function useChatMento() {
     client.activate();
     clientRef.current = client;
 
-    // client.onStompError = (e) => {
-    //   console.log(e);
-    // };
+    client.onStompError = (e) => {
+      alert(
+        "채팅방 연결에 실패하였습니다. 멘토가 ai 채팅방 연결을 시도중일 수 있습니다."
+      );
+      router.replace("/main");
+    };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

@@ -23,8 +23,8 @@ function Page() {
   }, [user, router]);
 
   return (
-    <div>
-      {user ? (
+    <div className="flex flex-col h-[calc(100dvh-48px)]">
+     {user ? (
         user.role === "USER" ? (
           <MenteeMain />
         ) : user.role === "MENTOR" ? (

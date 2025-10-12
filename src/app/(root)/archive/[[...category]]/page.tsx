@@ -15,6 +15,7 @@ import Link from "next/link";
 import { getArchiveList } from "@/api/getArchiveList";
 import { notFound } from "next/navigation";
 import ArchiveCard from "../components/ArchiveCard";
+import ArchiveButtons from "../components/ArchiveButtons";
 
 const matchCategory = {
   kakaotalk: { text: "카카오톡", cat: "KAKAO_TALK" },
@@ -120,12 +121,12 @@ async function Page({
 
   if (!archiveList) notFound();
   return (
-    <div className="flex flex-col gap-2 max-h-[calc(100dvh-48px)]">
+    <div className="flex flex-col gap-2 h-[calc(100dvh-48px)]">
       <Button
         fullWidth
         hasIcon
         color="darkgreen"
-        className="w-[calc(100%-8px)] self-center mt-2 p-0"
+        className="w-[calc(100%-8px)] self-center mt-2 p-0 shrink-0"
       >
         <Link
           href="/main"
@@ -135,7 +136,7 @@ async function Page({
           홈으로 이동
         </Link>
       </Button>
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto min-h-0">
         <h1 className="text-3xl text-darkgreen-default font-bold px-3 py-2">
           자주 찾는 서비스
         </h1>
@@ -161,11 +162,7 @@ async function Page({
           <h1 className="text-3xl text-darkgreen-default font-bold ">
             {matchCategory[category].text}
           </h1>
-          <Button className="p-0">
-            <Link href="/archive" className="px-4 py-3">
-              검색초기화
-            </Link>
-          </Button>
+          <ArchiveButtons />
         </div>
         <ul className="p-5 pt-0 flex flex-col gap-5">
           {archiveList.archives ? (

@@ -19,19 +19,6 @@ import { APIerror } from "@/api/getChatMsgMento";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { joinChatRoom } from "@/api/joinChatRoom";
 
-// TODO : 임시 데이터 => 나중에 api로 바꾸기
-//  const myRoomsData = [
-//   {id: 1, question: "멘토링 질문입니다."},
-//   {id: 2, question: "두번째 질문입니다."},
-//   {id: 3, question: "세번째 질문입니다."},
-// ];
-
-//  const publicRoomsData = [
-//   {id: 1, mentee_nickname: "멘티1", title: "제목1", category: "KTX", digital_level: "1"},
-//   {id: 2, mentee_nickname: "멘티2", title: "제목2", category: "버스", digital_level: "5"},
-//   {id: 3, mentee_nickname: "멘티3", title: "제목3", category: "쿠팡", digital_level: "2"},
-// ];
-
 function MentorTabContent({ activeTab }: { activeTab: MentorTabType }) {
   const router = useRouter();
   const [mentorRoomsData, setMentorRoomsData] =

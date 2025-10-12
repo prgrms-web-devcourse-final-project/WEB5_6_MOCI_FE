@@ -13,11 +13,11 @@ function MentorMain() {
   const [activeTab, setActiveTab] = useState<MentorTabType>("myRooms");
 
   return (
-    <div className="w-full flex flex-col">
+    <div className="w-full flex flex-col h-full">
       {/*탭 이동*/}
       <MentorTabBar activeTab={activeTab} onChange={setActiveTab} />
       {/*각 탭의 콘텐츠*/}
-      <div>
+      <div className="flex-1 overflow-y-auto min-h-0">
         <MentorTabContent activeTab={activeTab} />
       </div>
     </div>
