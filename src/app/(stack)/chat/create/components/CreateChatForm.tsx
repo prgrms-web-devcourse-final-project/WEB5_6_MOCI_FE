@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import StepCategory from "./StepCategory";
 import StepQuestion from "./StepQuestion";
 import StepTarget from "./StepTarget";
@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { ChatTarget } from "@/types/chat";
 import { createAIChatRoom } from "@/api/createAIChatRoom";
 import { createMentorChatRoom } from "@/api/createMentorChatRoom";
+import { useAuthStore } from "@/store/authStore";
 
 export type ChatFormData = {
   category: string;
@@ -23,6 +24,14 @@ export default function CreateChatForm() {
     target: "" as ChatTarget,
   });
   const router = useRouter();
+  const { user } = useAuthStore();
+
+  useEffect(() => {
+    if (!user) {
+      alert("로그인이 필요합니다.");
+      router.push("/login");
+    }
+  });
 
   const next = () => setStep((s) => s + 1);
 
@@ -36,9 +45,9 @@ export default function CreateChatForm() {
       console.log("채팅방생성완료", result.id); // 추후 console 지우기
 
       if (result.target === "ai") {
-        router.push(`/chat/${result.id}/ai`);
+        router.replace(`/chat/${result.id}/ai`);
       } else {
-        router.push(`/chat/${result.id}/mentor`);
+        router.replace(`/chat/${result.id}/mentor`);
       }
     } catch (e) {
       alert(e);

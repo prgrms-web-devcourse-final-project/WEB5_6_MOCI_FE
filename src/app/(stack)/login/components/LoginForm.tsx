@@ -6,7 +6,7 @@ import Input from "@/shared/components/Input";
 import { useAuthStore } from "@/store/authStore";
 // import { useAuthStore } from "@/store/authStore";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import EyeClose from "@/assets/icons/eyeClose.svg";
 import EyeOpen from "@/assets/icons/eyeOpen.svg";
 
@@ -16,10 +16,17 @@ function LoginForm() {
   const [errorMessage /*setErrorMessage*/] =
     useState("전화번호는 숫자만 입력해주세요");
   const router = useRouter();
+  const { user } = useAuthStore();
   const setUser = useAuthStore((s) => s.setUser);
   const toggleHidePW = () => {
     setHidePW(!hidePW);
   };
+
+  useEffect(() => {
+    if (user) {
+      router.push("/main");
+    }
+  }, [user, router]);
 
   const handleForm = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

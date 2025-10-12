@@ -12,14 +12,15 @@ type MyChatRoomCardProps = {
 
 function MyChatRoomCard({question, onEnter}: MyChatRoomCardProps) {
   return (
-    <div className="flex items-center justify-between p-4 bg-lightgreen border-b-1 border-darkgreen-default">
-      <p className="font-semibold text-xl">
+    <div className="flex items-center justify-between gap-4 p-4 bg-lightgreen border-b-1 border-darkgreen-default">
+      <p className="font-semibold text-xl truncate flex-1 min-w-0">
         {question}
       </p>
 
       <Button 
         color="darkgreen"
         onClick={onEnter}
+        className="shrink-0"
       >
         입장
       </Button>
