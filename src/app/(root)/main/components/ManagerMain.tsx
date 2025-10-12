@@ -12,7 +12,7 @@ import ChatRoomList from "./chatroom/ChatRoomList";
 import PublicChatRoomCard from "./chatroom/PublicChatRoomCard";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getPublicAIChatrooms } from "@/api/getChatrooms";
+import { getAllChatrooms, getPublicAIChatrooms } from "@/api/getChatrooms";
 import { APIerror } from "@/api/getChatMsgMento";
 import { handleEnterRoomAI } from "./MenteeMain";
 
@@ -20,6 +20,14 @@ function ManagerMain() {
   const router = useRouter();
   const [publicAIRoomsData, setPublicAIRoomsData] =
     useState<{ id: number; title: string; category: string }[]>();
+  const [allRoomsData, setAllRoomsData] = useState<
+    {
+      id: number;
+      title: string;
+      digital_level: number;
+      category: string;
+    }[]
+  >();
 
   useEffect(() => {
     const getAIChatroom = async () => {
@@ -32,6 +40,20 @@ function ManagerMain() {
       const error = e as APIerror;
       alert(error.message);
       setPublicAIRoomsData([]);
+    }
+  }, []);
+
+  useEffect(() => {
+    const getAllChatroom = async () => {
+      const res = await getAllChatrooms();
+      setAllRoomsData(res);
+    };
+    try {
+      getAllChatroom();
+    } catch (e) {
+      const error = e as APIerror;
+      alert(error.message);
+      setAllRoomsData([]);
     }
   }, []);
 
@@ -55,6 +77,17 @@ function ManagerMain() {
           전체 채팅방
         </h2>
         <ChatRoomList emptyMessage="생성된 채팅방이 없습니다.">
+          {allRoomsData &&
+            allRoomsData.length !== 0 &&
+            allRoomsData.map((room) => (
+              <PublicChatRoomCard
+                key={room.id}
+                mentee_nickname=""
+                title={room.title}
+                category={room.category}
+                digital_level={String(room.digital_level ?? "")}
+              />
+            ))}
           {publicAIRoomsData &&
             publicAIRoomsData.length !== 0 &&
             publicAIRoomsData.map((room) => (
