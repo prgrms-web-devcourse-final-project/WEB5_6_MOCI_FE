@@ -6,6 +6,7 @@ import { uploadPost } from "@/api/uploadPost";
 import { useRouter } from "next/navigation";
 import { JSONContent } from "@tiptap/react";
 import { editPost } from "@/api/editPost";
+import { useAuthStore } from "@/store/authStore";
 
 interface PostFormProps {
   mode: "write" | "edit";
@@ -26,8 +27,13 @@ function WriteForm({ mode, initialData }: PostFormProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const route = useRouter();
+  const { user } = useAuthStore();
 
   useEffect(() => {
+    if (user?.role !== "ADMIN") {
+      alert("관리자만 접근 가능한 페이지입니다.");
+      route.back();
+    }
     if (mode === "edit" && initialData) {
       setTitle(initialData.title);
       setCategory(initialData.category);
