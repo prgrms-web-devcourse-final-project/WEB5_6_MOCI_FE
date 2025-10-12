@@ -12,6 +12,10 @@ function Page() {
   const router = useRouter();
 
   useEffect(() => {
+    if (!user) {
+      alert("로그인이 필요합니다.");
+      router.push("/login");
+    }
     if (user?.digitalLevel === null) {
       alert("서비스를 사용하기 위해서는 디지털 역량평가가 필요합니다.");
       router.push("/register/ox-test");
