@@ -36,9 +36,9 @@ export default function CreateChatForm() {
       console.log("채팅방생성완료", result.id); // 추후 console 지우기
 
       if (result.target === "ai") {
-        router.push(`/chat/${result.id}/ai`);
+        router.replace(`/chat/${result.id}/ai`);
       } else {
-        router.push(`/chat/${result.id}/mentor`);
+        router.replace(`/chat/${result.id}/mentor`);
       }
     } catch (e) {
       alert(e);
