@@ -1,10 +1,12 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import { useAuthStore } from "@/store/authStore";
+import { useRouter } from "next/navigation";
 
 function UserInfo() {
   const user = useAuthStore((s) => s.user);
+  const router = useRouter();
   const emailLength = user?.email?.length ?? 0;
   const fontsize =
     emailLength >= 24
@@ -18,14 +20,19 @@ function UserInfo() {
       : "text-xl";
   const [id, domain] = (user?.email ?? "@").split("@");
 
+  useEffect(() => {
+    if (!user) {
+      alert("로그인이 필요합니다.");
+      router.push("/login");
+    }
+  }, [user, router]);
+
   return (
     <div className="w-full flex flex-col items-center rounded-xl border px-5 py-10 gap-10">
       <Image
         width={120}
         height={120}
-        src=//   ? "userProfile.png" // user?.role === "USER"
-        //   : user?.role === "MENTOR"
-        //   ? "mentoProfile.png"
+        src=//   ? "mentoProfile.png" //   : user?.role === "MENTOR" //   ? "userProfile.png" // user?.role === "USER"
         // :
         "/logo.png"
         alt="프로필이미지"
