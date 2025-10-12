@@ -120,12 +120,12 @@ async function Page({
 
   if (!archiveList) notFound();
   return (
-    <div className="flex flex-col gap-2 max-h-[calc(100dvh-48px)]">
+    <div className="flex flex-col gap-2 h-[calc(100dvh-48px)]">
       <Button
         fullWidth
         hasIcon
         color="darkgreen"
-        className="w-[calc(100%-8px)] self-center mt-2 p-0"
+        className="w-[calc(100%-8px)] self-center mt-2 p-0 shrink-0"
       >
         <Link
           href="/main"
@@ -135,7 +135,7 @@ async function Page({
           홈으로 이동
         </Link>
       </Button>
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto min-h-0">
         <h1 className="text-3xl text-darkgreen-default font-bold px-3 py-2">
           자주 찾는 서비스
         </h1>
