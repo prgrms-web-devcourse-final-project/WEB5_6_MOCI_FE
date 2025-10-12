@@ -31,10 +31,27 @@ function WriteForm({ mode, initialData }: PostFormProps) {
     if (mode === "edit" && initialData) {
       setTitle(initialData.title);
       setCategory(initialData.category);
-      const desc =
-        typeof initialData.description === "string"
-          ? JSON.parse(initialData.description)
-          : initialData.description;
+
+      let desc: JSONContent;
+
+      if (typeof initialData.description === "string") {
+        try {
+          desc = JSON.parse(initialData.description);
+        } catch {
+          desc = {
+            type: "doc",
+            content: [
+              {
+                type: "paragraph",
+                content: [{ type: "text", text: initialData.description }],
+              },
+            ],
+          };
+        }
+      } else {
+        desc = initialData.description;
+      }
+
       setDescription(desc);
     }
   }, [mode, initialData]);
@@ -121,12 +138,10 @@ function WriteForm({ mode, initialData }: PostFormProps) {
           className="mt-4 w-full text-4xl font-bold border-1 rounded-lg px-4 py-2"
         />
 
-        {description !== null && (
-          <TipTap
-            onChange={(value) => setDescription(value)}
-            initialValue={description ?? undefined}
-          />
-        )}
+        <TipTap
+          onChange={(value) => setDescription(value)}
+          initialValue={mode === "edit" ? description ?? undefined : undefined}
+        />
         <Button
           type="button"
           onClick={handleSubmit}

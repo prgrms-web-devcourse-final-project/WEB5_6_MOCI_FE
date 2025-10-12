@@ -36,16 +36,13 @@ function TipTapEditor({ onChange, initialValue }: Props) {
 
   // editor 상태가 바뀔 때마다 리렌더링
   useEffect(() => {
-    if (!editor) return;
-    const handleUpdate = () => {
-      const json = editor.getJSON();
-      onChange(json);
-    };
-    editor.on("update", handleUpdate);
-    return () => {
-      editor.off("update", handleUpdate);
-    };
-  }, [editor, onChange]);
+    if (editor && initialValue) {
+      const current = editor.getJSON();
+      if (JSON.stringify(current) !== JSON.stringify(initialValue)) {
+        editor.commands.setContent(initialValue);
+      }
+    }
+  }, [editor, initialValue]);
 
   if (!editor) {
     return null;
