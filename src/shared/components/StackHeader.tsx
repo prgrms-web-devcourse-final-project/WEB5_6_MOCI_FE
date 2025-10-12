@@ -8,6 +8,7 @@ const pageTitleList: Record<string, string> = {
   "/register": "회원가입",
   "/my-page": "내 정보",
   "/chat": "새로운 채팅 만들기",
+  "/archive/write": "교육자료실 새 글 작성",
 };
 
 function SubHeader({ pageTitle }: { pageTitle?: string }) {
@@ -22,6 +23,10 @@ function SubHeader({ pageTitle }: { pageTitle?: string }) {
 
   if (pageTitle) {
     headerTitle = pageTitle;
+  } else if(pathName.includes("/chat/") && pathName.endsWith("/ai")){
+    headerTitle = "AI 채팅방";
+  } else if(pathName.includes("/chat/") && pathName.endsWith("/mentor")){
+    headerTitle = "멘토 채팅방";
   } else {
     for (const key in pageTitleList) {
       if (pathName.startsWith(key)) {

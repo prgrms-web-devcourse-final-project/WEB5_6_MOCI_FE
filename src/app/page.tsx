@@ -32,17 +32,6 @@ export default function Home() {
   return (
     <div className="flex flex-col h-[100dvh]">
       <section className="min-w-[15rem] flex-[2] flex justify-center items-center px-6 py-6">
-        {/* <div className="w-full h-full border border-darkgreen-default rounded-lg flex flex-col justify-center items-center">
-          <Image
-            src="/logo.png"
-            alt="디딤돌 로고"
-            className="opacity-50"
-            width={100}
-            height={100}
-            priority
-          />
-          <p className="text-sm">멘토 매칭 서비스</p>
-        </div> */}
         <LandingSwiper />
       </section>
 
