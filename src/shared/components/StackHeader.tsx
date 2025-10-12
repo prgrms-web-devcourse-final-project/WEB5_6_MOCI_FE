@@ -8,6 +8,7 @@ const pageTitleList: Record<string, string> = {
   "/register": "회원가입",
   "/my-page": "내 정보",
   "/chat": "새로운 채팅 만들기",
+  "/archive/write": "교육자료실 새 글 작성",
 };
 
 function SubHeader({ pageTitle }: { pageTitle?: string }) {

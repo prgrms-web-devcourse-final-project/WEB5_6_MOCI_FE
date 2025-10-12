@@ -73,7 +73,11 @@ function MainHeader() {
           </Button>
         )}
       </header>
-      <Navbar navRef={navRef} closeNav={() => setOpenNav(false)} />
+      <Navbar
+        navRef={navRef}
+        closeNav={() => setOpenNav(false)}
+        openNav={openNav}
+      />
     </>
   );
 }
