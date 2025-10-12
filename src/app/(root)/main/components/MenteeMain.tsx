@@ -32,20 +32,6 @@ export const handleEnterRoomAI = (
   router.push(`/chat/${roomId}/ai`);
 };
 
-// TODO : 임시 데이터 => 나중에 api로 바꾸기// [
-//   { id: 1, question: "멘토링 질문입니다." },
-//   { id: 2, question: "두번째 질문입니다." },
-//   { id: 3, question: "세번째 질문입니다." },
-//   { id: 4, question: "세번째 질문입니다." },
-//   { id: 5, question: "세번째 질문입니다." },
-// {id: 6, question: "세번째 질문입니다."},
-// {id: 7, question: "세번째 질문입니다."},
-// {id: 8, question: "세번째 질문입니다."},
-// {id: 9, question: "세번째 질문입니다."},
-// {id: 10, question: "세번째 질문입니다."},
-// {id: 11, question: "세번째 질문입니다."},
-// {id: 12, question: "세번째 질문입니다."},
-// ];
 
 function MenteeMain() {
   const router = useRouter();

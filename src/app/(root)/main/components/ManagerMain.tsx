@@ -16,12 +16,6 @@ import { getPublicAIChatrooms } from "@/api/getChatrooms";
 import { APIerror } from "@/api/getChatMsgMento";
 import { handleEnterRoomAI } from "./MenteeMain";
 
-// const publicRoomsData = [
-//   {id: 1, mentee_nickname: "멘티1", title: "제목1", category: "KTX", digital_level: "1"},
-//   {id: 2, mentee_nickname: "멘티2", title: "제목2", category: "버스", digital_level: "5"},
-//   {id: 3, mentee_nickname: "멘티3", title: "제목3", category: "쿠팡", digital_level: "2"},
-// ];
-
 function ManagerMain() {
   const router = useRouter();
   const [publicAIRoomsData, setPublicAIRoomsData] =
