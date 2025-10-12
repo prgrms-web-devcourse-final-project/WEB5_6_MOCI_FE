@@ -60,7 +60,7 @@ function WriteForm({ mode, initialData }: PostFormProps) {
 
       setDescription(desc);
     }
-  }, [mode, initialData]);
+  }, [mode, initialData, user?.role, route]);
 
   const handleSubmit = async () => {
     if (isLoading) return;
