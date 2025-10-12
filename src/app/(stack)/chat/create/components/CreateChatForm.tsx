@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import StepCategory from "./StepCategory";
 import StepQuestion from "./StepQuestion";
 import StepTarget from "./StepTarget";
@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { ChatTarget } from "@/types/chat";
 import { createAIChatRoom } from "@/api/createAIChatRoom";
 import { createMentorChatRoom } from "@/api/createMentorChatRoom";
+import { useAuthStore } from "@/store/authStore";
 
 export type ChatFormData = {
   category: string;
@@ -23,6 +24,14 @@ export default function CreateChatForm() {
     target: "" as ChatTarget,
   });
   const router = useRouter();
+  const { user } = useAuthStore();
+
+  useEffect(() => {
+    if (!user) {
+      alert("로그인이 필요합니다.");
+      router.push("/login");
+    }
+  });
 
   const next = () => setStep((s) => s + 1);
 
