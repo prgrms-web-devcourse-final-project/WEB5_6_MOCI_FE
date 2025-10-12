@@ -3,22 +3,35 @@
 import { uploadFile } from "@/api/uploadFile";
 import Button from "@/shared/components/Button";
 import Image from "@tiptap/extension-image";
-import { EditorContent, useEditor } from "@tiptap/react";
+import { Link } from "@tiptap/extension-link";
+import { Placeholder } from "@tiptap/extensions/placeholder";
+import { EditorContent, JSONContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useEffect, useRef, useState } from "react";
 
 interface Props {
-  onChange: (value: object) => void;
+  onChange: (value: JSONContent) => void;
+  initialValue?: JSONContent; // ✅ 추가 (수정 모드 지원)
 }
 
-function TipTapEditor({ onChange }: Props) {
+function TipTapEditor({ onChange, initialValue }: Props) {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [updateTrigger, setUpdateTrigger] = useState(0); // 강제 리렌더링용 state
 
   const editor = useEditor({
-    extensions: [StarterKit, Image],
-    content: "<p>여기에 글을 작성해보세요</p>",
+    extensions: [
+      StarterKit,
+      Image,
+      Link,
+      Placeholder.configure({
+        placeholder: "글을 입력해주세요.",
+      }),
+    ],
+    content: initialValue ?? "",
     immediatelyRender: false,
+    onUpdate: ({ editor }) => onChange(editor.getJSON()),
+    onSelectionUpdate: () => setUpdateTrigger((v) => v + 1),
+    onTransaction: () => setUpdateTrigger((v) => v + 1),
   });
 
   // editor 상태가 바뀔 때마다 리렌더링
@@ -50,9 +63,35 @@ function TipTapEditor({ onChange }: Props) {
   };
 
   return (
-    <div className="px-2">
+    <div className="w-full px-2 border-1 rounded-lg mt-2 flex-1 overflow-hidden">
       {/* 툴바 */}
-      <div className="my-2 flex gap-2">
+      <div className="py-2 flex gap-2 border-b-1 border-gray">
+        <Button
+          type="button"
+          size="sm"
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 3 }).run()
+          }
+          className={
+            editor.isActive("heading", { level: 3 })
+              ? "box-border bg-green-default text-white border-2 border-green-default hover:bg-green-hover active:bg-green-hover"
+              : "box-border bg-white text-black border-2 border-green-default hover:bg-gray-50"
+          }
+        >
+          제목
+        </Button>
+        <Button
+          type="button"
+          size="sm"
+          onClick={() => editor.chain().focus().setParagraph().run()}
+          className={
+            editor.isActive("paragraph")
+              ? "box-border bg-green-default text-white border-2 border-green-default hover:bg-green-hover active:bg-green-hover"
+              : "box-border bg-white text-black border-2 border-green-default hover:bg-gray-50"
+          }
+        >
+          본문
+        </Button>
         <Button
           type="button"
           size="sm"
@@ -71,7 +110,7 @@ function TipTapEditor({ onChange }: Props) {
           onClick={() => fileInputRef.current?.click()}
           className="box-border bg-white text-black border-2 border-green-default hover:bg-gray-50"
         >
-          이미지
+          사진첨부
         </Button>
         <input
           ref={fileInputRef}
@@ -88,7 +127,7 @@ function TipTapEditor({ onChange }: Props) {
       {/* 에디터 */}
       <EditorContent
         editor={editor}
-        className="w-full min-h-[320px] resize-none px-4 py-3 rounded-md text-black border-black/25 outline-none"
+        className="flex-1 max-h-[60dvh] rounded-md text-black overflow-y-auto"
       />
     </div>
   );

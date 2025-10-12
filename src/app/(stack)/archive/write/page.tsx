@@ -1,10 +1,7 @@
-import WriteForm from "./components/WriteForm";
+import WriteForm from "../components/WriteForm";
 
-function Page() {
-  return (
-    <div>
-      <WriteForm />
-    </div>
-  );
+function WritePage() {
+  return <WriteForm mode="write" />;
 }
-export default Page;
+
+export default WritePage;
