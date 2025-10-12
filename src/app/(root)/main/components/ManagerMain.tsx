@@ -1,5 +1,5 @@
 /**
- * 매니저 메인 컴포넌트
+ * 관리자 메인 컴포넌트
  * - 교육 자료실로 이동 버튼
  * - 전체 채팅방 리스트
  */
@@ -36,7 +36,7 @@ function ManagerMain() {
   }, []);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col h-full">
       <div className="flex flex-col gap-4 p-6">
         <Button color="darkgreen" fullWidth hasIcon className="p-0">
           <Link
@@ -50,7 +50,7 @@ function ManagerMain() {
       </div>
 
       {/*전체 채팅방*/}
-      <div className="mt-6">
+      <div className="flex-1 overflow-y-auto min-h-0">
         <h2 className="px-6 pb-4 text-xl font-bold border-b-2 border-darkgreen-default">
           전체 채팅방
         </h2>
