@@ -23,6 +23,10 @@ function SubHeader({ pageTitle }: { pageTitle?: string }) {
 
   if (pageTitle) {
     headerTitle = pageTitle;
+  } else if(pathName.includes("/chat/") && pathName.endsWith("/ai")){
+    headerTitle = "AI 채팅방";
+  } else if(pathName.includes("/chat/") && pathName.endsWith("/mentor")){
+    headerTitle = "멘토 채팅방";
   } else {
     for (const key in pageTitleList) {
       if (pathName.startsWith(key)) {
