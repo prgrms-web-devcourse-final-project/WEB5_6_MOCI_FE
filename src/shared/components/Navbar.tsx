@@ -1,5 +1,5 @@
 import CloseIcon from "@/assets/icons/close.svg";
-import { RefObject } from "react";
+import { RefObject, useEffect, useRef } from "react";
 import NavItems from "./NavItems";
 
 interface Props {
@@ -9,6 +9,49 @@ interface Props {
 }
 
 function Navbar({ navRef: outRef, closeNav, openNav }: Props) {
+  const lastFocusedElement = useRef<HTMLElement | null>(null);
+  //navbar tap focus trap 설정
+  useEffect(() => {
+    if (openNav && outRef.current) {
+      lastFocusedElement.current = document.activeElement as HTMLElement;
+
+      const focusableElements = outRef.current.querySelectorAll<HTMLElement>(
+        'a[href], button, textarea, input, select, [tabindex]:not([tabindex="-1"])'
+      );
+      const first = focusableElements[0];
+      const last = focusableElements[focusableElements.length - 1];
+
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Tab") {
+          if (focusableElements.length === 0) return;
+
+          if (e.shiftKey) {
+            // Shift + Tab
+            if (document.activeElement === first) {
+              e.preventDefault();
+              last.focus();
+            }
+          } else {
+            // Tab
+            if (document.activeElement === last) {
+              e.preventDefault();
+              first.focus();
+            }
+          }
+        }
+        if (e.key === "Escape") {
+          closeNav();
+        }
+      };
+      document.addEventListener("keydown", handleKeyDown);
+      first?.focus();
+
+      return () => {
+        document.removeEventListener("keydown", handleKeyDown);
+        lastFocusedElement.current?.focus();
+      };
+    }
+  }, [closeNav, openNav, outRef]);
   return (
     <aside
       ref={outRef}

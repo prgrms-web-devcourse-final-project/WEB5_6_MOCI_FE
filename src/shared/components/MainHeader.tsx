@@ -12,7 +12,7 @@ import { useAuthStore } from "@/store/authStore";
 
 function MainHeader() {
   const [openNav, setOpenNav] = useState(false);
-  const navRef = useRef(null);
+  const navRef = useRef<HTMLDivElement | null>(null);
   const user = useAuthStore((s) => s.user);
 
   useEffect(() => {
