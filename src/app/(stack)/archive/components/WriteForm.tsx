@@ -35,10 +35,11 @@ function WriteForm({ mode, initialData }: PostFormProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const route = useRouter();
-  const { user } = useAuthStore();
+  const user = useAuthStore((s) => s.user);
+  const isLoadingUser = useAuthStore((s) => s.isLoading);
 
   useEffect(() => {
-    if (user?.role !== "ADMIN") {
+    if (user?.role !== "ADMIN" && !isLoadingUser) {
       alert("관리자만 접근 가능한 페이지입니다.");
       route.back();
     }
@@ -68,7 +69,7 @@ function WriteForm({ mode, initialData }: PostFormProps) {
 
       setDescription(desc);
     }
-  }, [mode, initialData, user?.role, route]);
+  }, [mode, initialData, user?.role, route, isLoadingUser]);
 
   //handleSubmit 시점에 일괄 삭제하려했지만, 수정할때 body에 바뀐 files[]를 받지 않아서 못함.
   //그래서 에디터에서 description change 할때, 삭제 api 호출

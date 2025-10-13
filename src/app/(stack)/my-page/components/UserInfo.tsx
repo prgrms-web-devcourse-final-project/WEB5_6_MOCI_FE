@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 
 function UserInfo() {
   const user = useAuthStore((s) => s.user);
+  const isLoading = useAuthStore((s) => s.isLoading);
   const router = useRouter();
   const emailLength = user?.email?.length ?? 0;
   const fontsize =
@@ -21,20 +22,18 @@ function UserInfo() {
   const [id, domain] = (user?.email ?? "@").split("@");
 
   useEffect(() => {
-    if (!user) {
+    if (!user && !isLoading) {
       alert("로그인이 필요합니다.");
-      router.push("/login");
+      router.replace("/login");
     }
-  }, [user, router]);
+  }, [user, router, isLoading]);
 
   return (
     <div className="w-full flex flex-col items-center rounded-xl border px-5 py-10 gap-10">
       <Image
         width={120}
         height={120}
-        src=//   ? "mentoProfile.png" //   : user?.role === "MENTOR" //   ? "userProfile.png" // user?.role === "USER"
-        // :
-        "/logo.png"
+        src="/logo.png" // : //   ? "mentoProfile.png" //   : user?.role === "MENTOR" //   ? "userProfile.png" // user?.role === "USER"
         alt="프로필이미지"
       ></Image>
       <section aria-label="사용자정보" className="flex-center flex-col gap-2">
