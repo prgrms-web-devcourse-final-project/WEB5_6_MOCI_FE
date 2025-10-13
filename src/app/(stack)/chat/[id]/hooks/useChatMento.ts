@@ -10,6 +10,7 @@ export type Message = {
   sender: string;
   content: string;
   createdAt: string;
+  attachmentUrl: string;
 };
 
 export default function useChatMento() {
@@ -77,9 +78,7 @@ export default function useChatMento() {
     clientRef.current = client;
 
     client.onStompError = () => {
-      alert(
-        "채팅방 연결에 실패하였습니다. 멘토가 ai 채팅방 연결을 시도중일 수 있습니다. 메인화면으로 돌아갑니다"
-      );
+      alert("채팅방 연결에 실패하였습니다. 메인화면으로 돌아갑니다");
       router.replace("/main");
     };
 
@@ -97,26 +96,29 @@ export default function useChatMento() {
     }
   }, [connectionStatus]);
 
-  const sendMessage = useCallback((text: string, roomId: string) => {
-    if (
-      clientRef.current &&
-      clientRef.current.connected &&
-      text.trim() !== ""
-    ) {
-      const message = {
-        content: text,
-        attachmentId: 0,
-      };
-      clientRef.current.publish({
-        destination: `/api/v1/chat/app/send`,
-        body: JSON.stringify(message),
-        headers: { roomId },
-      });
-    } else if (!clientRef.current || !clientRef.current.connected) {
-      setConnectionStatus("연결되지않음");
-      clientRef.current?.deactivate();
-    }
-  }, []);
+  const sendMessage = useCallback(
+    (text: string, roomId: string, attachmentId?: number) => {
+      if (
+        clientRef.current &&
+        clientRef.current.connected &&
+        text.trim() !== ""
+      ) {
+        const message = {
+          content: text,
+          attachmentId: attachmentId ?? 0,
+        };
+        clientRef.current.publish({
+          destination: `/api/v1/chat/app/send`,
+          body: JSON.stringify(message),
+          headers: { roomId },
+        });
+      } else if (!clientRef.current || !clientRef.current.connected) {
+        setConnectionStatus("연결되지않음");
+        clientRef.current?.deactivate();
+      }
+    },
+    []
+  );
   return {
     connectionStatus,
     connect,

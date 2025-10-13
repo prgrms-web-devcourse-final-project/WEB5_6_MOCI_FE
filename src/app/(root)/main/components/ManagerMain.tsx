@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getAllChatrooms, getPublicAIChatrooms } from "@/api/getChatrooms";
 import { APIerror } from "@/api/getChatMsgMento";
-import { handleEnterRoomAI } from "./MenteeMain";
+import { handleEnterRoomAI, handleEnterRoomMentor } from "./MenteeMain";
 import TabBar from "./TabBar";
 
 export type TabType = "MENTOR" | "AI";
@@ -33,7 +33,7 @@ function ManagerMain() {
       category: string;
     }[]
   >();
-//AI 채팅방
+  //AI 채팅방
   useEffect(() => {
     const getAIChatroom = async () => {
       const res = await getPublicAIChatrooms();
@@ -47,7 +47,7 @@ function ManagerMain() {
       setPublicAIRoomsData([]);
     }
   }, []);
-//멘토 채팅방
+  //멘토 채팅방
   useEffect(() => {
     const getAllChatroom = async () => {
       const res = await getAllChatrooms();
@@ -62,7 +62,7 @@ function ManagerMain() {
     }
   }, []);
 
-   return (
+  return (
     <div className="flex flex-col h-full">
       {/* 상단 버튼 영역 */}
       <div className="flex flex-col gap-4 p-6">
@@ -88,9 +88,9 @@ function ManagerMain() {
       </div>
 
       {/* 탭바 */}
-      <TabBar 
-        activeTab={activeTab} 
-        onChange={setActiveTab} 
+      <TabBar
+        activeTab={activeTab}
+        onChange={setActiveTab}
         customLabels={{
           MENTOR: "전체 멘토 채팅방",
           AI: "전체 AI 채팅방",
@@ -111,6 +111,7 @@ function ManagerMain() {
                     title={room.title}
                     category={room.category}
                     digital_level={String(room.digital_level ?? "")}
+                    onEnter={() => handleEnterRoomMentor(room.id, router)}
                   />
                 ))}
             </ChatRoomList>
