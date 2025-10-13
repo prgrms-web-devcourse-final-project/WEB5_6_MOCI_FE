@@ -11,10 +11,11 @@ import { useEffect, useRef, useState } from "react";
 
 interface Props {
   onChange: (value: JSONContent) => void;
+  onFileAdd: (newFileId: number, newFileUrl: string) => void;
   initialValue?: JSONContent; // ✅ 추가 (수정 모드 지원)
 }
 
-function TipTapEditor({ onChange, initialValue }: Props) {
+function TipTapEditor({ onChange, onFileAdd, initialValue }: Props) {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [updateTrigger, setUpdateTrigger] = useState(0); // 강제 리렌더링용 state
 
@@ -51,9 +52,10 @@ function TipTapEditor({ onChange, initialValue }: Props) {
   // 이미지 파일 업로드
   const handleImageUpload = async (file: File) => {
     try {
-      const { url } = await uploadFile(file);
+      const { id, url, fileUrl } = await uploadFile(file);
 
       editor.chain().focus().setImage({ src: url }).run();
+      onFileAdd(id, fileUrl);
     } catch (error) {
       console.error("이미지 업로드 중 오류 발생:", error);
     }
