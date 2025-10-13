@@ -56,14 +56,18 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
   },
   logout: async () => {
-    const res = await fetch(`${BASE_URL}/api/v1/auth/logout`, {
-      method: "DELETE",
-      credentials: "include",
-    });
-    if (res.ok) {
-      set({ user: null });
-    } else {
-      alert("로그아웃에 실패하였습니다");
+    try {
+      const res = await fetch(`${BASE_URL}/api/v1/auth/logout`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      if (res.ok) {
+        set({ user: null });
+      } else {
+        alert("로그아웃에 실패하였습니다");
+      }
+    } catch (err) {
+      console.error("로그아웃 오류:", err);
     }
   },
 }));

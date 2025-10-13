@@ -17,7 +17,7 @@ function MyChatRoomCard({
   onEnter,
 }: MyChatRoomCardProps) {
   return (
-    <div className="relative flex items-center justify-between p-4 bg-lightgreen border-b-1 border-darkgreen-default">
+    <div className="relative flex items-center justify-between p-4 bg-lightgreen border-b-1 border-darkgreen-default gap-4">
       <p className="font-semibold text-xl truncate flex-1 min-w-0">
         {question}
       </p>

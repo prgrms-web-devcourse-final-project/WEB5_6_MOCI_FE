@@ -1,11 +1,10 @@
 "use client";
 import { useAuthStore } from "@/store/authStore";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 function NavItems({ closeNav }: { closeNav: () => void }) {
   const pathname = usePathname();
-  const router = useRouter();
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
   const currentPath = pathname.split("/")[1];
@@ -44,13 +43,12 @@ function NavItems({ closeNav }: { closeNav: () => void }) {
   const moveTo = () => {
     closeNav();
   };
-  const handleLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleLogout = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const confirmOK = confirm("로그아웃 하시겠습니까?");
     if (confirmOK) {
       logout();
       closeNav();
-      router.push("/");
     }
   };
   return (

@@ -5,7 +5,7 @@ import { useAuthStore } from "@/store/authStore";
 import Link from "next/link";
 
 function ArchiveButtons() {
-  const { user } = useAuthStore();
+  const user = useAuthStore((s) => s.user);
 
   if (user?.role === "ADMIN") {
     return (

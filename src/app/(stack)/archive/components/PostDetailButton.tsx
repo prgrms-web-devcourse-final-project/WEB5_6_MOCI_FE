@@ -6,7 +6,7 @@ import Edit from "./Edit";
 import Delete from "./Delete";
 
 function PostDetailButton() {
-  const { user } = useAuthStore();
+  const user = useAuthStore((s) => s.user);
 
   if (user?.role === "ADMIN") {
     return (
