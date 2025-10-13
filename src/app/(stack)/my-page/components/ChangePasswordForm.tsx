@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@/shared/components/Button";
 import Input from "@/shared/components/Input";
 import EyeClose from "@/assets/icons/eyeClose.svg";
@@ -15,6 +15,24 @@ function ChangeButtonForm() {
   const [hidePWValidate, setHidePWValidate] = useState(true);
 
   const route = useRouter();
+
+  const [keyboardPadding, setKeyboardPadding] = useState(0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.visualViewport) {
+        const diff = window.innerHeight - window.visualViewport.height;
+        setKeyboardPadding(
+          diff > 0 ? (window.innerHeight > 240 ? diff - 35 : diff) : 0
+        );
+      }
+    };
+
+    window.visualViewport?.addEventListener("resize", handleResize);
+    return () => {
+      window.visualViewport?.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -109,16 +127,21 @@ function ChangeButtonForm() {
           )}
         </div>
 
-        <Button
-          type="submit"
-          className="mt-auto"
-          fullWidth
-          disabled={!isValid || isLoading}
-          aria-disabled={!isValid || isLoading}
-          aria-busy={isLoading}
+        <div
+          className="mt-auto sticky bottom-0 transition-[padding] duration-300"
+          style={{ paddingBottom: keyboardPadding }}
         >
-          {isLoading ? "처리중..." : "비밀번호 바꾸기"}
-        </Button>
+          <Button
+            type="submit"
+            className="mt-auto"
+            fullWidth
+            disabled={!isValid || isLoading}
+            aria-disabled={!isValid || isLoading}
+            aria-busy={isLoading}
+          >
+            {isLoading ? "처리중..." : "비밀번호 바꾸기"}
+          </Button>
+        </div>
       </form>
     </>
   );
