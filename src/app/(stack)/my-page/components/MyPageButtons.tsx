@@ -5,7 +5,7 @@ import Link from "next/link";
 import DeleteUserButton from "./DeleteUserButton";
 
 function MyPageButtons() {
-  const { user } = useAuthStore();
+  const user = useAuthStore((s) => s.user);
 
   if (!user) return null;
 
