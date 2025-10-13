@@ -31,6 +31,7 @@ function TipTapEditor({ onChange, onFileAdd, initialValue }: Props) {
     content: initialValue ?? "",
     immediatelyRender: false,
     onUpdate: ({ editor }) => onChange(editor.getJSON()),
+
     onSelectionUpdate: () => setUpdateTrigger((v) => v + 1),
     onTransaction: () => setUpdateTrigger((v) => v + 1),
   });
@@ -54,8 +55,26 @@ function TipTapEditor({ onChange, onFileAdd, initialValue }: Props) {
     try {
       const { id, url, fileUrl } = await uploadFile(file);
 
-      editor.chain().focus().setImage({ src: url }).run();
-      onFileAdd(id, fileUrl);
+      const img = new window.Image();
+      img.src = url;
+
+      img.onload = () => {
+        const naturalWidth = img.naturalWidth;
+        const naturalHeight = img.naturalHeight;
+
+        editor
+          .chain()
+          .focus()
+          .setImage({
+            src: url,
+            alt: file.name,
+            width: naturalWidth,
+            height: naturalHeight,
+          })
+          .run();
+
+        onFileAdd(id, fileUrl);
+      };
     } catch (error) {
       console.error("이미지 업로드 중 오류 발생:", error);
     }

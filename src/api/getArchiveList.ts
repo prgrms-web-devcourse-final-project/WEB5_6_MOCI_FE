@@ -1,6 +1,21 @@
 import { ResponseCatKey } from "@/app/(root)/archive/[[...category]]/page";
 import { BASE_URL } from "./constants/config";
 
+interface ArchiveThumbnail {
+  id: number;
+  file_name: string;
+  file_url: string;
+  file_type: string;
+}
+
+export interface ArchiveItem {
+  id: number;
+  title: string;
+  category: string;
+  thumbnail: ArchiveThumbnail | null;
+  createdAt: string;
+}
+
 export const getArchiveList = async ({
   page,
   keyword,
@@ -38,7 +53,20 @@ export const getArchiveList = async ({
       }
     }
     const data = await res.json();
-    return data.data;
+    const updatedData = {
+      ...data.data,
+      archives: data.data.archives.map((item: ArchiveItem) => ({
+        ...item,
+        thumbnail: item.thumbnail
+          ? {
+              ...item.thumbnail,
+              file_url: `${BASE_URL}/uploads/${item.thumbnail.file_url}`,
+            }
+          : null,
+      })),
+    };
+
+    return updatedData;
   } catch {}
 };
 

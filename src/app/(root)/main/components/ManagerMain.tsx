@@ -15,9 +15,14 @@ import { useEffect, useState } from "react";
 import { getAllChatrooms, getPublicAIChatrooms } from "@/api/getChatrooms";
 import { APIerror } from "@/api/getChatMsgMento";
 import { handleEnterRoomAI } from "./MenteeMain";
+import TabBar from "./TabBar";
+
+export type TabType = "MENTOR" | "AI";
 
 function ManagerMain() {
   const router = useRouter();
+  const [activeTab, setActiveTab] = useState<TabType>("MENTOR");
+
   const [publicAIRoomsData, setPublicAIRoomsData] =
     useState<{ id: number; title: string; category: string }[]>();
   const [allRoomsData, setAllRoomsData] = useState<
@@ -28,7 +33,7 @@ function ManagerMain() {
       category: string;
     }[]
   >();
-
+//AI 채팅방
   useEffect(() => {
     const getAIChatroom = async () => {
       const res = await getPublicAIChatrooms();
@@ -42,7 +47,7 @@ function ManagerMain() {
       setPublicAIRoomsData([]);
     }
   }, []);
-
+//멘토 채팅방
   useEffect(() => {
     const getAllChatroom = async () => {
       const res = await getAllChatrooms();
@@ -57,8 +62,9 @@ function ManagerMain() {
     }
   }, []);
 
-  return (
+   return (
     <div className="flex flex-col h-full">
+      {/* 상단 버튼 영역 */}
       <div className="flex flex-col gap-4 p-6">
         <Button color="darkgreen" fullWidth hasIcon className="p-0">
           <Link
@@ -69,40 +75,67 @@ function ManagerMain() {
             교육 자료실로 이동
           </Link>
         </Button>
+
+        <Button color="yellow" fullWidth hasIcon className="p-0">
+          <Link
+            href="/archive/request"
+            className="flex items-center gap-2.5 w-full h-full px-4 py-3"
+          >
+            <RightArrow className="text-black" />
+            자료요청게시판
+          </Link>
+        </Button>
       </div>
 
-      {/*전체 채팅방*/}
+      {/* 탭바 */}
+      <TabBar 
+        activeTab={activeTab} 
+        onChange={setActiveTab} 
+        customLabels={{
+          MENTOR: "전체 멘토 채팅방",
+          AI: "전체 AI 채팅방",
+        }}
+      />
+
+      {/* 탭별 콘텐츠 */}
       <div className="flex-1 overflow-y-auto min-h-0">
-        <h2 className="px-6 pb-4 text-xl font-bold border-b-2 border-darkgreen-default">
-          전체 채팅방
-        </h2>
-        <ChatRoomList emptyMessage="생성된 채팅방이 없습니다.">
-          {allRoomsData &&
-            allRoomsData.length !== 0 &&
-            allRoomsData.map((room) => (
-              <PublicChatRoomCard
-                key={room.id}
-                mentee_nickname=""
-                title={room.title}
-                category={room.category}
-                digital_level={String(room.digital_level ?? "")}
-              />
-            ))}
-          {publicAIRoomsData &&
-            publicAIRoomsData.length !== 0 &&
-            publicAIRoomsData.map((room) => (
-              <PublicChatRoomCard
-                key={room.id}
-                mentee_nickname=""
-                title={room.title}
-                category={room.category}
-                digital_level=""
-                onEnter={() => handleEnterRoomAI(room.id, router)}
-              />
-            ))}
-        </ChatRoomList>
+        {activeTab === "MENTOR" ? (
+          <>
+            <ChatRoomList emptyMessage="생성된 멘토 채팅방이 없습니다.">
+              {allRoomsData &&
+                allRoomsData.length > 0 &&
+                allRoomsData.map((room) => (
+                  <PublicChatRoomCard
+                    key={room.id}
+                    mentee_nickname=""
+                    title={room.title}
+                    category={room.category}
+                    digital_level={String(room.digital_level ?? "")}
+                  />
+                ))}
+            </ChatRoomList>
+          </>
+        ) : (
+          <>
+            <ChatRoomList emptyMessage="생성된 AI 채팅방이 없습니다.">
+              {publicAIRoomsData &&
+                publicAIRoomsData.length > 0 &&
+                publicAIRoomsData.map((room) => (
+                  <PublicChatRoomCard
+                    key={room.id}
+                    mentee_nickname=""
+                    title={room.title}
+                    category={room.category}
+                    digital_level=""
+                    onEnter={() => handleEnterRoomAI(room.id, router)}
+                  />
+                ))}
+            </ChatRoomList>
+          </>
+        )}
       </div>
     </div>
   );
 }
+
 export default ManagerMain;
