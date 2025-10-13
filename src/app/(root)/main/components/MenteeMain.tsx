@@ -15,6 +15,8 @@ import { useEffect, useState } from "react";
 import { getAIChatrooms, getChatrooms } from "@/api/getChatrooms";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { APIerror } from "@/api/getChatMsgMento";
+import { TabType } from "./ManagerMain";
+import TabBar from "./TabBar";
 
 export const handleEnterRoomMentor = (
   roomId: number,
@@ -34,6 +36,9 @@ export const handleEnterRoomAI = (
 
 function MenteeMain() {
   const router = useRouter();
+  const [activeTab, setActiveTab] = useState<TabType>("MENTOR");
+  
+
   const [myRoomsData, setMyRoomsData] =
     useState<{ id: number; question: string; unread_count: number }[]>();
   const [myAIRoomsData, setMyAIRoomsData] =
@@ -97,35 +102,54 @@ function MenteeMain() {
         </Button>
       </div>
 
-      {/*나의 채팅방 리스트 */}
+      {/* 탭바 */}
+      <TabBar
+        activeTab={activeTab}
+        onChange={setActiveTab}
+        customLabels={{
+          MENTOR: "나의 멘토 채팅방",
+          AI: "나의 AI 채팅방",
+        }}
+      />
+
+      {/* 탭별 콘텐츠 */}
       <div className="flex-1 overflow-y-auto min-h-0">
-        <h2 className="px-6 pb-4 text-xl font-bold border-b-2 border-darkgreen-default">
-          나의 채팅방
-        </h2>
-        <ChatRoomList
-          emptyMessage="참여중인 채팅방이 없습니다."
-          isLoading={isLoading}
-        >
-          {myRoomsData &&
-            myRoomsData.length !== 0 &&
-            myRoomsData.map((room) => (
-              <MyChatRoomCard
-                key={room.id}
-                question={room.question}
-                onEnter={() => handleEnterRoomMentor(room.id, router)}
-                unreadCount={room.unread_count}
-              />
-            ))}
-          {myAIRoomsData &&
-            myAIRoomsData.length !== 0 &&
-            myAIRoomsData.map((room) => (
-              <MyChatRoomCard
-                key={room.id}
-                question={room.title}
-                onEnter={() => handleEnterRoomAI(room.id, router)}
-              />
-            ))}
-        </ChatRoomList>
+        {activeTab === "MENTOR" ? (
+          <>
+            <ChatRoomList
+              emptyMessage="참여중인 멘토 채팅방이 없습니다."
+              isLoading={isLoading}
+            >
+              {myRoomsData &&
+                myRoomsData.length > 0 &&
+                myRoomsData.map((room) => (
+                  <MyChatRoomCard
+                    key={room.id}
+                    question={room.question}
+                    onEnter={() => handleEnterRoomMentor(room.id, router)}
+                    unreadCount={room.unread_count}
+                  />
+                ))}
+            </ChatRoomList>
+          </>
+        ) : (
+          <>
+            <ChatRoomList
+              emptyMessage="참여중인 AI 채팅방이 없습니다."
+              isLoading={isLoading}
+            >
+              {myAIRoomsData &&
+                myAIRoomsData.length > 0 &&
+                myAIRoomsData.map((room) => (
+                  <MyChatRoomCard
+                    key={room.id}
+                    question={room.title}
+                    onEnter={() => handleEnterRoomAI(room.id, router)}
+                  />
+                ))}
+            </ChatRoomList>
+          </>
+        )}
       </div>
     </div>
   );
