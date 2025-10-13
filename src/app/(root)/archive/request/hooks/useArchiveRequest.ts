@@ -1,10 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useAuthStore } from "@/store/authStore";
 import { 
-  ArchiveRequestListItem, 
-  ArchiveRequestListResponseDto,
-  ArchiveRequestListApiResponse,
-  RequestStatus 
+  ArchiveRequestListItem
 } from "@/types/archiveRequest";
 import { getArchiveRequestList } from "@/api/archiveRequest";
 
@@ -29,15 +26,17 @@ export function useArchiveRequestList() {
     try {
       const response = await getArchiveRequestList(page, 10, filterCategory);
       
-      const requests = (response as any)?.data?.requests || (response as any)?.requests || [];
-      const currentPage = (response as any)?.data?.currentPage || (response as any)?.currentPage || 0;
-      const totalPages = (response as any)?.data?.totalPages || (response as any)?.totalPages || 0;
-      const totalElements = (response as any)?.data?.totalElements || (response as any)?.totalElements || 0;
+      // 응답 데이터 구조 확인
+      const responseData = 'data' in response ? response.data : response;
+      const requests = 'requests' in responseData ? responseData.requests : [];
+      const currentPageNum = 'currentPage' in responseData ? responseData.currentPage : 0;
+      const totalPagesNum = 'totalPages' in responseData ? responseData.totalPages : 0;
+      const totalElementsNum = 'totalElements' in responseData ? responseData.totalElements : 0;
       
       setRequests(Array.isArray(requests) ? requests : []);
-      setCurrentPage(currentPage);
-      setTotalPages(totalPages);
-      setTotalElements(totalElements);
+      setCurrentPage(currentPageNum);
+      setTotalPages(totalPagesNum);
+      setTotalElements(totalElementsNum);
     } catch (error) {
       console.error("요청 목록 로딩 실패:", error);
       alert("요청 목록을 불러오는데 실패했습니다.");

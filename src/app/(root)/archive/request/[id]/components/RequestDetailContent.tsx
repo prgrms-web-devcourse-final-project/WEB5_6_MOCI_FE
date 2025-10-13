@@ -10,7 +10,11 @@ import CoupangLogo from "@/assets/logos/Coupang_logo.svg";
 import BusLogo from "@/assets/logos/Bus_logo.svg";
 import DeliveryLogo from "@/assets/logos/Delivery_logo.svg";
 
-const categoryIcons: Record<string, React.ComponentType<any>> = {
+interface SvgProps {
+  className?: string;
+}
+
+const categoryIcons: Record<string, React.ComponentType<SvgProps>> = {
   KAKAO_TALK: KakaoTalkLogo,
   YOUTUBE: YouTubeLogo,
   KTX: KTXLogo,
@@ -95,9 +99,10 @@ function RequestDetailContent({
 
       {/* 제목 */}
       <div className="mb-6">
-        <label className="block text-lg font-medium mb-2">제목</label>
+        <label htmlFor="edit-title" className="block text-lg font-medium mb-2">제목</label>
         {isEditing ? (
           <input
+            id="edit-title"
             type="text"
             value={editData.title}
             onChange={(e) => onEditDataChange({ ...editData, title: e.target.value })}
@@ -113,9 +118,10 @@ function RequestDetailContent({
 
       {/* 내용 */}
       <div className="flex-1">
-        <label className="block text-lg font-medium mb-2">내용</label>
+        <label htmlFor="edit-description" className="block text-lg font-medium mb-2">내용</label>
         {isEditing ? (
           <textarea
+            id="edit-description"
             value={editData.description}
             onChange={(e) => onEditDataChange({ ...editData, description: e.target.value })}
             className="w-full h-64 px-3 py-2 border border-black rounded-lg text-xl focus:outline-none focus:border-green-default focus:border-2 resize-none placeholder:text-gray"

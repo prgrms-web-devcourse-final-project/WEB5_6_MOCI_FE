@@ -1,10 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/authStore";
 import { 
   ArchiveRequestResponseDto, 
-  CreateArchiveRequestDto,
-  RequestStatus 
+  CreateArchiveRequestDto
 } from "@/types/archiveRequest";
 import { 
   getArchiveRequest, 
@@ -31,11 +30,10 @@ export function useArchiveRequestDetail(requestId: number) {
   const isAuthor = request && isMentor && user?.id === request.requester.id;
   const canEdit = request && (request.status === "PENDING" || request.status === "REJECTED");
 
-  const fetchRequest = async () => {
+  const fetchRequest = useCallback(async () => {
     try {
       const response = await getArchiveRequest(requestId);
-      const requestData = response?.data || response;
-      setRequest(requestData);
+      setRequest(response);
     } catch (error) {
       console.error("요청 상세 정보 로딩 실패:", error);
       alert("요청 정보를 불러오는데 실패했습니다.");
@@ -43,7 +41,7 @@ export function useArchiveRequestDetail(requestId: number) {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [requestId]);
 
   const handleEdit = () => {
     if (request) {
@@ -62,8 +60,7 @@ export function useArchiveRequestDetail(requestId: number) {
     setIsLoading(true);
     try {
       const response = await updateArchiveRequest(requestId, editData);
-      const updatedRequest = response?.data || response;
-      setRequest(updatedRequest);
+      setRequest(response);
       setIsEditing(false);
       alert("수정이 완료되었습니다.");
     } catch (error) {
@@ -96,8 +93,7 @@ export function useArchiveRequestDetail(requestId: number) {
     setIsLoading(true);
     try {
       const response = await updateArchiveRequestStatus(requestId, "APPROVED");
-      const updatedRequest = response?.data || response;
-      setRequest(updatedRequest);
+      setRequest(response);
       alert("승인되었습니다.");
     } catch (error) {
       console.error("승인 실패:", error);
@@ -113,8 +109,7 @@ export function useArchiveRequestDetail(requestId: number) {
     setIsLoading(true);
     try {
       const response = await updateArchiveRequestStatus(requestId, "REJECTED");
-      const updatedRequest = response?.data || response;
-      setRequest(updatedRequest);
+      setRequest(response);
       alert("거절되었습니다.");
     } catch (error) {
       console.error("거절 실패:", error);
@@ -135,7 +130,7 @@ export function useArchiveRequestDetail(requestId: number) {
 
   useEffect(() => {
     fetchRequest();
-  }, [requestId, user]);
+  }, [fetchRequest, user]);
 
   return {
     request,

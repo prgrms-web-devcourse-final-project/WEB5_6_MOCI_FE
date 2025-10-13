@@ -15,8 +15,12 @@ import CoupangLogo from "@/assets/logos/Coupang_logo.svg";
 import BusLogo from "@/assets/logos/Bus_logo.svg";
 import DeliveryLogo from "@/assets/logos/Delivery_logo.svg";
 
+interface SvgProps {
+  className?: string;
+}
+
 // 카테고리별 아이콘 매핑 (백엔드 RequestCategory enum에 맞춤)
-const categoryIcons: Record<string, React.ComponentType<any>> = {
+const categoryIcons: Record<string, React.ComponentType<SvgProps>> = {
   KAKAO_TALK: KakaoTalkLogo,
   YOUTUBE: YouTubeLogo,
   KTX: KTXLogo,

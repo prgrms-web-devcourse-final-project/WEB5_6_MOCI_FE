@@ -1,6 +1,6 @@
 "use client";
 
-import { ArchiveRequestListItem, RequestStatus } from "@/types/archiveRequest";
+import { ArchiveRequestListItem } from "@/types/archiveRequest";
 import { STATUS_STYLES, STATUS_LABELS } from "@/constants/archiveRequest";
 // 임시로 직접 import
 import KakaoTalkLogo from "@/assets/logos/KakaoTalk_logo.svg";
@@ -10,7 +10,11 @@ import CoupangLogo from "@/assets/logos/Coupang_logo.svg";
 import BusLogo from "@/assets/logos/Bus_logo.svg";
 import DeliveryLogo from "@/assets/logos/Delivery_logo.svg";
 
-const categoryIcons: Record<string, React.ComponentType<any>> = {
+interface SvgProps {
+  className?: string;
+}
+
+const categoryIcons: Record<string, React.ComponentType<SvgProps>> = {
   KAKAO_TALK: KakaoTalkLogo,
   YOUTUBE: YouTubeLogo,
   KTX: KTXLogo,
@@ -27,28 +31,15 @@ function getCategoryIcon(category?: string) {
   }
   return KakaoTalkLogo;
 }
-import RequestActions from "./RequestActions";
 
 interface RequestItemProps {
   request: ArchiveRequestListItem;
-  userRole?: string;
-  currentUserId?: number;
-  onEdit: (requestId: number) => void;
-  onDelete: (requestId: number) => void;
-  onStatusChange: (requestId: number, status: RequestStatus) => void;
   onViewDetail: (requestId: number) => void;
-  isLoading: boolean;
 }
 
 function RequestItem({
   request,
-  userRole,
-  currentUserId,
-  onEdit,
-  onDelete,
-  onStatusChange,
   onViewDetail,
-  isLoading,
 }: RequestItemProps) {
   const CategoryIcon = getCategoryIcon(request.category);
 
@@ -61,8 +52,9 @@ function RequestItem({
         </div>
 
         {/* 요청 정보 */}
-        <div 
-          className="flex-1 min-w-0 cursor-pointer"
+        <button 
+          type="button"
+          className="flex-1 min-w-0 cursor-pointer text-left"
           onClick={() => onViewDetail(request.id)}
         >
           <h3 className="text-lg font-medium text-black truncate">
@@ -71,7 +63,7 @@ function RequestItem({
           <p className="text-sm text-gray mt-1">
             {request.requesterName} • {new Date(request.createdAt).toLocaleDateString()}
           </p>
-        </div>
+        </button>
 
         {/* 상태 배지 */}
         <div className="flex-shrink-0">

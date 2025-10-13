@@ -94,13 +94,7 @@ function MaterialRequestBoard() {
             <RequestItem
               key={request.id}
               request={request}
-              userRole={user?.role}
-              currentUserId={user?.id}
-              onEdit={handleRequestEdit}
-              onDelete={handleRequestDelete}
-              onStatusChange={handleStatusChange}
               onViewDetail={handleViewDetail}
-              isLoading={isLoading}
             />
           ))}
         </RequestList>

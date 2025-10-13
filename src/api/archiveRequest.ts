@@ -1,9 +1,7 @@
 import {
   ArchiveRequestResponseDto,
-  ArchiveRequestListResponseDto,
   ArchiveRequestListApiResponse,
   CreateArchiveRequestDto,
-  UpdateArchiveRequestStatusDto,
   RequestStatus
 } from "@/types/archiveRequest";
 
