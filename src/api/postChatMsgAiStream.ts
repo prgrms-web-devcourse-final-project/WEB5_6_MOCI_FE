@@ -55,7 +55,12 @@ export const postChatMsgAiStream = async (
         }
       }
     }
-  } catch (err) {
+  } catch (err: unknown) {
+    if(err instanceof Error){
+      alert(`AI 스트리밍 에러 : ${err.message}`);
+    }else{
+      alert("AI 스트리밍 중 오류가 발생했습니다.");
+    }
     onError?.(err);
   }
 };
