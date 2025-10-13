@@ -67,11 +67,17 @@ function MainHeader() {
           </Link>
         ) : (
           <Button className="px-2.5 py-1.5 hover:scale-y-100 active:scale-y-100">
-            로그인
+            <Link href={"/login"} aria-label="로그인페이지로 이동">
+              로그인
+            </Link>
           </Button>
         )}
       </header>
-      <Navbar navRef={navRef} closeNav={() => setOpenNav(false)} />
+      <Navbar
+        navRef={navRef}
+        closeNav={() => setOpenNav(false)}
+        openNav={openNav}
+      />
     </>
   );
 }

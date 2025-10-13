@@ -8,6 +8,7 @@ function Back() {
     router.back();
     window.history.replaceState(null, "", window.location.href);
   };
+  //이전 스크롤위치 기억하는거 해보기
 
   return (
     <>

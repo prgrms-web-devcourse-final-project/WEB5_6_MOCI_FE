@@ -1,8 +1,9 @@
+import { BASE_URL } from "./constants/config";
 import { APIerror } from "./getChatMsgMento";
 
 export const deleteMentoChatRoom = async (roomId: string) => {
   const res = await fetch(
-    `http://localhost:8080/api/v1/chat/mentor/mentee/room/${roomId}`,
+    `${BASE_URL}/api/v1/chat/mentor/mentee/room/${roomId}?movedToAI=true`,
     {
       method: "DELETE",
       headers: {

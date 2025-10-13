@@ -13,4 +13,58 @@
     justify-content: center;
     align-items: center;
   }
+
+  /* TipTap Editor */
+  .ProseMirror img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+  .ProseMirror h3 {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+  .ProseMirror p {
+    font-size: 1.5rem;
+  }
+  .ProseMirror a {
+    font-size: 1.5rem;
+    color: #0645ad;
+
+    &:hover {
+      text-decoration: underline;
+    }
+    &:active {
+      text-decoration: underline;
+    }
+    &:visited {
+      color: #663366;
+    }
+  }
+  .ProseMirror p.is-editor-empty:first-child::before {
+    color: #9ca3af;
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
+  }
+}
+
+.loader {
+  width: 50px;
+  padding: 8px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--color-darkgreen-hover);
+  --_m: conic-gradient(#0000 10%, #000), linear-gradient(#000 0 0) content-box;
+  -webkit-mask: var(--_m);
+  mask: var(--_m);
+  -webkit-mask-composite: source-out;
+  mask-composite: subtract;
+  animation: l3 1s infinite linear;
+}
+@keyframes l3 {
+  to {
+    transform: rotate(1turn);
+  }
 }

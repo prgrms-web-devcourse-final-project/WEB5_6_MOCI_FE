@@ -1,14 +1,15 @@
 "use client";
 
 import { getChatMsgAi } from "@/api/getChatMsgAi";
-import { postChatMsgAi } from "@/api/postChatMsgAi";
+import { postChatMsgAiStream } from "@/api/postChatMsgAiStream"; //  새로 만든 스트리밍 함수
 import { useEffect, useState, useRef, FormEvent } from "react";
 import Chat from "./Chat";
 import Button from "@/shared/components/Button";
 import Plus from "@/assets/icons/plus.svg";
+import { useAuthStore } from "@/store/authStore";
 
 type AiMessage = {
-  id: number;
+  id: number | string;
   roomId: number;
   senderType: "HUMAN" | "AI";
   content: string;
@@ -17,12 +18,14 @@ type AiMessage = {
 
 function ChatListAi({ id }: { id: number }) {
   const [chatList, setChatList] = useState<AiMessage[]>([]);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
   const [inputValue, setInputValue] = useState("");
   const [sending, setSending] = useState(false);
   const sectionRef = useRef<HTMLDivElement | null>(null);
+  const user = useAuthStore((s) => s.user);
+  const [isComposing, setIsComposing] = useState(false);
 
-  //스크롤 맨 아래로
+  // 스크롤 맨 아래로
   const scrollToBottom = () => {
     if (sectionRef.current) {
       sectionRef.current.scrollTo({
@@ -32,14 +35,35 @@ function ChatListAi({ id }: { id: number }) {
     }
   };
 
-  //첫 메시지 불러오기
+  // 첫 메시지 불러오기
   useEffect(() => {
     const getChats = async () => {
       try {
-        const chats = await getChatMsgAi(id);
-        setChatList(chats || []);
+        const chats = await getChatMsgAi(id); // 배열 반환
+        const now = Date.now();
+
+        // 배열에서 HUMAN 메시지 찾기
+        const humanMsg = chats.find((m) => m.senderType === "HUMAN");
+        const humanCreatedAt = humanMsg ? new Date(humanMsg.createdAt).getTime() : 0;
+        const diffSeconds = (now - humanCreatedAt) / 1000;
+
+        // 조건: 메시지가 2개뿐이고, HUMAN 메시지가 지금으로부터 4초 이내
+        const isFirstQuestion = chats.length === 2 && diffSeconds < 4;
+
+        if (isFirstQuestion && humanMsg) {
+          // Human 먼저 보여주고
+          setChatList([humanMsg]);
+
+          // 1초 뒤에 AI 응답 추가
+          setTimeout(() => {
+            setChatList(chats);
+          }, 1000);
+        } else {
+          // 첫 질문이 아니면 전체 메시지 바로 보여주기
+          setChatList(chats || []);
+        }
       } catch (err) {
-        console.error("채팅 불러오기 실패", err);//console 지우기
+        console.error("채팅 불러오기 실패", err);
         setChatList([]);
       } finally {
         setLoading(false);
@@ -48,7 +72,8 @@ function ChatListAi({ id }: { id: number }) {
     getChats();
   }, [id]);
 
-  //새 메시지가 생길 때마다 스크롤
+
+  // 새 메시지가 생길 때마다 스크롤
   useEffect(() => {
     if (!loading) scrollToBottom();
   }, [chatList, loading]);
@@ -56,32 +81,74 @@ function ChatListAi({ id }: { id: number }) {
   // 메시지 전송
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!inputValue.trim() || sending) return;
+    if (!inputValue.trim() || sending || isComposing) return;
 
     setSending(true);
     const content = inputValue;
     setInputValue("");
 
-    try {
-      const { userMessage, aiMessage } = await postChatMsgAi(id, content);
+    // 유저 메시지를 먼저 추가
+    setChatList((prev) => [
+      ...prev,
+      {
+        id: crypto.randomUUID(),
+        roomId: id,
+        senderType: "HUMAN",
+        content,
+        createdAt: new Date().toISOString(),
+      },
+    ]);
 
-      setChatList((prev) => [
-        ...prev,
-        { ...userMessage, senderType: "HUMAN" },
-        { ...aiMessage, senderType: "AI" },
-      ]);
-    } catch (err) {
-      console.error("메시지 전송 실패", err);//콘솔 지우기
-      alert("메시지를 보낼 수 없습니다.");
+    // AI 메시지 "빈 껍데기" 하나 추가 → 이후 chunk마다 업데이트
+    const aiMsgId = crypto.randomUUID();
+    setChatList((prev) => [
+      ...prev,
+      {
+        id: aiMsgId,
+        roomId: id,
+        senderType: "AI",
+        content: "",
+        createdAt: new Date().toISOString(),
+      },
+    ]);
+
+    try {
+      await postChatMsgAiStream(
+        id,
+        content,
+        (msg) => {
+          // chunk가 들어올 때마다 AI 메시지 업데이트
+          setChatList((prev) =>
+            prev.map((m) =>
+              m.id === aiMsgId
+                ? { ...m, content: m.content + (msg + "\n") } // 줄바꿈 보존
+                : m
+            )
+          );
+        },
+        () => console.log("스트리밍 연결됨"),
+        (err) => {
+          console.error("메시지 전송 실패", err);
+          alert("메시지를 보낼 수 없습니다.");
+        }
+      );
     } finally {
       setSending(false);
-      scrollToBottom(); 
+      scrollToBottom();
     }
   };
 
+  const handleCompositionStart = () => {
+    setIsComposing(true);
+  };
+
+  const handleCompositionEnd = () => {
+    setIsComposing(false);
+  };
+  
   //엔터키 전송, 쉬프트 엔터 줄바꿈
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey && !isComposing) {
       e.preventDefault();
       handleSubmit(e);
     }
@@ -98,7 +165,9 @@ function ChatListAi({ id }: { id: number }) {
         aria-label="AI 채팅 메시지 목록"
       >
         {!chatList || chatList.length === 0 ? (
-          <p className="text-xl" aria-live="polite">채팅이 없습니다</p>
+          <p className="text-xl" aria-live="polite">
+            채팅이 없습니다
+          </p>
         ) : (
           chatList.map((msg) => (
             <Chat
@@ -115,19 +184,27 @@ function ChatListAi({ id }: { id: number }) {
         onSubmit={handleSubmit}
         className="bg-lightyellow h-20 flex justify-between items-center p-3 shrink-0 absolute bottom-0 left-0 right-0 gap-3"
       >
-        <Plus className="top-auto cursor-pointer" aria-hidden="true"/>
+        <Plus className="top-auto cursor-pointer" aria-hidden="true" />
         <textarea
           name="chatInputField"
           id="chatInputField"
-          className="flex-1 bg-white rounded-full border-2 text-xl p-3 resize-none h-fit"
+          className="flex-1 bg-white rounded-full border-2 text-xl p-3 resize-none h-fit disabled:bg-gray"
           rows={1}
           placeholder="질문을 입력하세요"
           value={inputValue}
+          onCompositionStart={handleCompositionStart}
+          onCompositionEnd={handleCompositionEnd}
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyDown}
           aria-label="메시지 입력창"
+          disabled={user?.role === "ADMIN"}
         />
-        <Button type="submit" className="cursor-pointer" disabled={sending}  aria-label="메시지 보내기">
+        <Button
+          type="submit"
+          className="cursor-pointer"
+          disabled={sending || user?.role === "ADMIN"}
+          aria-label="메시지 보내기"
+        >
           {sending ? "전송 중..." : "보내기"}
         </Button>
       </form>

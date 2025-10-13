@@ -16,7 +16,7 @@ function MentorMain() {
   const [activeTab, setActiveTab] = useState<MentorTabType>("myRooms");
 
   return (
-    <div className="w-full flex flex-col">
+    <div className="w-full flex flex-col h-full">
       {/* 액션 버튼들 */}
       <div className="flex flex-col gap-4 p-6">
         <Button color="darkgreen" fullWidth hasIcon className="p-0">
@@ -43,7 +43,7 @@ function MentorMain() {
       {/*탭 이동*/}
       <MentorTabBar activeTab={activeTab} onChange={setActiveTab} />
       {/*각 탭의 콘텐츠*/}
-      <div>
+      <div className="flex-1 overflow-y-auto min-h-0">
         <MentorTabContent activeTab={activeTab} />
       </div>
     </div>
