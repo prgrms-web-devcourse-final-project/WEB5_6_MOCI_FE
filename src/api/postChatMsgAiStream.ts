@@ -5,7 +5,7 @@ export const postChatMsgAiStream = async (
   content: string,
   onMessage: (msg: string) => void,
   onInit?: () => void,
-  onError?: (err: any) => void
+  onError?: (err: unknown) => void
 ) => {
   try {
     const res = await fetch(`${BASE_URL}/api/v1/chat/ai/rooms/${roomId}/ask-stream`, {
