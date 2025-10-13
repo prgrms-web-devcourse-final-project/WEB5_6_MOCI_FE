@@ -172,7 +172,7 @@ async function Page({
                   key={id}
                   cardInfo={{
                     id,
-                    imgsrc: thumbnail.file_url,
+                    imgsrc: thumbnail?.file_url ?? undefined,
                     title: title,
                     category:
                       matchCategory[matchCatResponse[category] as CategoryKey]

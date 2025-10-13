@@ -19,6 +19,7 @@
     "@tiptap/react": "^3.6.1",
     "@tiptap/starter-kit": "^3.6.1",
     "@types/lodash.debounce": "^4.0.9",
+    "browser-image-compression": "^2.0.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "gsap": "^3.13.0",
