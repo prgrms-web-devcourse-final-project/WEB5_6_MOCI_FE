@@ -21,8 +21,11 @@ import { joinChatRoom } from "@/api/joinChatRoom";
 
 function MentorTabContent({ activeTab }: { activeTab: MentorTabType }) {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
   const [mentorRoomsData, setMentorRoomsData] =
-    useState<{ id: number; question: string; category: string }[]>();
+    useState<
+      { id: number; question: string; category: string; unread_count: number }[]
+    >();
   const [noMentorRoomsData, setNoMentorRoomsData] =
     useState<
       { id: number; title: string; digital_level: number; category: string }[]
@@ -37,18 +40,25 @@ function MentorTabContent({ activeTab }: { activeTab: MentorTabType }) {
   >();
 
   useEffect(() => {
-    const getMentorChatroom = async () => {
-      const res = await getMentorChatrooms();
-      setMentorRoomsData(res);
-    };
-    try {
-      getMentorChatroom();
-    } catch (e) {
-      const error = e as APIerror;
-      alert(error.message);
-      setMentorRoomsData([]);
-    }
+    setIsLoading(true);
+    const timer = setTimeout(async () => {
+      try {
+        const res = await getMentorChatrooms();
+        setMentorRoomsData(res);
+        setIsLoading(false);
+      } catch (e) {
+        const error = e as APIerror;
+        alert(error.message);
+        setMentorRoomsData([]);
+        setIsLoading(false);
+      } finally {
+        setIsLoading(false);
+      }
+    }, 500); // 0.5초 뒤 실행
+
+    return () => clearTimeout(timer);
   }, []);
+
   useEffect(() => {
     const getNoMentorChatroom = async () => {
       const res = await getNoMentorChatrooms();
@@ -62,6 +72,7 @@ function MentorTabContent({ activeTab }: { activeTab: MentorTabType }) {
       setNoMentorRoomsData([]);
     }
   }, []);
+
   useEffect(() => {
     const getAllChatroom = async () => {
       const res = await getAllChatrooms();
@@ -89,13 +100,17 @@ function MentorTabContent({ activeTab }: { activeTab: MentorTabType }) {
   switch (activeTab) {
     case "myRooms":
       return (
-        <ChatRoomList emptyMessage="참여중인 채팅방이 없습니다.">
+        <ChatRoomList
+          emptyMessage="참여중인 채팅방이 없습니다."
+          isLoading={isLoading}
+        >
           {mentorRoomsData &&
             mentorRoomsData.length !== 0 &&
             mentorRoomsData.map((room) => (
               <MyChatRoomCard
                 key={room.id}
                 question={room.question}
+                unreadCount={room.unread_count}
                 onEnter={() => handleEnterRoomMentor(room.id, router)}
               />
             ))}

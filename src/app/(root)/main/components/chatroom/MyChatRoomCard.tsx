@@ -6,25 +6,35 @@
 import Button from "@/shared/components/Button";
 
 type MyChatRoomCardProps = {
-  question:string; //질문 내용 
+  question: string; //질문 내용
   onEnter: () => void;
-}
+  unreadCount?: number;
+};
 
-function MyChatRoomCard({question, onEnter}: MyChatRoomCardProps) {
+function MyChatRoomCard({
+  question,
+  unreadCount = 0,
+  onEnter,
+}: MyChatRoomCardProps) {
   return (
-    <div className="flex items-center justify-between gap-4 p-4 bg-lightgreen border-b-1 border-darkgreen-default">
+    <div className="relative flex items-center justify-between p-4 bg-lightgreen border-b-1 border-darkgreen-default">
       <p className="font-semibold text-xl truncate flex-1 min-w-0">
         {question}
       </p>
 
-      <Button 
-        color="darkgreen"
-        onClick={onEnter}
-        className="shrink-0"
-      >
+      <Button color="darkgreen" onClick={onEnter} className="shrink-0">
         입장
       </Button>
+      <p
+        className={`absolute top-1 right-16 ${
+          unreadCount &&
+          unreadCount > 0 &&
+          "bg-red-600 text-white text-xl text-bold rounded-full w-8 h-8"
+        }  flex-center`}
+      >
+        {unreadCount && unreadCount > 0 ? unreadCount : ""}
+      </p>
     </div>
-  )
+  );
 }
-export default MyChatRoomCard
+export default MyChatRoomCard;

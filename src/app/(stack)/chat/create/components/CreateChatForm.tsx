@@ -24,14 +24,15 @@ export default function CreateChatForm() {
     target: "" as ChatTarget,
   });
   const router = useRouter();
-  const { user } = useAuthStore();
+  const user = useAuthStore((s) => s.user);
+  const isLoading = useAuthStore((s) => s.isLoading);
 
   useEffect(() => {
-    if (!user) {
+    if (!user && !isLoading) {
       alert("로그인이 필요합니다.");
-      router.push("/login");
+      router.replace("/login");
     }
-  });
+  }, [user, isLoading, router]);
 
   const next = () => setStep((s) => s + 1);
 
