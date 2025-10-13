@@ -12,6 +12,12 @@ interface PostData {
   description: string | JSONContent;
   category: string;
   subCategory?: string;
+  files: {
+    id: number;
+    file_name: string;
+    file_url: string;
+    file_type: string;
+  }[];
   createdAt?: string;
   updatedAt?: string;
 }
