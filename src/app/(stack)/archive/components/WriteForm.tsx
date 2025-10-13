@@ -109,6 +109,15 @@ function WriteForm({ mode, initialData }: PostFormProps) {
     setFiles(usedFiles);
   };
 
+  const isValidDescription =
+    !!description &&
+    Array.isArray(description.content) &&
+    description.content.length > 0 &&
+    (description.content.some((n) => n.type === "image") ||
+      description.content.some(
+        (n) => Array.isArray(n.content) && n.content.length > 0
+      ));
+
   const handleSubmit = async () => {
     if (isLoading) return;
     setIsLoading(true);
@@ -117,16 +126,12 @@ function WriteForm({ mode, initialData }: PostFormProps) {
       setIsLoading(false);
       return;
     }
-    if (!title) {
+    if (!title?.trim()) {
       alert("제목을 입력해주세요");
       setIsLoading(false);
       return;
     }
-    if (
-      !description ||
-      !description.content ||
-      description.content.length === 0
-    ) {
+    if (!isValidDescription) {
       alert("본문을 입력해주세요");
       setIsLoading(false);
       return;
@@ -145,7 +150,6 @@ function WriteForm({ mode, initialData }: PostFormProps) {
       } else {
         throw new Error("잘못된 동작입니다.");
       }
-      console.log(files);
       route.replace(`/archive/post/${postId}`);
     } catch (error) {
       alert(
