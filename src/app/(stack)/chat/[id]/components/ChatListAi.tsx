@@ -23,6 +23,7 @@ function ChatListAi({ id }: { id: number }) {
   const [sending, setSending] = useState(false);
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const user = useAuthStore((s) => s.user);
+  const [isComposing, setIsComposing] = useState(false);
 
   // 스크롤 맨 아래로
   const scrollToBottom = () => {
@@ -80,7 +81,7 @@ function ChatListAi({ id }: { id: number }) {
   // 메시지 전송
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!inputValue.trim() || sending) return;
+    if (!inputValue.trim() || sending || isComposing) return;
 
     setSending(true);
     const content = inputValue;
@@ -137,9 +138,17 @@ function ChatListAi({ id }: { id: number }) {
     }
   };
 
-  // 엔터키 전송, 쉬프트 엔터 줄바꿈
+  const handleCompositionStart = () => {
+    setIsComposing(true);
+  };
+
+  const handleCompositionEnd = () => {
+    setIsComposing(false);
+  };
+  
+  //엔터키 전송, 쉬프트 엔터 줄바꿈
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey && !isComposing) {
       e.preventDefault();
       handleSubmit(e);
     }
@@ -183,6 +192,8 @@ function ChatListAi({ id }: { id: number }) {
           rows={1}
           placeholder="질문을 입력하세요"
           value={inputValue}
+          onCompositionStart={handleCompositionStart}
+          onCompositionEnd={handleCompositionEnd}
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyDown}
           aria-label="메시지 입력창"

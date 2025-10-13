@@ -7,6 +7,7 @@ import RegisterPasswordForm from "./RegisterPasswordForm";
 import { useRouter } from "next/navigation";
 import { checkDuplicateId } from "@/api/checkDuplicateId";
 import { register } from "@/api/register";
+import { useAuthStore } from "@/store/authStore";
 
 type RegisterUserInfo = {
   name: string;
@@ -22,6 +23,8 @@ function RegisterForm() {
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   const router = useRouter();
+  const user = useAuthStore((s) => s.user);
+  const isLoadingUser = useAuthStore((s) => s.isLoading);
 
   const [step, setStep] = useState<Step>(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -30,6 +33,12 @@ function RegisterForm() {
     phone: "",
     password: "",
   });
+
+  useEffect(() => {
+    if (user && !isLoadingUser) {
+      router.replace("/main");
+    }
+  }, [user, router, isLoadingUser]);
 
   useEffect(() => {
     const initialHeight = window.innerHeight; // 초기 화면 높이 저장

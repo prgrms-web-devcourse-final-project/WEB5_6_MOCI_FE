@@ -17,6 +17,7 @@ interface AuthState {
   setUser: (user: Partial<User> | null) => void;
   fetchUser: () => Promise<void>;
   logout: () => void;
+  isLoading: boolean;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -25,7 +26,10 @@ export const useAuthStore = create<AuthState>((set) => ({
     set((state) => ({
       user: state.user ? { ...state.user, ...user } : (user as User),
     })),
+  isLoading: true,
   fetchUser: async () => {
+    set({ isLoading: true });
+
     try {
       const res = await fetch(`${BASE_URL}/api/v1/users/me`, {
         method: "GET",
@@ -47,6 +51,8 @@ export const useAuthStore = create<AuthState>((set) => ({
     } catch (err) {
       console.error(err);
       set({ user: null });
+    } finally {
+      set({ isLoading: false });
     }
   },
   logout: async () => {

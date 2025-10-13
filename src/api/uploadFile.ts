@@ -1,7 +1,13 @@
 import { BASE_URL } from "./constants/config";
 
+interface UploadedFile {
+  id: number;
+  name: string;
+  url: string;
+  fileUrl: string;
+}
 //file을 db에 업로드하고, 해당 파일의 url을 받습니다.
-export const uploadFile = async (file: File) => {
+export const uploadFile = async (file: File): Promise<UploadedFile> => {
   const formData = new FormData();
   formData.append("uploadFile", file);
 
@@ -20,5 +26,6 @@ export const uploadFile = async (file: File) => {
     id: data.data.id,
     name: data.data.file_name,
     url: `${BASE_URL}/uploads/${data.data.file_url}`,
+    fileUrl: data.data.file_url,
   };
 };
