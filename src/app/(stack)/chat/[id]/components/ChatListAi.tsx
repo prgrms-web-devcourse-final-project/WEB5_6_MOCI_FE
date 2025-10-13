@@ -38,8 +38,29 @@ function ChatListAi({ id }: { id: number }) {
   useEffect(() => {
     const getChats = async () => {
       try {
-        const chats = await getChatMsgAi(id);
-        setChatList(chats || []);
+        const chats = await getChatMsgAi(id); // 배열 반환
+        const now = Date.now();
+
+        // 배열에서 HUMAN 메시지 찾기
+        const humanMsg = chats.find((m) => m.senderType === "HUMAN");
+        const humanCreatedAt = humanMsg ? new Date(humanMsg.createdAt).getTime() : 0;
+        const diffSeconds = (now - humanCreatedAt) / 1000;
+
+        // 조건: 메시지가 2개뿐이고, HUMAN 메시지가 지금으로부터 4초 이내
+        const isFirstQuestion = chats.length === 2 && diffSeconds < 4;
+
+        if (isFirstQuestion && humanMsg) {
+          // Human 먼저 보여주고
+          setChatList([humanMsg]);
+
+          // 1초 뒤에 AI 응답 추가
+          setTimeout(() => {
+            setChatList(chats);
+          }, 1000);
+        } else {
+          // 첫 질문이 아니면 전체 메시지 바로 보여주기
+          setChatList(chats || []);
+        }
       } catch (err) {
         console.error("채팅 불러오기 실패", err);
         setChatList([]);
@@ -49,6 +70,7 @@ function ChatListAi({ id }: { id: number }) {
     };
     getChats();
   }, [id]);
+
 
   // 새 메시지가 생길 때마다 스크롤
   useEffect(() => {
