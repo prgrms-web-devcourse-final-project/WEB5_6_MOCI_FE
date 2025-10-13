@@ -64,7 +64,7 @@ function ChatListMento({ id }: { id: string }) {
     onSendMessage();
   };
 
-  const handleText = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleText = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setText(e.target.value);
   };
 
@@ -76,8 +76,8 @@ function ChatListMento({ id }: { id: string }) {
     setIsComposing(false);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && !isComposing) {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey && !isComposing) {
       e.preventDefault();
       onSendMessage();
     }
@@ -140,7 +140,7 @@ function ChatListMento({ id }: { id: string }) {
         onSubmit={send}
       >
         <Plus className="top-auto cursor-pointer" />
-        <input
+        <textarea
           name="chatInputField"
           id="chatInputField"
           className="flex-1 bg-white rounded-full border-2 text-xl p-3 resize-none h-fit min-w-0 disabled:bg-gray"
@@ -149,6 +149,7 @@ function ChatListMento({ id }: { id: string }) {
               ? "채팅방이 종료되었습니다"
               : "질문을 입력하세요"
           }
+          rows={1}
           onChange={handleText}
           value={text}
           onCompositionStart={handleCompositionStart}
