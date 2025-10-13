@@ -43,7 +43,7 @@ export type ResponseCatKey = keyof typeof matchCatResponse;
 interface ArchiveType {
   id: number;
   title: string;
-  thumbnail: string | null; // 파일업로드 기능 완료되면 수정필요
+  thumbnail: { file_url: string }; // 파일업로드 기능 완료되면 수정필요
   createdAt: string;
   category: ResponseCatKey;
 }
@@ -172,7 +172,7 @@ async function Page({
                   key={id}
                   cardInfo={{
                     id,
-                    imgsrc: thumbnail,
+                    imgsrc: thumbnail.file_url,
                     title: title,
                     category:
                       matchCategory[matchCatResponse[category] as CategoryKey]
