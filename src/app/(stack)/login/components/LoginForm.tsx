@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import EyeClose from "@/assets/icons/eyeClose.svg";
 import EyeOpen from "@/assets/icons/eyeOpen.svg";
+import { APIerror } from "@/api/getChatMsgMento";
 
 function LoginForm() {
   const [hidePW, setHidePW] = useState(true);
@@ -16,17 +17,18 @@ function LoginForm() {
   const [errorMessage /*setErrorMessage*/] =
     useState("전화번호는 숫자만 입력해주세요");
   const router = useRouter();
-  const { user } = useAuthStore();
+  const user = useAuthStore((s) => s.user);
+  const isLoading = useAuthStore((s) => s.isLoading);
   const setUser = useAuthStore((s) => s.setUser);
   const toggleHidePW = () => {
     setHidePW(!hidePW);
   };
 
   useEffect(() => {
-    if (user) {
-      router.push("/main");
+    if (user && !isLoading) {
+      router.replace("/main");
     }
-  }, [user, router]);
+  }, [user, router, isLoading]);
 
   const handleForm = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -58,9 +60,10 @@ function LoginForm() {
       try {
         const result = await login(form);
         setUser(result);
-        router.push("/main");
+        router.replace("/main");
       } catch (e) {
-        alert(e);
+        const error = e as APIerror;
+        alert(error.message);
       }
     }
   };

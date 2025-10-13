@@ -32,26 +32,29 @@ export const handleEnterRoomAI = (
   router.push(`/chat/${roomId}/ai`);
 };
 
-
 function MenteeMain() {
   const router = useRouter();
   const [myRoomsData, setMyRoomsData] =
-    useState<{ id: number; question: string }[]>();
+    useState<{ id: number; question: string; unread_count: number }[]>();
   const [myAIRoomsData, setMyAIRoomsData] =
     useState<{ id: number; title: string }[]>();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const getMenteeChatroom = async () => {
-      const res = await getChatrooms();
-      setMyRoomsData(res);
-    };
-    try {
-      getMenteeChatroom();
-    } catch (e) {
-      const error = e as APIerror;
-      alert(error.message);
-      setMyRoomsData([]);
-    }
+    setIsLoading(true);
+    const timer = setTimeout(async () => {
+      try {
+        const res = await getChatrooms();
+        setMyRoomsData(res);
+      } catch (e) {
+        const error = e as APIerror;
+        alert(error.message);
+        setMyRoomsData([]);
+      } finally {
+        setIsLoading(false);
+      }
+    }, 500);
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -99,7 +102,10 @@ function MenteeMain() {
         <h2 className="px-6 pb-4 text-xl font-bold border-b-2 border-darkgreen-default">
           나의 채팅방
         </h2>
-        <ChatRoomList emptyMessage="참여중인 채팅방이 없습니다.">
+        <ChatRoomList
+          emptyMessage="참여중인 채팅방이 없습니다."
+          isLoading={isLoading}
+        >
           {myRoomsData &&
             myRoomsData.length !== 0 &&
             myRoomsData.map((room) => (
@@ -107,6 +113,7 @@ function MenteeMain() {
                 key={room.id}
                 question={room.question}
                 onEnter={() => handleEnterRoomMentor(room.id, router)}
+                unreadCount={room.unread_count}
               />
             ))}
           {myAIRoomsData &&
