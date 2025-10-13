@@ -35,9 +35,9 @@ export function useArchiveRequestDetail(requestId: number) {
       const response = await getArchiveRequest(requestId);
       console.log("API 응답:", response);
       // 백엔드가 { data: { ... } } 형태로 응답하는 경우 처리
-      const requestData = response?.data || response;
+      const requestData = (response as { data?: ArchiveRequestResponseDto })?.data || response;
       console.log("파싱된 데이터:", requestData);
-      setRequest(requestData);
+      setRequest(requestData as ArchiveRequestResponseDto);
     } catch (error) {
       console.error("요청 상세 정보 로딩 실패:", error);
       alert("요청 정보를 불러오는데 실패했습니다.");
@@ -64,8 +64,8 @@ export function useArchiveRequestDetail(requestId: number) {
     setIsLoading(true);
     try {
       const response = await updateArchiveRequest(requestId, editData);
-      const updatedRequest = response?.data || response;
-      setRequest(updatedRequest);
+      const updatedRequest = (response as { data?: ArchiveRequestResponseDto })?.data || response;
+      setRequest(updatedRequest as ArchiveRequestResponseDto);
       setIsEditing(false);
       alert("수정이 완료되었습니다.");
     } catch (error) {
@@ -98,8 +98,8 @@ export function useArchiveRequestDetail(requestId: number) {
     setIsLoading(true);
     try {
       const response = await updateArchiveRequestStatus(requestId, "APPROVED");
-      const updatedRequest = response?.data || response;
-      setRequest(updatedRequest);
+      const updatedRequest = (response as { data?: ArchiveRequestResponseDto })?.data || response;
+      setRequest(updatedRequest as ArchiveRequestResponseDto);
       alert("승인되었습니다.");
     } catch (error) {
       console.error("승인 실패:", error);
@@ -115,8 +115,8 @@ export function useArchiveRequestDetail(requestId: number) {
     setIsLoading(true);
     try {
       const response = await updateArchiveRequestStatus(requestId, "REJECTED");
-      const updatedRequest = response?.data || response;
-      setRequest(updatedRequest);
+      const updatedRequest = (response as { data?: ArchiveRequestResponseDto })?.data || response;
+      setRequest(updatedRequest as ArchiveRequestResponseDto);
       alert("거절되었습니다.");
     } catch (error) {
       console.error("거절 실패:", error);
