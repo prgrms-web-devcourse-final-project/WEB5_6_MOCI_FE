@@ -57,17 +57,17 @@ function RequestItem({
           className="flex-1 min-w-0 cursor-pointer text-left"
           onClick={() => onViewDetail(request.id)}
         >
-          <h3 className="text-lg font-medium text-black truncate">
+          <h3 className="text-xl font-medium text-black truncate">
             {request.title}
           </h3>
-          <p className="text-sm text-gray mt-1">
+          <p className="text-base text-gray mt-1">
             {request.requesterName} • {new Date(request.createdAt).toLocaleDateString()}
           </p>
         </button>
 
         {/* 상태 배지 */}
         <div className="flex-shrink-0">
-          <span className={`px-3 py-1 text-sm font-medium rounded-full ${STATUS_STYLES[request.status]}`}>
+          <span className={`px-4 py-2 text-lg font-semibold rounded-full ${STATUS_STYLES[request.status]}`}>
             {STATUS_LABELS[request.status]}
           </span>
         </div>

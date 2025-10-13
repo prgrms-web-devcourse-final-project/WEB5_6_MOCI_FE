@@ -98,7 +98,7 @@ function RequestDetail({ requestId }: RequestDetailProps) {
             userRole={user?.role}
             currentUserId={user?.id}
             requestId={requestId}
-            requesterId={request.requester.id}
+            requesterId={request.requester?.id}
             status={request.status}
             onEdit={() => handleEdit()}
             onDelete={() => handleDelete()}

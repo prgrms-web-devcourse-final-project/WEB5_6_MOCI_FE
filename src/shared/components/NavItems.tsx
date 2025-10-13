@@ -31,13 +31,13 @@ function NavItems({ closeNav }: { closeNav: () => void }) {
       href: "/archive",
       show: true,
       itemName: "교육자료실로 이동",
-      selected: "archive" === currentPath,
+      selected: "archive" === currentPath && !pathname.startsWith("/archive/request"),
     },
     {
       href: "/archive/request",
       show: user !== null && user.role !== "USER",
       itemName: "자료요청게시판",
-      selected: "/archive/request" === pathname,
+      selected: pathname.startsWith("/archive/request"),
     },
   ];
   const moveTo = () => {

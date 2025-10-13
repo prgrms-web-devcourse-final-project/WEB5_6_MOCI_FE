@@ -54,10 +54,10 @@ function RequestDetailContent({
         <CategoryIcon className="w-10 h-10" />
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">
-            <h2 className="text-lg font-medium">{request.requester.name}</h2>
-            <span className="text-sm text-gray">{new Date(request.createdAt).toLocaleDateString()}</span>
+            <h2 className="text-xl font-medium">{request.requester?.name ?? '알 수 없음'}</h2>
+            <span className="text-base text-gray">{new Date(request.createdAt).toLocaleDateString()}</span>
           </div>
-          <span className={`px-2 py-1 text-sm font-medium rounded-full ${STATUS_STYLES[request.status]}`}>
+          <span className={`px-3 py-1.5 text-base font-medium rounded-full ${STATUS_STYLES[request.status]}`}>
             {STATUS_LABELS[request.status]}
           </span>
         </div>
@@ -66,7 +66,7 @@ function RequestDetailContent({
       {/* 카테고리 */}
       {isEditing && (
         <div className="mb-6">
-          <label htmlFor="category" className="block text-lg font-medium mb-2">
+          <label htmlFor="category" className="block text-xl font-medium mb-2">
             카테고리
           </label>
           <div className="flex items-center gap-3">
@@ -99,7 +99,7 @@ function RequestDetailContent({
 
       {/* 제목 */}
       <div className="mb-6">
-        <label htmlFor="edit-title" className="block text-lg font-medium mb-2">제목</label>
+        <label htmlFor="edit-title" className="block text-xl font-medium mb-2">제목</label>
         {isEditing ? (
           <input
             id="edit-title"
@@ -110,7 +110,7 @@ function RequestDetailContent({
             placeholder="제목을 입력해주세요"
           />
         ) : (
-          <div className="p-3 bg-gray-50 rounded-lg text-lg">
+          <div className="p-3 bg-gray-50 rounded-lg text-xl">
             {request.title}
           </div>
         )}
@@ -118,13 +118,13 @@ function RequestDetailContent({
 
       {/* 내용 */}
       <div className="flex-1">
-        <label htmlFor="edit-description" className="block text-lg font-medium mb-2">내용</label>
+        <label htmlFor="edit-description" className="block text-xl font-medium mb-2">내용</label>
         {isEditing ? (
           <textarea
             id="edit-description"
             value={editData.description}
             onChange={(e) => onEditDataChange({ ...editData, description: e.target.value })}
-            className="w-full h-64 px-3 py-2 border border-black rounded-lg text-xl focus:outline-none focus:border-green-default focus:border-2 resize-none placeholder:text-gray"
+            className="w-full h-64 px-3 py-2 border border-black rounded-lg text-lg focus:outline-none focus:border-green-default focus:border-2 resize-none placeholder:text-gray"
             placeholder="내용을 입력해주세요"
           />
         ) : (

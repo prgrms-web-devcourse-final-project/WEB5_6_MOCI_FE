@@ -114,7 +114,7 @@ function RequestCreateForm() {
           <div className="flex-1 flex flex-col gap-5">
             {/* 카테고리 */}
             <div>
-              <label htmlFor="category" className="block text-lg font-medium mb-2">
+              <label htmlFor="category" className="block text-xl font-medium mb-3">
                 카테고리
               </label>
               <div className="flex items-center gap-3">
@@ -123,7 +123,7 @@ function RequestCreateForm() {
                   <div className="flex-shrink-0">
                     {(() => {
                       const IconComponent = categoryIcons[formData.category];
-                      return <IconComponent className="w-8 h-8" />;
+                      return <IconComponent className="w-10 h-10" />;
                     })()}
                   </div>
                 )}
@@ -133,7 +133,7 @@ function RequestCreateForm() {
                   name="category"
                   value={formData.category}
                   onChange={handleInputChange}
-                  className="flex-1 h-[48px] px-3 border border-black rounded-lg text-xl focus:outline-none focus:border-green-default focus:border-2"
+                  className="flex-1 h-[52px] px-4 border border-black rounded-lg text-xl focus:outline-none focus:border-green-default focus:border-2"
                   required
                 >
                   {CATEGORY_OPTIONS.map(option => (
@@ -147,7 +147,7 @@ function RequestCreateForm() {
 
             {/* 제목 */}
             <div>
-              <label htmlFor="title" className="block text-lg font-medium mb-2">
+              <label htmlFor="title" className="block text-xl font-medium mb-3">
                 제목
               </label>
               <Input
@@ -163,7 +163,7 @@ function RequestCreateForm() {
 
             {/* 내용 */}
             <div className="flex-1 flex flex-col">
-              <label htmlFor="description" className="block text-lg font-medium mb-2">
+              <label htmlFor="description" className="block text-xl font-medium mb-3">
                 내용
               </label>
               <textarea
@@ -172,7 +172,7 @@ function RequestCreateForm() {
                 value={formData.description}
                 onChange={handleInputChange}
                 placeholder="요청 내용을 자세히 입력해주세요"
-                className="flex-1 w-full px-3 py-2 border border-black rounded-lg text-xl focus:outline-none focus:border-green-default focus:border-2 resize-none placeholder:text-gray"
+                className="flex-1 w-full px-4 py-3 border border-black rounded-lg text-lg focus:outline-none focus:border-green-default focus:border-2 resize-none placeholder:text-gray"
                 required
               />
             </div>

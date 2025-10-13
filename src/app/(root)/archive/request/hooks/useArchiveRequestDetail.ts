@@ -27,13 +27,17 @@ export function useArchiveRequestDetail(requestId: number) {
   const isMentor = user?.role === "MENTOR";
   const isAdmin = user?.role === "ADMIN";
   const canAccess = isMentor || isAdmin;
-  const isAuthor = request && isMentor && user?.id === request.requester.id;
+  const isAuthor = request && isMentor && user?.id === request.requester?.id;
   const canEdit = request && (request.status === "PENDING" || request.status === "REJECTED");
 
   const fetchRequest = useCallback(async () => {
     try {
       const response = await getArchiveRequest(requestId);
-      setRequest(response);
+      console.log("API 응답:", response);
+      // 백엔드가 { data: { ... } } 형태로 응답하는 경우 처리
+      const requestData = response?.data || response;
+      console.log("파싱된 데이터:", requestData);
+      setRequest(requestData);
     } catch (error) {
       console.error("요청 상세 정보 로딩 실패:", error);
       alert("요청 정보를 불러오는데 실패했습니다.");
@@ -60,7 +64,8 @@ export function useArchiveRequestDetail(requestId: number) {
     setIsLoading(true);
     try {
       const response = await updateArchiveRequest(requestId, editData);
-      setRequest(response);
+      const updatedRequest = response?.data || response;
+      setRequest(updatedRequest);
       setIsEditing(false);
       alert("수정이 완료되었습니다.");
     } catch (error) {
@@ -93,7 +98,8 @@ export function useArchiveRequestDetail(requestId: number) {
     setIsLoading(true);
     try {
       const response = await updateArchiveRequestStatus(requestId, "APPROVED");
-      setRequest(response);
+      const updatedRequest = response?.data || response;
+      setRequest(updatedRequest);
       alert("승인되었습니다.");
     } catch (error) {
       console.error("승인 실패:", error);
@@ -109,7 +115,8 @@ export function useArchiveRequestDetail(requestId: number) {
     setIsLoading(true);
     try {
       const response = await updateArchiveRequestStatus(requestId, "REJECTED");
-      setRequest(response);
+      const updatedRequest = response?.data || response;
+      setRequest(updatedRequest);
       alert("거절되었습니다.");
     } catch (error) {
       console.error("거절 실패:", error);
