@@ -32,40 +32,29 @@ export const handleEnterRoomAI = (
   router.push(`/chat/${roomId}/ai`);
 };
 
-// TODO : 임시 데이터 => 나중에 api로 바꾸기// [
-//   { id: 1, question: "멘토링 질문입니다." },
-//   { id: 2, question: "두번째 질문입니다." },
-//   { id: 3, question: "세번째 질문입니다." },
-//   { id: 4, question: "세번째 질문입니다." },
-//   { id: 5, question: "세번째 질문입니다." },
-// {id: 6, question: "세번째 질문입니다."},
-// {id: 7, question: "세번째 질문입니다."},
-// {id: 8, question: "세번째 질문입니다."},
-// {id: 9, question: "세번째 질문입니다."},
-// {id: 10, question: "세번째 질문입니다."},
-// {id: 11, question: "세번째 질문입니다."},
-// {id: 12, question: "세번째 질문입니다."},
-// ];
-
 function MenteeMain() {
   const router = useRouter();
   const [myRoomsData, setMyRoomsData] =
-    useState<{ id: number; question: string }[]>();
+    useState<{ id: number; question: string; unread_count: number }[]>();
   const [myAIRoomsData, setMyAIRoomsData] =
     useState<{ id: number; title: string }[]>();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const getMenteeChatroom = async () => {
-      const res = await getChatrooms();
-      setMyRoomsData(res);
-    };
-    try {
-      getMenteeChatroom();
-    } catch (e) {
-      const error = e as APIerror;
-      alert(error.message);
-      setMyRoomsData([]);
-    }
+    setIsLoading(true);
+    const timer = setTimeout(async () => {
+      try {
+        const res = await getChatrooms();
+        setMyRoomsData(res);
+      } catch (e) {
+        const error = e as APIerror;
+        alert(error.message);
+        setMyRoomsData([]);
+      } finally {
+        setIsLoading(false);
+      }
+    }, 500);
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -83,7 +72,7 @@ function MenteeMain() {
   }, []);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col h-full">
       <div className="flex flex-col gap-4 p-6">
         {/*교육 자료실 이동 버튼 */}
         <Button color="darkgreen" fullWidth hasIcon className="p-0">
@@ -109,11 +98,14 @@ function MenteeMain() {
       </div>
 
       {/*나의 채팅방 리스트 */}
-      <div className="mt-6">
+      <div className="flex-1 overflow-y-auto min-h-0">
         <h2 className="px-6 pb-4 text-xl font-bold border-b-2 border-darkgreen-default">
           나의 채팅방
         </h2>
-        <ChatRoomList emptyMessage="참여중인 채팅방이 없습니다.">
+        <ChatRoomList
+          emptyMessage="참여중인 채팅방이 없습니다."
+          isLoading={isLoading}
+        >
           {myRoomsData &&
             myRoomsData.length !== 0 &&
             myRoomsData.map((room) => (
@@ -121,6 +113,7 @@ function MenteeMain() {
                 key={room.id}
                 question={room.question}
                 onEnter={() => handleEnterRoomMentor(room.id, router)}
+                unreadCount={room.unread_count}
               />
             ))}
           {myAIRoomsData &&

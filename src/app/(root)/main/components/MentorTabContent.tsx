@@ -19,23 +19,13 @@ import { APIerror } from "@/api/getChatMsgMento";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { joinChatRoom } from "@/api/joinChatRoom";
 
-// TODO : 임시 데이터 => 나중에 api로 바꾸기
-//  const myRoomsData = [
-//   {id: 1, question: "멘토링 질문입니다."},
-//   {id: 2, question: "두번째 질문입니다."},
-//   {id: 3, question: "세번째 질문입니다."},
-// ];
-
-//  const publicRoomsData = [
-//   {id: 1, mentee_nickname: "멘티1", title: "제목1", category: "KTX", digital_level: "1"},
-//   {id: 2, mentee_nickname: "멘티2", title: "제목2", category: "버스", digital_level: "5"},
-//   {id: 3, mentee_nickname: "멘티3", title: "제목3", category: "쿠팡", digital_level: "2"},
-// ];
-
 function MentorTabContent({ activeTab }: { activeTab: MentorTabType }) {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
   const [mentorRoomsData, setMentorRoomsData] =
-    useState<{ id: number; question: string; category: string }[]>();
+    useState<
+      { id: number; question: string; category: string; unread_count: number }[]
+    >();
   const [noMentorRoomsData, setNoMentorRoomsData] =
     useState<
       { id: number; title: string; digital_level: number; category: string }[]
@@ -50,18 +40,25 @@ function MentorTabContent({ activeTab }: { activeTab: MentorTabType }) {
   >();
 
   useEffect(() => {
-    const getMentorChatroom = async () => {
-      const res = await getMentorChatrooms();
-      setMentorRoomsData(res);
-    };
-    try {
-      getMentorChatroom();
-    } catch (e) {
-      const error = e as APIerror;
-      alert(error.message);
-      setMentorRoomsData([]);
-    }
+    setIsLoading(true);
+    const timer = setTimeout(async () => {
+      try {
+        const res = await getMentorChatrooms();
+        setMentorRoomsData(res);
+        setIsLoading(false);
+      } catch (e) {
+        const error = e as APIerror;
+        alert(error.message);
+        setMentorRoomsData([]);
+        setIsLoading(false);
+      } finally {
+        setIsLoading(false);
+      }
+    }, 500); // 0.5초 뒤 실행
+
+    return () => clearTimeout(timer);
   }, []);
+
   useEffect(() => {
     const getNoMentorChatroom = async () => {
       const res = await getNoMentorChatrooms();
@@ -75,6 +72,7 @@ function MentorTabContent({ activeTab }: { activeTab: MentorTabType }) {
       setNoMentorRoomsData([]);
     }
   }, []);
+
   useEffect(() => {
     const getAllChatroom = async () => {
       const res = await getAllChatrooms();
@@ -102,13 +100,17 @@ function MentorTabContent({ activeTab }: { activeTab: MentorTabType }) {
   switch (activeTab) {
     case "myRooms":
       return (
-        <ChatRoomList emptyMessage="참여중인 채팅방이 없습니다.">
+        <ChatRoomList
+          emptyMessage="참여중인 채팅방이 없습니다."
+          isLoading={isLoading}
+        >
           {mentorRoomsData &&
             mentorRoomsData.length !== 0 &&
             mentorRoomsData.map((room) => (
               <MyChatRoomCard
                 key={room.id}
                 question={room.question}
+                unreadCount={room.unread_count}
                 onEnter={() => handleEnterRoomMentor(room.id, router)}
               />
             ))}
