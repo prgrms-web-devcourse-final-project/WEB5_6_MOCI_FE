@@ -1,12 +1,14 @@
 "use client";
 import Button from "@/shared/components/Button";
 import TipTap from "../components/TipTap";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { uploadPost } from "@/api/uploadPost";
 import { useRouter } from "next/navigation";
 import { JSONContent } from "@tiptap/react";
 import { editPost } from "@/api/editPost";
 import { useAuthStore } from "@/store/authStore";
+import { deleteFile } from "@/api/deleteFile";
+import debounce from "lodash.debounce";
 
 interface PostFormProps {
   mode: "write" | "edit";
@@ -19,11 +21,17 @@ interface PostFormProps {
   };
 }
 
+interface Files {
+  id: number;
+  url: string;
+  // isUsed: boolean;
+}
+
 function WriteForm({ mode, initialData }: PostFormProps) {
   const [title, setTitle] = useState<string | null>(null);
   const [description, setDescription] = useState<JSONContent | null>(null);
   const [category, setCategory] = useState("");
-  // const [fileIds, setFileIds] = useState(null);
+  const [files, setFiles] = useState<Files[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const route = useRouter();
@@ -62,6 +70,45 @@ function WriteForm({ mode, initialData }: PostFormProps) {
     }
   }, [mode, initialData, user?.role, route]);
 
+  //handleSubmit 시점에 일괄 삭제하려했지만, 수정할때 body에 바뀐 files[]를 받지 않아서 못함.
+  //그래서 에디터에서 description change 할때, 삭제 api 호출
+  const handleFileAdd = (id: number, url: string) => {
+    const newFile = { id, url };
+    setFiles((prev) => [...prev, newFile]);
+  };
+
+  const debouncedUpdateDescription = useMemo(
+    () =>
+      debounce((value: JSONContent) => {
+        setDescription(value);
+      }, 300),
+    []
+  );
+
+  const debouncedDeleteFiles = useMemo(
+    () =>
+      debounce(async (unusedUrls: string[]) => {
+        for (const url of unusedUrls) {
+          await deleteFile(url);
+        }
+      }, 700),
+    []
+  );
+
+  const handleTipTpaDescriptionChange = async (value: JSONContent) => {
+    debouncedUpdateDescription(value);
+
+    const contentString = JSON.stringify(value);
+    const unusedFilesUrl = files
+      .map((f) => f.url)
+      .filter((url) => !contentString.includes(url));
+    if (unusedFilesUrl.length > 0) {
+      debouncedDeleteFiles(unusedFilesUrl);
+    }
+    const usedFiles = files.filter((f) => contentString.includes(f.url));
+    setFiles(usedFiles);
+  };
+
   const handleSubmit = async () => {
     if (isLoading) return;
     setIsLoading(true);
@@ -98,6 +145,7 @@ function WriteForm({ mode, initialData }: PostFormProps) {
       } else {
         throw new Error("잘못된 동작입니다.");
       }
+      console.log(files);
       route.replace(`/archive/post/${postId}`);
     } catch (error) {
       alert(
@@ -105,7 +153,6 @@ function WriteForm({ mode, initialData }: PostFormProps) {
           ? error.message
           : "게시글 처리 중 오류가 발생했습니다."
       );
-      console.error(error);
     } finally {
       setIsLoading(false);
     }
@@ -145,7 +192,8 @@ function WriteForm({ mode, initialData }: PostFormProps) {
         />
 
         <TipTap
-          onChange={(value) => setDescription(value)}
+          onChange={handleTipTpaDescriptionChange}
+          onFileAdd={handleFileAdd}
           initialValue={mode === "edit" ? description ?? undefined : undefined}
         />
         <Button
