@@ -73,7 +73,7 @@ async function page({ params }: { params: Promise<{ id: number }> }) {
         const level = node.attrs?.level || 1;
         return React.createElement(
           `h${level}`,
-          { key },
+          { key, className: "text-3xl font-bold" },
           node.content?.map((child, i) => renderContent(child, i))
         );
       }
@@ -87,7 +87,7 @@ async function page({ params }: { params: Promise<{ id: number }> }) {
         }
 
         return (
-          <p key={key}>
+          <p key={key} className="text-2xl">
             {node.content.map((child, i) => renderContent(child, i))}
           </p>
         );
@@ -97,7 +97,11 @@ async function page({ params }: { params: Promise<{ id: number }> }) {
         if (node.marks) {
           node.marks.forEach((mark) => {
             if (mark.type === "bold") {
-              textElement = <strong key={key}>{textElement}</strong>;
+              textElement = (
+                <strong key={key} className="text-2xl font-bold">
+                  {textElement}
+                </strong>
+              );
             }
             if (mark.type === "link") {
               textElement = (
@@ -106,7 +110,7 @@ async function page({ params }: { params: Promise<{ id: number }> }) {
                   href={mark.attrs?.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-500 hover:underline active:underline visited:text-purple-900"
+                  className="text-2xl text-blue-500 hover:underline active:underline visited:text-purple-900"
                 >
                   {textElement}
                 </a>
