@@ -160,7 +160,7 @@ function ChatListAi({ id }: { id: number }) {
     <>
       <section
         ref={sectionRef}
-        className="my-20 min-h-0 flex-1 flex flex-col overflow-y-auto"
+        className="mb-20 min-h-0 flex-1 flex flex-col overflow-y-auto"
         aria-live="polite"
         aria-label="AI 채팅 메시지 목록"
       >
@@ -184,7 +184,6 @@ function ChatListAi({ id }: { id: number }) {
         onSubmit={handleSubmit}
         className="bg-lightyellow h-20 flex justify-between items-center p-3 shrink-0 absolute bottom-0 left-0 right-0 gap-3"
       >
-        <Plus className="top-auto cursor-pointer" aria-hidden="true" />
         <textarea
           name="chatInputField"
           id="chatInputField"
