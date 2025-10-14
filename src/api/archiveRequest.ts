@@ -29,8 +29,8 @@ export async function getArchiveRequestList(
 
   if (!response.ok) {
     const errorText = await response.text();
-    console.error("API 에러 응답:", errorText);
-    throw new Error(`요청 목록을 불러오는데 실패했습니다. (${response.status}: ${response.statusText})`);
+    alert(`요청 목록을 불러오는데 실패했습니다.\n(${response.status}: ${errorText})`);
+    throw new Error(errorText);
   }
 
   const data = await response.json();
@@ -74,7 +74,6 @@ export async function createArchiveRequest(data: CreateArchiveRequestDto): Promi
 
 // 요청 수정
 export async function updateArchiveRequest(id: number, data: CreateArchiveRequestDto): Promise<ArchiveRequestResponseDto> {
-  console.log("요청 수정 API 호출:", { id, data });
   
   const response = await fetch(`${BASE_URL}/api/v1/archive-requests/${id}`, {
     method: 'PUT',
@@ -85,12 +84,11 @@ export async function updateArchiveRequest(id: number, data: CreateArchiveReques
     body: JSON.stringify(data),
   });
 
-  console.log("수정 API 응답 상태:", response.status, response.statusText);
 
   if (!response.ok) {
     const errorText = await response.text();
-    console.error("수정 API 에러 응답:", errorText);
-    throw new Error(`요청 수정에 실패했습니다. (${response.status}: ${errorText})`);
+    alert(`요청 수정에 실패했습니다.\n(${response.status}: ${errorText})`);
+    throw new Error(errorText);
   }
 
   return response.json();

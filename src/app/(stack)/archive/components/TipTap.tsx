@@ -75,8 +75,8 @@ function TipTapEditor({ onChange, onFileAdd, initialValue }: Props) {
 
         onFileAdd(id, fileUrl);
       };
-    } catch (error) {
-      console.error("이미지 업로드 중 오류 발생:", error);
+    } catch{
+      alert("이미지 업로드에 실패했습니다.");
     }
   };
 

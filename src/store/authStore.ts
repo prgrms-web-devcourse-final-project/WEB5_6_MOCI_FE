@@ -47,8 +47,8 @@ export const useAuthStore = create<AuthState>((set) => ({
       } else {
         set({ user: null });
       }
-    } catch (err) {
-      console.error(err);
+    } catch {
+      alert("사용자 정보를 불러오는 중 오류가 발생했습니다.");
       set({ user: null });
     } finally {
       set({ isLoading: false });
@@ -65,8 +65,8 @@ export const useAuthStore = create<AuthState>((set) => ({
       } else {
         alert("로그아웃에 실패하였습니다");
       }
-    } catch (err) {
-      console.error("로그아웃 오류:", err);
+    } catch {
+      alert("로그아웃 중 오류가 발생했습니다.");
     }
   },
 }));

@@ -71,14 +71,11 @@ function RequestCreateForm() {
 
     setIsLoading(true);
     try {
-      const response = await createArchiveRequest(formData);
-      console.log("요청 생성 응답:", response);
-      
+      const response = await createArchiveRequest(formData);      
       // 성공 시 목록으로 이동
       alert("요청이 성공적으로 등록되었습니다.");
       router.push("/archive/request");
-    } catch (error) {
-      console.error("요청 생성 실패:", error);
+    } catch {
       alert("요청 등록에 실패했습니다.");
     } finally {
       setIsLoading(false);

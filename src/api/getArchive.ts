@@ -10,11 +10,14 @@ export const getArchive = async (id: number) => {
       credentials: "include",
     });
     if (!res.ok) {
-      throw new Error("교육자료 불러오기에 실패하였습니다");
+      alert("교육자료 불러오기에 실패하였습니다.");
+      return null;
     }
+
     const data = await res.json();
     return data.data;
-  } catch (e) {
-    console.error(e);
+  } catch {
+    alert("교육자료를 불러오는 중 오류가 발생했습니다.");
+    return null;
   }
 };

@@ -22,7 +22,6 @@ export const handleEnterRoomMentor = (
   roomId: number,
   router: AppRouterInstance
 ) => {
-  console.log("입장", roomId);
   router.push(`/chat/${roomId}/mentor`);
 };
 
@@ -30,7 +29,6 @@ export const handleEnterRoomAI = (
   roomId: number,
   router: AppRouterInstance
 ) => {
-  console.log("입장", roomId);
   router.push(`/chat/${roomId}/ai`);
 };
 
