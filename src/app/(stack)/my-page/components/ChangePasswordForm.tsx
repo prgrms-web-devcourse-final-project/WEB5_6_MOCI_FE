@@ -75,6 +75,15 @@ function ChangeButtonForm() {
   return (
     <>
       <form onSubmit={handleSubmit} className="flex-1 flex flex-col gap-5">
+        <input
+          type="text"
+          name="username"
+          autoComplete="username"
+          style={{ position: "absolute", left: "-9999px" }}
+          tabIndex={-1}
+          aria-hidden="true"
+          readOnly
+        />
         <div>
           <div className="flex gap-2">
             <Input
@@ -84,6 +93,7 @@ function ChangeButtonForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               minLength={8}
+              autoComplete="new-password"
             ></Input>
             <button
               type="button"
@@ -110,6 +120,7 @@ function ChangeButtonForm() {
               onChange={(e) => setConfirmPassword(e.target.value)}
               aria-describedby="confirmPassword-error"
               minLength={8}
+              autoComplete="new-password"
             ></Input>
             <button
               type="button"

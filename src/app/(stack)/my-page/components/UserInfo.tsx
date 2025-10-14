@@ -31,10 +31,13 @@ function UserInfo() {
   return (
     <div className="w-full flex flex-col items-center rounded-xl border px-5 py-10 gap-10">
       <Image
-        width={120}
-        height={120}
-        src="/logo.png" // : //   ? "mentoProfile.png" //   : user?.role === "MENTOR" //   ? "userProfile.png" // user?.role === "USER"
+        width={0}
+        height={0}
+        sizes="120px"
+        style={{ width: "auto", height: "auto", maxWidth: "120px" }}
+        src="/logo.png"
         alt="프로필이미지"
+        priority
       ></Image>
       <section aria-label="사용자정보" className="flex-center flex-col gap-2">
         <p className="text-xl">{user?.name ?? "사용자 정보가 없습니다"}</p>
