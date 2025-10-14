@@ -77,6 +77,7 @@ function LoginForm() {
           name="userId"
           value={form.userId}
           onChange={handleForm}
+          autoComplete="userId"
         ></Input>
         <div className="relative">
           <Input
@@ -86,6 +87,7 @@ function LoginForm() {
             value={form.password}
             onChange={handleForm}
             className="pr-10"
+            autoComplete="password"
           ></Input>
           <button
             type="button"

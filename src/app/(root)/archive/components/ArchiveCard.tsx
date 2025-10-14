@@ -34,6 +34,7 @@ function ArchiveCard({
                 ? { width: "100%", height: "auto", overflow: "hidden" }
                 : { width: "auto", height: "auto", overflow: "hidden" }
             }
+            priority={imgsrc ? false : true}
           ></Image>
         </div>
         <h2 className="text-2xl font-bold">{title}</h2>
