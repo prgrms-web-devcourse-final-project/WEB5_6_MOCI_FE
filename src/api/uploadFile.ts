@@ -24,7 +24,6 @@ export const uploadFile = async (file: File): Promise<UploadedFile> => {
           useWebWorker: true,
         });
       } catch (error) {
-        console.error("이미지 압축 중 오류:", error);
         alert("이미지 리사이징 중 오류가 발생했습니다.");
         throw error;
       }

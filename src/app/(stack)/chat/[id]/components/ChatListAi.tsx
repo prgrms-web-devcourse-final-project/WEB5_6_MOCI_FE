@@ -5,7 +5,6 @@ import { postChatMsgAiStream } from "@/api/postChatMsgAiStream"; //  새로 만�
 import { useEffect, useState, useRef, FormEvent } from "react";
 import Chat from "./Chat";
 import Button from "@/shared/components/Button";
-import Plus from "@/assets/icons/plus.svg";
 import { useAuthStore } from "@/store/authStore";
 
 type AiMessage = {
@@ -62,8 +61,8 @@ function ChatListAi({ id }: { id: number }) {
           // 첫 질문이 아니면 전체 메시지 바로 보여주기
           setChatList(chats || []);
         }
-      } catch (err) {
-        console.error("채팅 불러오기 실패", err);
+      } catch{
+        alert("채팅을 불러오지 못했습니다.");
         setChatList([]);
       } finally {
         setLoading(false);
@@ -126,9 +125,8 @@ function ChatListAi({ id }: { id: number }) {
             )
           );
         },
-        () => console.log("스트리밍 연결됨"),
-        (err) => {
-          console.error("메시지 전송 실패", err);
+        undefined,
+        () => {
           alert("메시지를 보낼 수 없습니다.");
         }
       );
@@ -160,14 +158,16 @@ function ChatListAi({ id }: { id: number }) {
     <>
       <section
         ref={sectionRef}
-        className="my-20 min-h-0 flex-1 flex flex-col overflow-y-auto"
+        className="mb-20 min-h-0 flex-1 flex flex-col overflow-y-auto"
         aria-live="polite"
         aria-label="AI 채팅 메시지 목록"
       >
         {!chatList || chatList.length === 0 ? (
-          <p className="text-xl" aria-live="polite">
-            채팅이 없습니다
-          </p>
+          <div className="flex flex-1 items-center justify-center">
+            <p className="text-xl text-darkgray" aria-live="polite">
+              채팅이 없습니다
+            </p>
+          </div>
         ) : (
           chatList.map((msg) => (
             <Chat
@@ -184,7 +184,6 @@ function ChatListAi({ id }: { id: number }) {
         onSubmit={handleSubmit}
         className="bg-lightyellow h-20 flex justify-between items-center p-3 shrink-0 absolute bottom-0 left-0 right-0 gap-3"
       >
-        <Plus className="top-auto cursor-pointer" aria-hidden="true" />
         <textarea
           name="chatInputField"
           id="chatInputField"

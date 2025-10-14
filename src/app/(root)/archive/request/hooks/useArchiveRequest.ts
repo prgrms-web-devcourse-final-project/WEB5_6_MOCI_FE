@@ -37,8 +37,7 @@ export function useArchiveRequestList() {
       setCurrentPage(currentPageNum);
       setTotalPages(totalPagesNum);
       setTotalElements(totalElementsNum);
-    } catch (error) {
-      console.error("요청 목록 로딩 실패:", error);
+    } catch {
       alert("요청 목록을 불러오는데 실패했습니다.");
       setRequests([]);
       setCurrentPage(0);

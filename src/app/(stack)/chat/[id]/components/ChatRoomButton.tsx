@@ -33,8 +33,8 @@ function ChatRoomButton({
         const res = await getMentorChatRoomInfo(id);
         setChatRoomInfo(res);
       } catch (e) {
-        console.error(e);
-        return;
+        const error = e as APIerror;
+        alert(error.message);
       }
     }
     if (user && user.role === "USER")
@@ -49,6 +49,7 @@ function ChatRoomButton({
   const endChat = async () => {
     try {
       await endChatByMento(id);
+      alert("채팅이 종료되었습니다.");
       router.replace("/main");
     } catch (e) {
       const error = e as APIerror;
@@ -63,7 +64,7 @@ function ChatRoomButton({
         chatRoomInfo.category,
         chatRoomInfo.question
       );
-
+      alert("AI 채팅방으로 이동합니다.");
       router.replace(`/chat/${aiChatRoom.id}/ai`);
       await deleteMentoChatRoom(id);
     } catch (e) {

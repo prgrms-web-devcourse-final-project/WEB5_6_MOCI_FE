@@ -43,8 +43,6 @@ export default function CreateChatForm() {
           ? await createAIChatRoom(formData.category, formData.question)
           : await createMentorChatRoom(formData.category, formData.question);
 
-      console.log("채팅방생성완료", result.id); // 추후 console 지우기
-
       if (result.target === "ai") {
         router.replace(`/chat/${result.id}/ai`);
       } else {

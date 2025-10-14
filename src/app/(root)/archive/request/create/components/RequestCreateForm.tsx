@@ -14,6 +14,8 @@ import KTXLogo from "@/assets/logos/KTX_logo.svg";
 import CoupangLogo from "@/assets/logos/Coupang_logo.svg";
 import BusLogo from "@/assets/logos/Bus_logo.svg";
 import DeliveryLogo from "@/assets/logos/Delivery_logo.svg";
+import Image from "next/image";
+import LogoPng from "@/../public/logo.png";
 
 interface SvgProps {
   className?: string;
@@ -27,7 +29,6 @@ const categoryIcons: Record<string, React.ComponentType<SvgProps>> = {
   INTERCITY_BUS: BusLogo,
   BAEMIN: DeliveryLogo,
   COUPANG: CoupangLogo,
-  ETC: KakaoTalkLogo, // 기타는 기본 아이콘 사용
 };
 
 function RequestCreateForm() {
@@ -70,14 +71,11 @@ function RequestCreateForm() {
 
     setIsLoading(true);
     try {
-      const response = await createArchiveRequest(formData);
-      console.log("요청 생성 응답:", response);
-      
+      const response = await createArchiveRequest(formData);      
       // 성공 시 목록으로 이동
       alert("요청이 성공적으로 등록되었습니다.");
       router.push("/archive/request");
-    } catch (error) {
-      console.error("요청 생성 실패:", error);
+    } catch {
       alert("요청 등록에 실패했습니다.");
     } finally {
       setIsLoading(false);
@@ -119,9 +117,11 @@ function RequestCreateForm() {
               </label>
               <div className="flex items-center gap-3">
                 {/* 카테고리 아이콘 미리보기 */}
-                {formData.category && categoryIcons[formData.category] && (
+                {formData.category && (
                   <div className="flex-shrink-0">
-                    {(() => {
+                    {formData.category === "ETC" ? (
+                      <Image src={LogoPng} alt="기타" width={40} height={40} className="w-10 h-10" />
+                    ) : categoryIcons[formData.category] && (() => {
                       const IconComponent = categoryIcons[formData.category];
                       return <IconComponent className="w-10 h-10" />;
                     })()}
