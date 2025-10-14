@@ -180,6 +180,7 @@ function WriteForm({ mode, initialData }: PostFormProps) {
             value={category}
             onChange={(e) => setCategory(e.target.value)}
             className="border-1 rounded-lg px-2 py-1"
+            aria-label="카테고리 선택"
           >
             <option value="">카테고리 선택</option>
             <option value="KAKAO_TALK">카카오톡</option>
