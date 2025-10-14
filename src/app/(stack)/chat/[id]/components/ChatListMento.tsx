@@ -7,11 +7,14 @@ import Button from "@/shared/components/Button";
 import useChatMento from "../hooks/useChatMento";
 import ChatRoomButton from "./ChatRoomButton";
 import Help from "@/assets/icons/help.svg";
+import { uploadFile } from "@/api/uploadFile";
 
 function ChatListMento({ id }: { id: string }) {
   const [text, setText] = useState("");
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const [isComposing, setIsComposing] = useState(false);
+  const [attachment, setAttachment] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
 
   const {
     messages,
@@ -53,12 +56,28 @@ function ChatListMento({ id }: { id: string }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  const onSendMessage = () => {
-    sendMessage(text, id);
-    setText("");
+  const onSendMessage = async () => {
+    if (text.trim() === "") {
+      alert("채팅을 입력해주세요");
+      return;
+    }
+    if (attachment) {
+      try {
+        const attachmentInfo = await uploadFile(attachment);
+        sendMessage(text, id, attachmentInfo.id);
+        setAttachment(null);
+        setPreview(null);
+        setText("");
+      } catch (e) {
+        alert(e);
+      }
+    } else {
+      sendMessage(text, id);
+      setText("");
+    }
   };
 
-  const send = (e: FormEvent) => {
+  const send = async (e: FormEvent) => {
     e.preventDefault();
     if (isComposing) return;
     onSendMessage();
@@ -80,6 +99,24 @@ function ChatListMento({ id }: { id: string }) {
     if (e.key === "Enter" && !e.shiftKey && !isComposing) {
       e.preventDefault();
       onSendMessage();
+    }
+  };
+
+  const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] ?? null;
+    setAttachment(file);
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        alert("5MB 이하의 이미지만 업로드할 수 있습니다.");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setPreview(null);
     }
   };
 
@@ -105,7 +142,7 @@ function ChatListMento({ id }: { id: string }) {
             <Help />
           </button>
           <p className="absolute -top-11.5 right-1 z-1000 p-2 bg-yellow-hover text-xl rounded-lg font-bold hidden peer-hover:block peer-active:block">
-            채팅방 이용방법을 확인하려면 클릭하세요
+            채팅 입력창 왼쪽의 + 버튼을 통해 사진을 전송할 수 있습니다
           </p>
         </>
       </div>
@@ -117,10 +154,12 @@ function ChatListMento({ id }: { id: string }) {
           !messages || messages.length === 0 ? (
             <p className="text-xl text-center">채팅이 없습니다</p>
           ) : (
-            messages.map(({ id, sender, content }) => (
+            messages.map(({ id, sender, content, attachmentUrl }) => (
               <Chat
                 key={id}
                 text={content}
+                imageUrl={attachmentUrl}
+                onLoadComplete={scrollToBottom}
                 sender={
                   id === null || sender === "System"
                     ? "system"
@@ -139,7 +178,17 @@ function ChatListMento({ id }: { id: string }) {
         className="bg-lightyellow h-20 flex  justify-between items-center p-3 shrink-0 absolute bottom-0 left-0 right-0 gap-3"
         onSubmit={send}
       >
-        <Plus className="top-auto cursor-pointer" />
+        <label htmlFor="사진업로드">
+          <Plus className="top-auto cursor-pointer" />
+        </label>
+        <input
+          type="file"
+          name="사진업로드"
+          id="사진업로드"
+          className="hidden"
+          onChange={handleImage}
+          disabled={messages?.at(-1)?.id === null || user?.role === "ADMIN"}
+        />
         <textarea
           name="chatInputField"
           id="chatInputField"
@@ -160,11 +209,40 @@ function ChatListMento({ id }: { id: string }) {
         <Button
           type="submit"
           className="cursor-pointer"
-          disabled={messages?.at(-1)?.id === null}
+          disabled={messages?.at(-1)?.id === null || user?.role === "ADMIN"}
         >
           보내기
         </Button>
       </form>
+      {preview && (
+        <div className="bg-white rounded-t-xl p-5 inset-shadow-sm absolute bottom-20">
+          <p className="text-xl pb-2 text-center font-bold">사진미리보기</p>
+          <div className="flex-center flex-col gap-4">
+            <span className="w-40 h-40 overflow-clip">
+              {
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={preview}
+                  width={160}
+                  height={160}
+                  alt="미리보기"
+                ></img>
+              }
+            </span>
+
+            <Button
+              color="darkgreen"
+              fullWidth
+              onClick={() => {
+                setAttachment(null);
+                setPreview(null);
+              }}
+            >
+              삭제
+            </Button>
+          </div>
+        </div>
+      )}
     </>
   );
 }

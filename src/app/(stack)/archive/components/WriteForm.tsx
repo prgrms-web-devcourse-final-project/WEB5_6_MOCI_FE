@@ -9,6 +9,7 @@ import { editPost } from "@/api/editPost";
 import { useAuthStore } from "@/store/authStore";
 import { deleteFile } from "@/api/deleteFile";
 import debounce from "lodash.debounce";
+import { splitUsedAndUnusedFiles } from "../utils/splitUsedAndUnusedFiles";
 
 interface PostFormProps {
   mode: "write" | "edit";
@@ -18,13 +19,19 @@ interface PostFormProps {
     title: string;
     description: JSONContent | string;
     category: string;
+    files: {
+      id: number;
+      file_name: string;
+      file_url: string;
+      file_type: string;
+    }[];
   };
 }
 
 interface Files {
   id: number;
   url: string;
-  // isUsed: boolean;
+  isUsed: boolean;
 }
 
 function WriteForm({ mode, initialData }: PostFormProps) {
@@ -46,6 +53,14 @@ function WriteForm({ mode, initialData }: PostFormProps) {
     if (mode === "edit" && initialData) {
       setTitle(initialData.title);
       setCategory(initialData.category);
+
+      const initialFiles: Files[] =
+        initialData.files.map((f) => ({
+          id: f.id,
+          url: f.file_url,
+          isUsed: false,
+        })) ?? [];
+      setFiles(initialFiles);
 
       let desc: JSONContent;
 
@@ -71,10 +86,8 @@ function WriteForm({ mode, initialData }: PostFormProps) {
     }
   }, [mode, initialData, user?.role, route, isLoadingUser]);
 
-  //handleSubmit 시점에 일괄 삭제하려했지만, 수정할때 body에 바뀐 files[]를 받지 않아서 못함.
-  //그래서 에디터에서 description change 할때, 삭제 api 호출
   const handleFileAdd = (id: number, url: string) => {
-    const newFile = { id, url };
+    const newFile = { id, url, isUsed: false };
     setFiles((prev) => [...prev, newFile]);
   };
 
@@ -85,30 +98,6 @@ function WriteForm({ mode, initialData }: PostFormProps) {
       }, 300),
     []
   );
-
-  const debouncedDeleteFiles = useMemo(
-    () =>
-      debounce(async (unusedUrls: string[]) => {
-        for (const url of unusedUrls) {
-          await deleteFile(url);
-        }
-      }, 700),
-    []
-  );
-
-  const handleTipTpaDescriptionChange = async (value: JSONContent) => {
-    debouncedUpdateDescription(value);
-
-    const contentString = JSON.stringify(value);
-    const unusedFilesUrl = files
-      .map((f) => f.url)
-      .filter((url) => !contentString.includes(url));
-    if (unusedFilesUrl.length > 0) {
-      debouncedDeleteFiles(unusedFilesUrl);
-    }
-    const usedFiles = files.filter((f) => contentString.includes(f.url));
-    setFiles(usedFiles);
-  };
 
   const isValidDescription =
     !!description &&
@@ -137,17 +126,34 @@ function WriteForm({ mode, initialData }: PostFormProps) {
       setIsLoading(false);
       return;
     }
+
+    const { usedFiles, unusedFiles } = splitUsedAndUnusedFiles(
+      files,
+      description
+    );
+    const fileIds = usedFiles.map((file) => file.id);
+
     try {
       let postId: number;
 
+      await Promise.all(unusedFiles.map((file) => deleteFile(file.url)));
+      setFiles(usedFiles);
+
       if (mode === "write") {
-        const res = await uploadPost(title, description, category);
+        const res = await uploadPost({ title, description, category, fileIds });
         postId = res.id;
-        alert("게시글이 업로드되었습니다!");
+        alert("게시글이 업로드되었습니다");
       } else if (mode === "edit" && initialData) {
-        await editPost(initialData.id, title, description, category);
+        await editPost({
+          postId: initialData.id,
+          title,
+          description,
+          category,
+          fileIds,
+        });
         postId = initialData.id;
-        alert("게시글이 수정되었습니다!");
+
+        alert("게시글이 수정되었습니다");
       } else {
         throw new Error("잘못된 동작입니다.");
       }
@@ -197,13 +203,14 @@ function WriteForm({ mode, initialData }: PostFormProps) {
         />
 
         <TipTap
-          onChange={handleTipTpaDescriptionChange}
+          onChange={debouncedUpdateDescription}
           onFileAdd={handleFileAdd}
           initialValue={mode === "edit" ? description ?? undefined : undefined}
         />
         <Button
           type="button"
           onClick={handleSubmit}
+          disabled={isLoading}
           aria-disabled={isLoading}
           className="mt-4"
         >
