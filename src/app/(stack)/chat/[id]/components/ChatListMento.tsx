@@ -138,6 +138,7 @@ function ChatListMento({ id }: { id: string }) {
           <button
             type="button"
             className="bg-lightgreen p-2 rounded-full absolute top-auto right-2 hover:bg-lightyellow hover:scale-105 hover:ring-4 hover:ring-yellow-default active:bg-lightyellow active:scale-105 active:ring-4 active:ring-yellow-default  peer cursor-pointer"
+            aria-label="채팅 도움말"
           >
             <Help />
           </button>

@@ -29,7 +29,7 @@ function PublicChatRoomCard({
   onEnter,
 }: PublicChatRoomCardProps) {
   return (
-    <div className="flex items-center justify-between px-4 py-3 bg-white border-b-1 border-darkgreen-default ">
+    <div className="flex items-center justify-between px-4 py-3 bg-white border-b-1 border-darkgreen-default hover:bg-gray-50 active:bg-gray-50">
       {/*멘티,채팅방 정보 */}
       <div className="flex items-center gap-3 flex-1 min-w-0">
         <div className="relative w-12 h-12 overflow-hidden rounded-full border-2 border-gray shrink-0">
@@ -42,7 +42,12 @@ function PublicChatRoomCard({
             style={{ objectFit: "cover" }}
           />
         </div>
-        <div className="flex-1 min-w-0">
+        <button 
+          type="button"
+          className="flex-1 min-w-0 cursor-pointer text-left"
+          onClick={onEnter}
+          aria-label="채팅방 입장"
+        >
           {/* <p className="text-sm text-darkgray">멘티 : {mentee_nickname}</p> */}
           <p className="text-xl font-semibold truncate w-[80%]">{title}</p>
           <div className="flex gap-2 mt-1 flex-wrap">
@@ -55,7 +60,7 @@ function PublicChatRoomCard({
               {category}
             </span>
           </div>
-        </div>
+        </button>
       </div>
 
       {/*입장하기 버튼 */}
