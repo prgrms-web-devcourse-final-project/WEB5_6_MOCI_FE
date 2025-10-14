@@ -90,6 +90,7 @@ function ChangeButtonForm() {
               onClick={toggleHidePW}
               aria-label="비밀번호 표시/숨기기"
               aria-pressed={hidePW}
+              className="p-2"
             >
               {hidePW ? <EyeClose /> : <EyeOpen />}
             </button>
@@ -116,6 +117,7 @@ function ChangeButtonForm() {
               onClick={toggleHidePWValidate}
               aria-label="비밀번호 표시/숨기기"
               aria-pressed={hidePWValidate}
+              className="p-2"
             >
               {hidePWValidate ? <EyeClose /> : <EyeOpen />}
             </button>
