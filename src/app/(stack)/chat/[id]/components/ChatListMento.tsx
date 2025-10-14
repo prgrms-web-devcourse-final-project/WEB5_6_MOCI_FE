@@ -61,6 +61,11 @@ function ChatListMento({ id }: { id: string }) {
       alert("채팅을 입력해주세요");
       return;
     }
+    if (messages.length === 1 && messages[0].sender === name) {
+      alert(
+        "멘토의 답변을 기다려주세요! 빠른 답변을 원하신다면 상단의 AI 채팅방 기능을 이용해보세요."
+      );
+    }
     if (attachment) {
       try {
         const attachmentInfo = await uploadFile(attachment);
@@ -164,10 +169,13 @@ function ChatListMento({ id }: { id: string }) {
                 sender={
                   id === null || sender === "System"
                     ? "system"
-                    : name === sender
+                    : name === sender ||
+                      (user?.role === "ADMIN" && messages[0].sender === sender)
                     ? "me"
                     : "others"
                 }
+                senderName={sender}
+                isAdmin={user?.role === "ADMIN"}
               />
             ))
           )
