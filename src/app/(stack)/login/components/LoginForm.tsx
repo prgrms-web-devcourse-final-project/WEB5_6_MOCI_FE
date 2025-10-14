@@ -70,7 +70,7 @@ function LoginForm() {
 
   return (
     <>
-      <p className="text-xl text-red-500">{errorMessage}</p>
+      <p className="text-xl text-darkgray">{errorMessage}</p>
       <form onSubmit={handleLogin} className="w-9/10 flex flex-col gap-5">
         <Input
           placeholder="전화번호"
@@ -94,7 +94,7 @@ function LoginForm() {
             onClick={toggleHidePW}
             aria-label="비밀번호 표시/숨기기"
             aria-pressed={hidePW}
-            className="absolute right-2 bottom-0 top-0 flex-center"
+            className="absolute right-2 bottom-0 top-0 flex-center p-2"
           >
             {hidePW ? <EyeClose /> : <EyeOpen />}
           </button>
