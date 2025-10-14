@@ -13,6 +13,7 @@ type AiMessage = {
   senderType: "HUMAN" | "AI";
   content: string;
   createdAt: string;
+  senderName: string;
 };
 
 function ChatListAi({ id }: { id: number }) {
@@ -43,7 +44,9 @@ function ChatListAi({ id }: { id: number }) {
 
         // 배열에서 HUMAN 메시지 찾기
         const humanMsg = chats.find((m) => m.senderType === "HUMAN");
-        const humanCreatedAt = humanMsg ? new Date(humanMsg.createdAt).getTime() : 0;
+        const humanCreatedAt = humanMsg
+          ? new Date(humanMsg.createdAt).getTime()
+          : 0;
         const diffSeconds = (now - humanCreatedAt) / 1000;
 
         // 조건: 메시지가 2개뿐이고, HUMAN 메시지가 지금으로부터 4초 이내
@@ -61,7 +64,7 @@ function ChatListAi({ id }: { id: number }) {
           // 첫 질문이 아니면 전체 메시지 바로 보여주기
           setChatList(chats || []);
         }
-      } catch{
+      } catch {
         alert("채팅을 불러오지 못했습니다.");
         setChatList([]);
       } finally {
@@ -70,7 +73,6 @@ function ChatListAi({ id }: { id: number }) {
     };
     getChats();
   }, [id]);
-
 
   // 새 메시지가 생길 때마다 스크롤
   useEffect(() => {
@@ -95,6 +97,7 @@ function ChatListAi({ id }: { id: number }) {
         senderType: "HUMAN",
         content,
         createdAt: new Date().toISOString(),
+        senderName: user!.name,
       },
     ]);
 
@@ -108,6 +111,7 @@ function ChatListAi({ id }: { id: number }) {
         senderType: "AI",
         content: "",
         createdAt: new Date().toISOString(),
+        senderName: "챗봇 딤돌이",
       },
     ]);
 
@@ -143,7 +147,7 @@ function ChatListAi({ id }: { id: number }) {
   const handleCompositionEnd = () => {
     setIsComposing(false);
   };
-  
+
   //엔터키 전송, 쉬프트 엔터 줄바꿈
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey && !isComposing) {
@@ -175,6 +179,8 @@ function ChatListAi({ id }: { id: number }) {
               text={msg.content}
               sender={msg.senderType === "HUMAN" ? "me" : "others"}
               isMarkdown={msg.senderType === "AI"}
+              senderName={msg.senderName}
+              isAdmin={user?.role === "ADMIN"}
             />
           ))
         )}

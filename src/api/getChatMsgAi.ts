@@ -7,6 +7,7 @@ export async function getChatMsgAi(roomId: number): Promise<
     senderType: "HUMAN" | "AI";
     content: string;
     createdAt: string;
+    senderName: string;
   }[]
 > {
   const res = await fetch(
