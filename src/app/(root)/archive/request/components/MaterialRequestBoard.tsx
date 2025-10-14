@@ -55,8 +55,7 @@ function MaterialRequestBoard() {
       // 현재 선택된 카테고리로 새로고침
       await fetchRequests(0, selectedCategory);
       alert("삭제가 완료되었습니다.");
-    } catch (error) {
-      console.error("삭제 실패:", error);
+    } catch{
       alert("삭제에 실패했습니다.");
     }
   };
@@ -68,8 +67,7 @@ function MaterialRequestBoard() {
       // 현재 선택된 카테고리로 새로고침
       await fetchRequests(0, selectedCategory);
       alert(`${newStatus === "APPROVED" ? "승인" : "거절"}이 완료되었습니다.`);
-    } catch (error) {
-      console.error("상태 변경 실패:", error);
+    } catch{
       alert("상태 변경에 실패했습니다.");
     }
   };

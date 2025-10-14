@@ -33,13 +33,10 @@ export function useArchiveRequestDetail(requestId: number) {
   const fetchRequest = useCallback(async () => {
     try {
       const response = await getArchiveRequest(requestId);
-      console.log("API 응답:", response);
       // 백엔드가 { data: { ... } } 형태로 응답하는 경우 처리
       const requestData = (response as { data?: ArchiveRequestResponseDto })?.data || response;
-      console.log("파싱된 데이터:", requestData);
       setRequest(requestData as ArchiveRequestResponseDto);
-    } catch (error) {
-      console.error("요청 상세 정보 로딩 실패:", error);
+    } catch {
       alert("요청 정보를 불러오는데 실패했습니다.");
       setRequest(null);
     } finally {
@@ -68,8 +65,7 @@ export function useArchiveRequestDetail(requestId: number) {
       setRequest(updatedRequest as ArchiveRequestResponseDto);
       setIsEditing(false);
       alert("수정이 완료되었습니다.");
-    } catch (error) {
-      console.error("수정 실패:", error);
+    } catch {
       alert("수정에 실패했습니다.");
     } finally {
       setIsLoading(false);
@@ -84,8 +80,7 @@ export function useArchiveRequestDetail(requestId: number) {
       await deleteArchiveRequest(requestId);
       alert("삭제가 완료되었습니다.");
       router.push("/archive/request");
-    } catch (error) {
-      console.error("삭제 실패:", error);
+    } catch {
       alert("삭제에 실패했습니다.");
     } finally {
       setIsLoading(false);
@@ -101,8 +96,7 @@ export function useArchiveRequestDetail(requestId: number) {
       const updatedRequest = (response as { data?: ArchiveRequestResponseDto })?.data || response;
       setRequest(updatedRequest as ArchiveRequestResponseDto);
       alert("승인되었습니다.");
-    } catch (error) {
-      console.error("승인 실패:", error);
+    } catch {
       alert("승인에 실패했습니다.");
     } finally {
       setIsLoading(false);
@@ -118,8 +112,7 @@ export function useArchiveRequestDetail(requestId: number) {
       const updatedRequest = (response as { data?: ArchiveRequestResponseDto })?.data || response;
       setRequest(updatedRequest as ArchiveRequestResponseDto);
       alert("거절되었습니다.");
-    } catch (error) {
-      console.error("거절 실패:", error);
+    } catch {
       alert("거절에 실패했습니다.");
     } finally {
       setIsLoading(false);

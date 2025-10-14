@@ -98,7 +98,6 @@ export const getAllChatrooms = async () => {
     credentials: "include",
   });
   const data = await res.json();
-  // console.log(data);
   if (!res.ok) {
     const error: APIerror = { status: data.code, message: data.message };
     throw error;

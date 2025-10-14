@@ -132,8 +132,7 @@ function RegisterForm() {
 
       //로그인 페이지로 이동
       router.push("/login");
-    } catch (err) {
-      console.error(err);
+    } catch {
       alert("회원가입 중 오류가 발생했습니다.");
     } finally {
       setIsLoading(false);

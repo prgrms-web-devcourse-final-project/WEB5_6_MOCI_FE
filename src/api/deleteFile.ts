@@ -12,14 +12,15 @@ export const deleteFile = async (fileUrl: string) => {
 
     if (!res.ok) {
       const errData = await res.json().catch(() => ({}));
-      console.log(` 파일 삭제 실패 (${fileUrl}):`, errData.message);
+      alert(`파일 삭제 실패 (${fileUrl})\n${errData.message || ""}`);
       return null;
     }
 
-    const data = await res.json();
+   const data = await res.json();
+    alert(data.message || "파일이 삭제되었습니다.");
     return data.message;
   } catch (error) {
-    console.log(`⚠️ 파일 삭제 중 오류 (${fileUrl}):`, error);
+    alert(`파일 삭제 중 오류 발생 (${fileUrl})`);
     return null;
   }
 };
