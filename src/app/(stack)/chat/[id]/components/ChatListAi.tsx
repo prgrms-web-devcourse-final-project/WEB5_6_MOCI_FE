@@ -165,9 +165,11 @@ function ChatListAi({ id }: { id: number }) {
         aria-label="AI 채팅 메시지 목록"
       >
         {!chatList || chatList.length === 0 ? (
-          <p className="text-xl" aria-live="polite">
-            채팅이 없습니다
-          </p>
+          <div className="flex flex-1 items-center justify-center">
+            <p className="text-xl text-darkgray" aria-live="polite">
+              채팅이 없습니다
+            </p>
+          </div>
         ) : (
           chatList.map((msg) => (
             <Chat
