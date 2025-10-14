@@ -39,6 +39,7 @@ function MainHeader() {
           type="button"
           className="px-2 h-full"
           onClick={() => setOpenNav(!openNav)}
+          aria-label="사이드바 열기/닫기"
         >
           <Hamburger />
         </button>

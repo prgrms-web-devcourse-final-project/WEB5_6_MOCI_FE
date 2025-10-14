@@ -74,6 +74,7 @@ function RegisterPasswordForm({ onSubmit, isKeyboardOpen, isLoading }: Props) {
             ref={inputRef}
             onChange={(e) => setPassword(e.target.value)}
             minLength={8}
+            autoComplete="password"
           />
           <button
             type="button"
@@ -101,6 +102,7 @@ function RegisterPasswordForm({ onSubmit, isKeyboardOpen, isLoading }: Props) {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             aria-describedby="confirmPassword-error"
+            autoComplete="password-confirm"
           />
           <button
             type="button"

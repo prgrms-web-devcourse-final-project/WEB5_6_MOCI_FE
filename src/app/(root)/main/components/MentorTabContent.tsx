@@ -145,6 +145,7 @@ function MentorTabContent({ activeTab }: { activeTab: MentorTabType }) {
                 title={room.title}
                 category={room.category}
                 digital_level={String(room.digital_level ?? "")}
+                onEnter={() => handleEnterRoomMentor(room.id, router)}
               />
             ))}
         </ChatRoomList>

@@ -36,6 +36,8 @@ function PublicChatRoomCard({
           <Image
             src="/user_profile.png"
             alt="기본 프로필 이미지"
+            priority
+            sizes="48px"
             fill
             style={{ objectFit: "cover" }}
           />
