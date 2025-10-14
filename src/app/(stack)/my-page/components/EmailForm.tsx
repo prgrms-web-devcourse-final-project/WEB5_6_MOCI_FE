@@ -4,7 +4,7 @@ import Button from "@/shared/components/Button";
 import Input from "@/shared/components/Input";
 import { useAuthStore } from "@/store/authStore";
 import { useRouter } from "next/navigation";
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 
 function EmailForm() {
   const [email, setEmail] = useState("");
@@ -32,6 +32,23 @@ function EmailForm() {
       }
     }
   };
+
+  const [keyboardPadding, setKeyboardPadding] = useState(0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.visualViewport) {
+        const diff = window.innerHeight - window.visualViewport.height;
+        setKeyboardPadding(diff > 0 ? diff : 0);
+      }
+    };
+
+    window.visualViewport?.addEventListener("resize", handleResize);
+    return () => {
+      window.visualViewport?.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <form onSubmit={handleSubmit} className="flex-1 flex flex-col gap-5">
       <Input
@@ -54,10 +71,14 @@ function EmailForm() {
           * 이메일 알림은 현재 지원하지않는 서비스입니다.
         </p>
       </div>
-
-      <Button type="submit" className="mt-auto sticky bottom-0" fullWidth>
-        이메일 설정하기
-      </Button>
+      <div
+        className="mt-auto sticky bottom-0 transition-[padding] duration-300"
+        style={{ paddingBottom: keyboardPadding }}
+      >
+        <Button type="submit" fullWidth>
+          이메일 설정하기
+        </Button>
+      </div>
     </form>
   );
 }
