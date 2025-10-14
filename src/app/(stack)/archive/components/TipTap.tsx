@@ -146,6 +146,7 @@ function TipTapEditor({ onChange, onFileAdd, initialValue }: Props) {
       <EditorContent
         editor={editor}
         className="flex-1 max-h-[60dvh] rounded-md text-black overflow-y-auto"
+        aria-label="글 입력 에디터"
       />
     </div>
   );

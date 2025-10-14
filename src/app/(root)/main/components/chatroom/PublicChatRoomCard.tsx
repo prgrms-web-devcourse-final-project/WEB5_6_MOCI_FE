@@ -29,7 +29,7 @@ function PublicChatRoomCard({
   onEnter,
 }: PublicChatRoomCardProps) {
   return (
-    <div className="flex items-center justify-between px-4 py-3 bg-white border-b-1 border-darkgreen-default hover:bg-gray-50 active:bg-gray-50">
+    <div className="flex items-center justify-between px-4 py-3 bg-white border-b-1 border-darkgreen-default hover:bg-gray-100 active:bg-gray-100">
       {/*멘티,채팅방 정보 */}
       <div className="flex items-center gap-3 flex-1 min-w-0">
         <div className="relative w-12 h-12 overflow-hidden rounded-full border-2 border-gray shrink-0">
