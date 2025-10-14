@@ -17,10 +17,15 @@ function MyChatRoomCard({
   onEnter,
 }: MyChatRoomCardProps) {
   return (
-    <div className="relative flex items-center justify-between p-4 bg-lightgreen border-b-1 border-darkgreen-default gap-4">
-      <p className="font-semibold text-xl truncate flex-1 min-w-0">
-        {question}
-      </p>
+    <div className="relative flex items-center justify-between p-4 bg-lightgreen border-b-1 border-darkgreen-default gap-4 hover:bg-lightyellow active:bg-lightyellow">
+      <button 
+        onClick={onEnter}
+        className="flex-1 min-w-0 cursor-pointer text-left"
+      >
+        <p className="font-semibold text-xl truncate">
+          {question}
+        </p>
+      </button>
 
       <Button color="darkgreen" onClick={onEnter} className="shrink-0">
         입장
