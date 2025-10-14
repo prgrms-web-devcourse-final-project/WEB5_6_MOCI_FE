@@ -9,6 +9,8 @@ import KTXLogo from "@/assets/logos/KTX_logo.svg";
 import CoupangLogo from "@/assets/logos/Coupang_logo.svg";
 import BusLogo from "@/assets/logos/Bus_logo.svg";
 import DeliveryLogo from "@/assets/logos/Delivery_logo.svg";
+import Image from "next/image";
+import LogoPng from "@/../public/logo.png";
 
 interface SvgProps {
   className?: string;
@@ -21,7 +23,6 @@ const categoryIcons: Record<string, React.ComponentType<SvgProps>> = {
   INTERCITY_BUS: BusLogo,
   BAEMIN: DeliveryLogo,
   COUPANG: CoupangLogo,
-  ETC: KakaoTalkLogo, // 기타는 기본 아이콘 사용
 };
 
 function getCategoryIcon(category?: string) {
@@ -46,12 +47,17 @@ function RequestDetailContent({
   onEditDataChange
 }: RequestDetailContentProps) {
   const CategoryIcon = getCategoryIcon(request.category);
+  const isEtcCategory = request.category?.toUpperCase() === "ETC";
 
   return (
     <div className="flex-1 px-6 py-4 overflow-y-auto">
       {/* 요청 정보 헤더 */}
       <div className="flex items-center gap-4 mb-6">
-        <CategoryIcon className="w-10 h-10" />
+        {isEtcCategory ? (
+          <Image src={LogoPng} alt="기타" width={40} height={40} className="w-10 h-10" />
+        ) : (
+          <CategoryIcon className="w-10 h-10" />
+        )}
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">
             <h2 className="text-xl font-medium">{request.requester?.name ?? '알 수 없음'}</h2>
@@ -70,9 +76,11 @@ function RequestDetailContent({
             카테고리
           </label>
           <div className="flex items-center gap-3">
-            {editData.category && getCategoryIcon(editData.category) && (
+            {editData.category && (
               <div className="flex-shrink-0">
-                {(() => {
+                {editData.category === "ETC" ? (
+                  <Image src={LogoPng} alt="기타" width={32} height={32} className="w-8 h-8" />
+                ) : (() => {
                   const IconComponent = getCategoryIcon(editData.category);
                   return <IconComponent className="w-8 h-8" />;
                 })()}

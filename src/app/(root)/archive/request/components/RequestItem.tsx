@@ -9,6 +9,8 @@ import KTXLogo from "@/assets/logos/KTX_logo.svg";
 import CoupangLogo from "@/assets/logos/Coupang_logo.svg";
 import BusLogo from "@/assets/logos/Bus_logo.svg";
 import DeliveryLogo from "@/assets/logos/Delivery_logo.svg";
+import Image from "next/image";
+import LogoPng from "@/../public/logo.png";
 
 interface SvgProps {
   className?: string;
@@ -21,7 +23,6 @@ const categoryIcons: Record<string, React.ComponentType<SvgProps>> = {
   INTERCITY_BUS: BusLogo,
   BAEMIN: DeliveryLogo,
   COUPANG: CoupangLogo,
-  ETC: KakaoTalkLogo, // 기타는 기본 아이콘 사용
 };
 
 function getCategoryIcon(category?: string) {
@@ -42,13 +43,18 @@ function RequestItem({
   onViewDetail,
 }: RequestItemProps) {
   const CategoryIcon = getCategoryIcon(request.category);
+  const isEtcCategory = request.category?.toUpperCase() === "ETC";
 
   return (
     <div className="px-6 py-4 hover:bg-gray-50 transition-colors border-b">
       <div className="flex items-center gap-4">
         {/* 카테고리 아이콘 */}
         <div className="flex-shrink-0">
-          <CategoryIcon className="w-8 h-8" />
+          {isEtcCategory ? (
+            <Image src={LogoPng} alt="기타" width={32} height={32} className="w-8 h-8" />
+          ) : (
+            <CategoryIcon className="w-8 h-8" />
+          )}
         </div>
 
         {/* 요청 정보 */}
