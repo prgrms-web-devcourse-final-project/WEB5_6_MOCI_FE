@@ -1,4 +1,3 @@
-"use server";
 
 import KaKaoIcon from "@/assets/logos/KakaoTalk_logo.svg";
 import KTXLogo from "@/assets/logos/KTX_logo.svg";
@@ -15,6 +14,12 @@ import { notFound } from "next/navigation";
 import ArchiveCard from "../components/ArchiveCard";
 import ArchiveButtons from "../components/ArchiveButtons";
 import HomeButton from "../components/HomeButton";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "교육 자료실",
+  description: "교육 자료실 페이지",
+};
 
 const matchCategory = {
   kakaotalk: { text: "카카오톡", cat: "KAKAO_TALK" },
