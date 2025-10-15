@@ -36,7 +36,6 @@ export default function Home() {
       </section>
 
       <section className="bg-lightyellow flex-[3] flex flex-col px-6 py-6">
-        <h2 className="text-left w-full text-lg font-bold mb-3">사용법 안내</h2>
         <div className="flex-1 mb-6">
           <ButtonGroup items={items} />
         </div>
@@ -49,7 +48,11 @@ export default function Home() {
         </Link>
       </section>
 
-      <section className="flex-[1] flex justify-center items-center px-6 w-full">
+      <section className="flex-[1] flex flex-col justify-center items-center px-6 w-full">
+        <h2 className="text-center w-full text-xl font-bold mb-3">
+          로그인 후 채팅기능을 이용할 수 있습니다
+        </h2>
+
         <Link
           href="/login"
           className="w-full"

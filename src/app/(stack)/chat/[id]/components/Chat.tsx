@@ -74,7 +74,7 @@ function Chat({
             />
           )}
           {isAdmin
-            ? senderName
+            ? senderName !== "관리자" && senderName
             : sender === "me"
             ? ""
             : sender === "system"
