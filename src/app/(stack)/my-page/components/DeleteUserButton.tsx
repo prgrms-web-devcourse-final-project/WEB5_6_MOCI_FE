@@ -18,7 +18,7 @@ function DeleteUserButton() {
     try {
       await deleteUser(confirmed);
       alert("회원탈퇴가 완료되었습니다.");
-      router.push("/");
+      router.replace("/");
     } catch (error) {
       alert(error);
     } finally {
