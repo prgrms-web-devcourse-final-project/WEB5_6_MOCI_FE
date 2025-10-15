@@ -6,53 +6,24 @@ import BusLogo from "@/assets/logos/Bus_logo.svg";
 import Delivery from "@/assets/logos/Delivery_logo.svg";
 import ButtonGroup from "@/shared/components/ButtonGroup";
 import HomeButton from "../components/HomeButton";
-import Image from "next/image";
-
-import ArchiveList, {
-  matchCategory,
-  matchCatResponse,
-} from "../components/ArchiveList";
+import { matchCategory, matchCatResponse } from "../components/ArchiveList";
+import Spinner from "@/shared/components/Spinner";
 
 export type CategoryKey = keyof typeof matchCategory;
 export type ResponseCatKey = keyof typeof matchCatResponse;
+// type CategoryValue = (typeof matchCategory)[CategoryKey];
 
-export const categoryIcons: Record<CategoryKey, React.ReactNode> = {
-  kakaotalk: <KaKaoIcon className="w-9 h-9" />,
-  ktx: <KTXLogo className="w-9 h-9" />,
-  youtube: (
-    <YouTubeLogo className="w-9 h-9 rounded-lg border border-gray-100" />
-  ),
-  coupang: (
-    <CoupangLogo className="w-9 h-9 rounded-lg border border-gray-100" />
-  ),
-  bus: <BusLogo className="w-9 h-9" />,
-  delivery: <Delivery className="w-9 h-9 rounded-lg" />,
-  all: <Image src="/logo.png" alt="디딤돌 로고" width={36} height={36} />,
-};
-
-async function Page({
-  params,
-}: {
-  searchParams: Promise<{ page: string; keyword: string }>;
-  params?: Promise<{ category: CategoryKey }>;
-}) {
-  const param = await params;
-  const category = param?.category ?? "all";
-
+function Loading() {
   const items = [
     {
       icon: <KaKaoIcon />,
       label: "카카오톡",
       href: "/archive/kakaotalk",
-      className: `${
-        category[0] === "kakaotalk" && "bg-yellow-default border-4"
-      }`,
     },
     {
       icon: <KTXLogo />,
       label: "KTX",
       href: "/archive/ktx",
-      className: `${category[0] === "ktx" && "bg-yellow-default border-4"}`,
     },
     {
       icon: (
@@ -60,7 +31,6 @@ async function Page({
       ),
       label: "유튜브",
       href: "/archive/youtube",
-      className: `${category[0] === "youtube" && "bg-yellow-default border-4"}`,
     },
     {
       icon: (
@@ -68,21 +38,16 @@ async function Page({
       ),
       label: "쿠팡",
       href: "/archive/coupang",
-      className: `${category[0] === "coupang" && "bg-yellow-default border-4"}`,
     },
     {
       icon: <BusLogo />,
       label: "버스",
       href: "/archive/bus",
-      className: `${category[0] === "bus" && "bg-yellow-default border-4"}`,
     },
     {
       icon: <Delivery className="rounded-lg w-[50px] h-[50px]" />,
       label: "배달",
       href: "/archive/delivery",
-      className: `${
-        category[0] === "delivery" && "bg-yellow-default border-4"
-      }`,
     },
   ];
 
@@ -99,9 +64,9 @@ async function Page({
         <div className="bg-lightyellow p-3 h-80">
           <ButtonGroup items={items} />
         </div>
-        <ArchiveList />
+        <Spinner />
       </div>
     </div>
   );
 }
-export default Page;
+export default Loading;

@@ -3,9 +3,11 @@
 import Button from "@/shared/components/Button";
 import { useAuthStore } from "@/store/authStore";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-function ArchiveButtons() {
+function ArchiveButtons({ resetSearch }: { resetSearch: () => void }) {
   const user = useAuthStore((s) => s.user);
+  const router = useRouter();
 
   if (user?.role === "ADMIN") {
     return (
@@ -15,19 +17,25 @@ function ArchiveButtons() {
             글 작성
           </Link>
         </Button>
-        <Button className="p-0">
-          <Link href="/archive" className="px-4 py-3">
-            검색초기화
-          </Link>
+        <Button
+          onClick={() => {
+            resetSearch();
+            router.replace("/archive");
+          }}
+        >
+          검색 초기화
         </Button>
       </div>
     );
   } else {
     return (
-      <Button className="p-0">
-        <Link href="/archive" className="px-4 py-3">
-          검색초기화
-        </Link>
+      <Button
+        onClick={() => {
+          resetSearch();
+          router.replace("/archive");
+        }}
+      >
+        검색 초기화
       </Button>
     );
   }

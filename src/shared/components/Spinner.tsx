@@ -1,6 +1,16 @@
-function Spinner({ userLoading = false }: { userLoading?: boolean }) {
+function Spinner({
+  userLoading = false,
+  paddingSmall = false,
+}: {
+  userLoading?: boolean;
+  paddingSmall?: boolean;
+}) {
   return (
-    <div className={`${userLoading ? "p-50" : "p-10"}  flex-center`}>
+    <div
+      className={`${
+        userLoading ? "p-50" : paddingSmall ? "p-5" : "p-10"
+      }  flex-center`}
+    >
       <div className="loader"></div>
     </div>
   );
