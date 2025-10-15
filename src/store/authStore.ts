@@ -16,8 +16,10 @@ interface AuthState {
   user: User | null;
   setUser: (user: Partial<User> | null) => void;
   fetchUser: () => Promise<void>;
-  logout: () => void;
   isLoading: boolean;
+  logout: () => void;
+  isLoggingOut: boolean;
+  setIsLoggingOut: (value: boolean) => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -55,6 +57,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
   },
   logout: async () => {
+    set({ isLoggingOut: true });
     try {
       const res = await fetch(`${BASE_URL}/api/v1/auth/logout`, {
         method: "DELETE",
@@ -67,6 +70,10 @@ export const useAuthStore = create<AuthState>((set) => ({
       }
     } catch {
       alert("로그아웃 중 오류가 발생했습니다.");
+    } finally {
+      set({ isLoggingOut: false });
     }
   },
+  isLoggingOut: false,
+  setIsLoggingOut: (value) => set({ isLoggingOut: value }),
 }));

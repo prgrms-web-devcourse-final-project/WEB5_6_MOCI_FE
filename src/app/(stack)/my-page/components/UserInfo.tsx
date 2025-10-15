@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 function UserInfo() {
   const user = useAuthStore((s) => s.user);
   const isLoading = useAuthStore((s) => s.isLoading);
+  const isLoggingOut = useAuthStore();
   const router = useRouter();
   const emailLength = user?.email?.length ?? 0;
   const fontsize =
@@ -22,11 +23,11 @@ function UserInfo() {
   const [id, domain] = (user?.email ?? "@").split("@");
 
   useEffect(() => {
-    if (!user && !isLoading) {
+    if (!user && !isLoading && !isLoggingOut) {
       alert("로그인이 필요합니다.");
       router.replace("/login");
     }
-  }, [user, router, isLoading]);
+  }, [user, router, isLoading, isLoggingOut]);
 
   return (
     <div className="w-full flex flex-col items-center rounded-xl border px-5 py-10 gap-10">
