@@ -162,7 +162,9 @@ function ChatListAi({ id }: { id: number }) {
     <>
       <section
         ref={sectionRef}
-        className="mb-20 min-h-0 flex-1 flex flex-col overflow-y-auto"
+        className={` ${
+          user?.role !== "ADMIN" && "mb-20"
+        } min-h-0 flex-1 flex flex-col overflow-y-auto`}
         aria-live="polite"
         aria-label="AI 채팅 메시지 목록"
       >
@@ -186,33 +188,34 @@ function ChatListAi({ id }: { id: number }) {
         )}
       </section>
 
-      <form
-        onSubmit={handleSubmit}
-        className="bg-lightyellow h-20 flex justify-between items-center p-3 shrink-0 absolute bottom-0 left-0 right-0 gap-3"
-      >
-        <textarea
-          name="chatInputField"
-          id="chatInputField"
-          className="flex-1 bg-white rounded-full border-2 text-xl p-3 resize-none h-fit disabled:bg-gray"
-          rows={1}
-          placeholder="질문을 입력하세요"
-          value={inputValue}
-          onCompositionStart={handleCompositionStart}
-          onCompositionEnd={handleCompositionEnd}
-          onChange={(e) => setInputValue(e.target.value)}
-          onKeyDown={handleKeyDown}
-          aria-label="메시지 입력창"
-          disabled={user?.role === "ADMIN"}
-        />
-        <Button
-          type="submit"
-          className="cursor-pointer"
-          disabled={sending || user?.role === "ADMIN"}
-          aria-label="메시지 보내기"
+      {user?.role !== "ADMIN" && (
+        <form
+          onSubmit={handleSubmit}
+          className="bg-lightyellow h-20 flex justify-between items-center p-3 shrink-0 absolute bottom-0 left-0 right-0 gap-3"
         >
-          {sending ? "전송 중..." : "보내기"}
-        </Button>
-      </form>
+          <textarea
+            name="chatInputField"
+            id="chatInputField"
+            className="flex-1 bg-white rounded-full border-2 text-xl p-3 resize-none h-fit disabled:bg-gray"
+            rows={1}
+            placeholder="질문을 입력하세요"
+            value={inputValue}
+            onCompositionStart={handleCompositionStart}
+            onCompositionEnd={handleCompositionEnd}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyDown={handleKeyDown}
+            aria-label="메시지 입력창"
+          />
+          <Button
+            type="submit"
+            className="cursor-pointer"
+            disabled={sending}
+            aria-label="메시지 보내기"
+          >
+            {sending ? "전송 중..." : "보내기"}
+          </Button>
+        </form>
+      )}
     </>
   );
 }
