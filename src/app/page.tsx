@@ -8,6 +8,7 @@ import KTXLogo from "@/assets/logos/KTX_logo.svg";
 import YouTubeLogo from "@/assets/logos/YouTube_logo.svg";
 import CoupangLogo from "@/assets/logos/Coupang_logo.svg";
 import LandingSwiper from "./components/LandingSwiper/LandingSwiper";
+import LoginOrHomeButton from "./components/LoginorHomeButton";
 
 const items = [
   { icon: <KaKaoIcon />, label: "카카오톡", href: "/archive/kakaotalk" },
@@ -49,19 +50,7 @@ export default function Home() {
       </section>
 
       <section className="flex-[1] flex flex-col justify-center items-center px-6 w-full">
-        <h2 className="text-center w-full text-xl font-bold mb-3">
-          로그인 후 채팅기능을 이용할 수 있습니다
-        </h2>
-
-        <Link
-          href="/login"
-          className="w-full"
-          aria-label="로그인 페이지로 이동"
-        >
-          <Button color="darkgreen" className="w-full">
-            로그인 하러가기
-          </Button>
-        </Link>
+        <LoginOrHomeButton/>
       </section>
     </div>
   );

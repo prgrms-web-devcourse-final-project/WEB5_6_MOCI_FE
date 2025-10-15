@@ -18,7 +18,7 @@ import HomeButton from "../components/HomeButton";
 
 const matchCategory = {
   kakaotalk: { text: "카카오톡", cat: "KAKAO_TALK" },
-  ktx: { text: "교통", cat: "KTX" },
+  ktx: { text: "기차", cat: "KTX" },
   youtube: { text: "유튜브", cat: "YOUTUBE" },
   coupang: { text: "쿠팡", cat: "COUPANG" },
   delivery: { text: "배달", cat: "BAEMIN" },
