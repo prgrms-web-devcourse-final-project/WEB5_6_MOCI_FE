@@ -23,9 +23,9 @@ function SubHeader({ pageTitle }: { pageTitle?: string }) {
 
   if (pageTitle) {
     headerTitle = pageTitle;
-  } else if(pathName.includes("/chat/") && pathName.endsWith("/ai")){
+  } else if (pathName.includes("/chat/") && pathName.endsWith("/ai")) {
     headerTitle = "AI 채팅방";
-  } else if(pathName.includes("/chat/") && pathName.endsWith("/mentor")){
+  } else if (pathName.includes("/chat/") && pathName.endsWith("/mentor")) {
     headerTitle = "멘토 채팅방";
   } else {
     for (const key in pageTitleList) {
@@ -46,7 +46,9 @@ function SubHeader({ pageTitle }: { pageTitle?: string }) {
       >
         <LeftArrowIcon />
       </button>
-      <span className="m-2 font-bold select-none">{headerTitle}</span>
+      <span className="m-2 font-bold select-none absolute left-1/2 -translate-x-1/2">
+        {headerTitle}
+      </span>
     </header>
   );
 }
