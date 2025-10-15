@@ -34,7 +34,7 @@ function ChatListMento({ id }: { id: string }) {
     }
   };
 
-  console.log(messages);
+  // console.log(messages);
   // 연결된 상태에서 메시지 새로 올라오면 맨밑으로 스크롤
   useEffect(() => {
     if (connectionStatus === "연결되었습니다") scrollToBottom();
