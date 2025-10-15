@@ -53,7 +53,7 @@ function OXQuiz() {
         const data = await updateDigitalLevel(answers);
         const level = data.data.digitalLevel;
         setUser({ ...user, digitalLevel: level });
-        router.push("/main");
+        router.replace("/main");
       } catch (err) {
         if (err instanceof Error) {
           setError(err.message);

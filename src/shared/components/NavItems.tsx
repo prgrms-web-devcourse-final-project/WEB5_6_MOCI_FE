@@ -1,12 +1,12 @@
 "use client";
 import { useAuthStore } from "@/store/authStore";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 function NavItems({ closeNav }: { closeNav: () => void }) {
   const pathname = usePathname();
-  const user = useAuthStore((s) => s.user);
-  const logout = useAuthStore((s) => s.logout);
+  const { user, logout, setIsLoggingOut } = useAuthStore();
+  const router = useRouter();
   const currentPath = pathname.split("/")[1];
   const navItem = [
     {
@@ -31,7 +31,8 @@ function NavItems({ closeNav }: { closeNav: () => void }) {
       href: "/archive",
       show: true,
       itemName: "교육자료실로 이동",
-      selected: "archive" === currentPath && !pathname.startsWith("/archive/request"),
+      selected:
+        "archive" === currentPath && !pathname.startsWith("/archive/request"),
     },
     {
       href: "/archive/request",
@@ -47,8 +48,23 @@ function NavItems({ closeNav }: { closeNav: () => void }) {
     e.preventDefault();
     const confirmOK = confirm("로그아웃 하시겠습니까?");
     if (confirmOK) {
-      logout();
-      closeNav();
+      setIsLoggingOut(true);
+      await Promise.resolve();
+      try {
+        if (!currentPath.startsWith("archive")) {
+          router.replace("/");
+          await new Promise((r) => setTimeout(r, 100));
+        } else {
+          router.refresh();
+        }
+        await logout();
+        alert("로그아웃이 완료되었습니다.");
+      } catch (error) {
+        alert(error);
+      } finally {
+        setIsLoggingOut(false);
+        closeNav();
+      }
     }
   };
   return (
