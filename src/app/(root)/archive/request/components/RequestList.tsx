@@ -15,7 +15,7 @@ function RequestList({ children, emptyMessage = "요청이 없습니다." }: Req
           <p className="text-xl text-gray">{emptyMessage}</p>
         </div>
       ) : (
-        <div className="divide-y divide-gray-200">
+        <div className="divide-y divide-gray-200 border-t border-gray-200">
           {children}
         </div>
       )}

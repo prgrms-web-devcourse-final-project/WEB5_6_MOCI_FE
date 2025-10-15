@@ -9,10 +9,12 @@ import { useRouter } from "next/navigation";
 
 function ChangeButtonForm() {
   const [isLoading, setIsLoading] = useState(false);
-  const [password, setPassword] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [hidePW, setHidePW] = useState(true);
-  const [hidePWValidate, setHidePWValidate] = useState(true);
+  const [hideCurrentPW, setHideCurrentPW] = useState(true);
+  const [hideNewPW, setHideNewPW] = useState(true);
+  const [hideConfirmPW, setHideConfirmPW] = useState(true);
 
   const route = useRouter();
 
@@ -38,14 +40,14 @@ function ChangeButtonForm() {
     e.preventDefault();
     if (isLoading) return;
     setIsLoading(true);
-    if (!password.trim() || !confirmPassword.trim()) {
+    if (!newPassword.trim() || !confirmPassword.trim()) {
       return alert("비밀번호를 입력해주세요!");
     }
-    if (password !== confirmPassword) {
+    if (newPassword !== confirmPassword) {
       return alert("비밀번호가 일치하지 않습니다.");
     }
     try {
-      await changePW(password, confirmPassword);
+      await changePW({ currentPassword, newPassword, confirmPassword });
       alert("비밀번호가 성공적으로 변경되었습니다.");
       route.push("/my-page");
     } catch (e) {
@@ -55,20 +57,24 @@ function ChangeButtonForm() {
     }
   };
 
-  const toggleHidePW = () => {
-    setHidePW(!hidePW);
+  const toggleHideCurrentPW = () => {
+    setHideCurrentPW(!hideCurrentPW);
   };
-  const toggleHidePWValidate = () => {
-    setHidePWValidate(!hidePWValidate);
+  const toggleHideNewPW = () => {
+    setHideNewPW(!hideNewPW);
+  };
+  const toggleHideConfirmPW = () => {
+    setHideConfirmPW(!hideConfirmPW);
   };
 
-  const isPasswordValidLength = password.length !== 0 && password.length < 8;
+  const isPasswordValidLength =
+    newPassword.length !== 0 && newPassword.length < 8;
 
   const passwordsMismatch =
-    confirmPassword.length > 0 && password !== confirmPassword;
+    confirmPassword.length > 0 && newPassword !== confirmPassword;
 
   const isValid =
-    password.trim().length >= 8 &&
+    newPassword.trim().length >= 8 &&
     confirmPassword.trim().length >= 8 &&
     !passwordsMismatch;
 
@@ -84,25 +90,47 @@ function ChangeButtonForm() {
           aria-hidden="true"
           readOnly
         />
+        <p className="font-bold">현재 비밀번호 입력</p>
+        <div className="flex gap-2">
+          <Input
+            type={hideCurrentPW ? "password" : "text"}
+            placeholder="현재 비밀번호"
+            required
+            value={currentPassword}
+            onChange={(e) => setCurrentPassword(e.target.value)}
+            minLength={8}
+            autoComplete="current-password"
+          ></Input>
+          <button
+            type="button"
+            onClick={toggleHideCurrentPW}
+            aria-label="현재 비밀번호 표시/숨기기"
+            aria-pressed={hideConfirmPW}
+            className="p-2"
+          >
+            {hideConfirmPW ? <EyeClose /> : <EyeOpen />}
+          </button>
+        </div>
+        <p className="font-bold mt-4">새로운 비밀번호</p>
         <div>
           <div className="flex gap-2">
             <Input
-              type={hidePW ? "password" : "text"}
-              placeholder="비밀번호"
+              type={hideNewPW ? "password" : "text"}
+              placeholder="새로운 비밀번호"
               required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
               minLength={8}
               autoComplete="new-password"
             ></Input>
             <button
               type="button"
-              onClick={toggleHidePW}
-              aria-label="비밀번호 표시/숨기기"
-              aria-pressed={hidePW}
+              onClick={toggleHideNewPW}
+              aria-label="새로운 비밀번호 표시/숨기기"
+              aria-pressed={hideNewPW}
               className="p-2"
             >
-              {hidePW ? <EyeClose /> : <EyeOpen />}
+              {hideNewPW ? <EyeClose /> : <EyeOpen />}
             </button>
           </div>
           {isPasswordValidLength && (
@@ -114,7 +142,7 @@ function ChangeButtonForm() {
         <div>
           <div className="flex gap-2">
             <Input
-              type={hidePWValidate ? "password" : "text"}
+              type={hideConfirmPW ? "password" : "text"}
               placeholder="비밀번호확인"
               required
               value={confirmPassword}
@@ -125,12 +153,12 @@ function ChangeButtonForm() {
             ></Input>
             <button
               type="button"
-              onClick={toggleHidePWValidate}
-              aria-label="비밀번호 표시/숨기기"
-              aria-pressed={hidePWValidate}
+              onClick={toggleHideConfirmPW}
+              aria-label="새로운 비밀번호 확인 표시/숨기기"
+              aria-pressed={hideConfirmPW}
               className="p-2"
             >
-              {hidePWValidate ? <EyeClose /> : <EyeOpen />}
+              {hideConfirmPW ? <EyeClose /> : <EyeOpen />}
             </button>
           </div>
           {passwordsMismatch && (
@@ -152,7 +180,7 @@ function ChangeButtonForm() {
             aria-disabled={!isValid || isLoading}
             aria-busy={isLoading}
           >
-            {isLoading ? "처리중..." : "비밀번호 바꾸기"}
+            {isLoading ? "처리중..." : "비밀번호 변경하기"}
           </Button>
         </div>
       </form>

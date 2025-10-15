@@ -7,7 +7,11 @@ export const metadata: Metadata = {
 };
 
 function Page() {
-  return <MaterialRequestBoard />;
+  return(
+    <div className="flex flex-col h-[calc(100dvh-48px)]">
+      <MaterialRequestBoard />
+    </div>
+  )
 }
 
 export default Page;

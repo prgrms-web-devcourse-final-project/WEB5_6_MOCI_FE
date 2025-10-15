@@ -1,4 +1,3 @@
-"use server";
 
 import KaKaoIcon from "@/assets/logos/KakaoTalk_logo.svg";
 import KTXLogo from "@/assets/logos/KTX_logo.svg";
@@ -6,20 +5,25 @@ import YouTubeLogo from "@/assets/logos/YouTube_logo.svg";
 import CoupangLogo from "@/assets/logos/Coupang_logo.svg";
 import BusLogo from "@/assets/logos/Bus_logo.svg";
 import Delivery from "@/assets/logos/Delivery_logo.svg";
-import RightArrow from "@/assets/icons/rightArrow.svg";
 import ButtonGroup from "@/shared/components/ButtonGroup";
 import Button from "@/shared/components/Button";
 import Input from "@/shared/components/Input";
 import Pagination from "@/shared/components/Pagination";
-import Link from "next/link";
 import { getArchiveList } from "@/api/getArchiveList";
 import { notFound } from "next/navigation";
 import ArchiveCard from "../components/ArchiveCard";
 import ArchiveButtons from "../components/ArchiveButtons";
+import HomeButton from "../components/HomeButton";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "교육 자료실",
+  description: "교육 자료실 페이지",
+};
 
 const matchCategory = {
   kakaotalk: { text: "카카오톡", cat: "KAKAO_TALK" },
-  ktx: { text: "교통", cat: "KTX" },
+  ktx: { text: "기차", cat: "KTX" },
   youtube: { text: "유튜브", cat: "YOUTUBE" },
   coupang: { text: "쿠팡", cat: "COUPANG" },
   delivery: { text: "배달", cat: "BAEMIN" },
@@ -122,20 +126,7 @@ async function Page({
   if (!archiveList) notFound();
   return (
     <div className="flex flex-col gap-2 h-[calc(100dvh-48px)]">
-      <Button
-        fullWidth
-        hasIcon
-        color="darkgreen"
-        className="w-[calc(100%-8px)] self-center mt-2 p-0 shrink-0"
-      >
-        <Link
-          href="/main"
-          className="flex items-center gap-2.5 w-full h-full px-4 py-3"
-        >
-          <RightArrow />
-          홈으로 이동
-        </Link>
-      </Button>
+      <HomeButton />
       <div className="flex-1 overflow-y-auto min-h-0">
         <h1 className="text-3xl text-darkgreen-default font-bold px-3 py-2">
           자주 찾는 서비스

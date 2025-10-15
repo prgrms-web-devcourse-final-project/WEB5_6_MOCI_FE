@@ -10,11 +10,13 @@ import Spinner from "@/shared/components/Spinner";
 function Page() {
   const user = useAuthStore((s) => s.user);
   const isLoading = useAuthStore((s) => s.isLoading);
+  const isLoggingOut = useAuthStore((s) => s.isLoggingOut);
   const [redirecting, setRedirecting] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     if (isLoading) return;
+    if (isLoggingOut) return;
 
     if (!user) {
       setRedirecting(true);
@@ -22,15 +24,15 @@ function Page() {
       router.replace("/login");
       return;
     }
-    if (user?.digitalLevel === null && !isLoading) {
+    if (user.digitalLevel === null) {
       alert("서비스를 사용하기 위해서는 디지털 역량평가가 필요합니다.");
       router.replace("/register/ox-test");
     }
-  }, [user, router, isLoading]);
+  }, [user, router, isLoading, isLoggingOut]);
 
   return (
     <div className="flex flex-col h-[calc(100dvh-48px)]">
-      {isLoading || redirecting ? (
+      {isLoading ? (
         <Spinner />
       ) : (
         user &&

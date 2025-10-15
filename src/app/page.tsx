@@ -8,6 +8,7 @@ import KTXLogo from "@/assets/logos/KTX_logo.svg";
 import YouTubeLogo from "@/assets/logos/YouTube_logo.svg";
 import CoupangLogo from "@/assets/logos/Coupang_logo.svg";
 import LandingSwiper from "./components/LandingSwiper/LandingSwiper";
+import LoginOrHomeButton from "./components/LoginorHomeButton";
 
 const items = [
   { icon: <KaKaoIcon />, label: "카카오톡", href: "/archive/kakaotalk" },
@@ -36,7 +37,6 @@ export default function Home() {
       </section>
 
       <section className="bg-lightyellow flex-[3] flex flex-col px-6 py-6">
-        <h2 className="text-left w-full text-lg font-bold mb-3">사용법 안내</h2>
         <div className="flex-1 mb-6">
           <ButtonGroup items={items} />
         </div>
@@ -49,16 +49,8 @@ export default function Home() {
         </Link>
       </section>
 
-      <section className="flex-[1] flex justify-center items-center px-6 w-full">
-        <Link
-          href="/login"
-          className="w-full"
-          aria-label="로그인 페이지로 이동"
-        >
-          <Button color="darkgreen" className="w-full">
-            로그인 하러가기
-          </Button>
-        </Link>
+      <section className="flex-[1] flex flex-col justify-center items-center px-6 w-full">
+        <LoginOrHomeButton/>
       </section>
     </div>
   );
