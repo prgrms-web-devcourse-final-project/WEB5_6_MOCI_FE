@@ -37,7 +37,7 @@ function MainHeader() {
       <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[650px] min-w-[350px] flex justify-between items-center px-4 h-12 z-10 shadow-md bg-white">
         <button
           type="button"
-          className="px-2 h-full"
+          className="ml-2 px-2 h-full z-20"
           onClick={() => setOpenNav(!openNav)}
           aria-label="사이드바 열기/닫기"
         >
@@ -45,7 +45,7 @@ function MainHeader() {
         </button>
 
         <Link
-          href={"/main"}
+          href={user ? "/main" : "/"}
           aria-label="메인페이지로 이동"
           className="h-full absolute top-auto right-1/2 translate-x-1/2"
         >
