@@ -12,7 +12,7 @@ function LogoutButton() {
     try {
       await logout();
       alert("로그아웃이 완료되었습니다.");
-      router.push("/");
+      router.replace("/");
     } catch (error) {
       alert(error);
     } finally {
@@ -26,7 +26,7 @@ function LogoutButton() {
       onClick={handleLogout}
       disabled={isLoggingOut}
     >
-      {isLoggingOut ? "처리중..." : "로그아웃 "}
+      {isLoggingOut ? "처리중..." : "로그아웃 하기"}
     </Button>
   );
 }

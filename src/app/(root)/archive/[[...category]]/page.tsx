@@ -14,6 +14,7 @@ import { notFound } from "next/navigation";
 import ArchiveCard from "../components/ArchiveCard";
 import ArchiveButtons from "../components/ArchiveButtons";
 import HomeButton from "../components/HomeButton";
+import Image from "next/image";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -123,6 +124,23 @@ async function Page({
     page: String(currentPage - 1),
   });
 
+  const categoryIcons: Record<CategoryKey, React.ReactNode> = {
+    kakaotalk: <KaKaoIcon className="w-9 h-9" />,
+    ktx: <KTXLogo className="w-9 h-9" />,
+    youtube: <YouTubeLogo className="w-9 h-9 rounded-lg border border-gray-100" />,
+    coupang: <CoupangLogo className="w-9 h-9 rounded-lg border border-gray-100" />,
+    bus: <BusLogo className="w-9 h-9" />,
+    delivery: <Delivery className="w-9 h-9 rounded-lg" />,
+    all: (
+      <Image
+        src="/logo.png"
+        alt="디딤돌 로고"
+        width={36}
+        height={36}
+      />
+    ),
+  };
+
   if (!archiveList) notFound();
   return (
     <div className="flex flex-col gap-2 h-[calc(100dvh-48px)]">
@@ -149,10 +167,13 @@ async function Page({
             검색
           </Button>
         </form>
-        <div className="flex justify-between items-center p-5 ">
-          <h1 className="text-3xl text-darkgreen-default font-bold ">
-            {matchCategory[category].text}
-          </h1>
+        <div className="flex justify-between items-center p-5">
+          <div className="flex items-center gap-3">
+            {categoryIcons[category]}
+            <h1 className="text-3xl text-darkgreen-default font-bold">
+              {matchCategory[category].text}
+            </h1>
+          </div>
           <ArchiveButtons />
         </div>
         <ul className="p-5 pt-0 flex flex-col gap-5">
