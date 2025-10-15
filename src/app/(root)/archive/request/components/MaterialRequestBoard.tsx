@@ -26,7 +26,6 @@ function MaterialRequestBoard() {
   //로그아웃 시 로그인 페이지로 이동
   useEffect(() => {
     if (!isLoading && !user) {
-      alert("로그인이 필요합니다.");
       router.push("/login");
     }
   }, [user, isLoading, router]);
