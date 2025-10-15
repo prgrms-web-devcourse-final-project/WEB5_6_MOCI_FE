@@ -74,19 +74,15 @@ function Chat({
             />
           )}
           {isAdmin
-            ? senderName
+            ? senderName !== "관리자" && senderName
             : sender === "me"
             ? ""
             : sender === "system"
             ? ""
             : senderName}
-          {/* {sender === "me"
+          {sender === "me"
             ? ""
-            : role === "MENTOR"
-            ? ""
-            : role === "USER"
-            ? " 멘토🐰"
-            : ""} */}
+            : sender !== "system" && role === "MENTOR" && " 멘토🐰"}
         </div>
       </div>
     </>

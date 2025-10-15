@@ -34,6 +34,7 @@ function ChatListMento({ id }: { id: string }) {
     }
   };
 
+  console.log(messages);
   // 연결된 상태에서 메시지 새로 올라오면 맨밑으로 스크롤
   useEffect(() => {
     if (connectionStatus === "연결되었습니다") scrollToBottom();
@@ -61,11 +62,7 @@ function ChatListMento({ id }: { id: string }) {
       alert("채팅을 입력해주세요");
       return;
     }
-    if (messages.length === 1 && messages[0].sender === name) {
-      alert(
-        "멘토의 답변을 기다려주세요! 빠른 답변을 원하신다면 상단의 AI 채팅방 기능을 이용해보세요."
-      );
-    }
+
     if (attachment) {
       try {
         const attachmentInfo = await uploadFile(attachment);
@@ -130,99 +127,111 @@ function ChatListMento({ id }: { id: string }) {
 
   return (
     <>
-      <div className="h-20 p-3 flex-center absolute left-0 right-0 shrink-0">
-        <ChatRoomButton
-          id={id}
-          hasmento={messages?.find((m) => m.sender !== name) ? true : false}
-          end={
-            messages?.at(-1)?.id === null ||
-            messages?.at(-1)?.sender === "System"
-          }
-        />
-        <>
-          <button
-            type="button"
-            className="bg-lightgreen p-2 rounded-full absolute top-auto right-2 hover:bg-lightyellow hover:scale-105 hover:ring-4 hover:ring-yellow-default active:bg-lightyellow active:scale-105 active:ring-4 active:ring-yellow-default  peer cursor-pointer"
-            aria-label="채팅 도움말"
-          >
-            <Help />
-          </button>
-          <p className="absolute -top-11.5 right-1 z-1000 p-2 bg-yellow-hover text-xl rounded-lg font-bold hidden peer-hover:block peer-active:block">
-            채팅 입력창 왼쪽의 + 버튼을 통해 사진을 전송할 수 있습니다
-          </p>
-        </>
-      </div>
+      {user?.role !== "ADMIN" && (
+        <div className="h-20 p-3 flex-center absolute left-0 right-0 shrink-0">
+          <ChatRoomButton
+            id={id}
+            hasmento={messages?.find((m) => m.sender !== name) ? true : false}
+            end={
+              messages?.at(-1)?.id === null ||
+              messages?.at(-1)?.sender === "System"
+            }
+          />
+
+          <>
+            <button
+              type="button"
+              className="bg-lightgreen p-2 rounded-full absolute top-auto right-2 hover:bg-lightyellow hover:scale-105 hover:ring-4 hover:ring-yellow-default active:bg-lightyellow active:scale-105 active:ring-4 active:ring-yellow-default  peer cursor-pointer"
+              aria-label="채팅 도움말"
+            >
+              <Help />
+            </button>
+
+            <p className="absolute -top-11.5 right-1 z-1000 p-2 bg-yellow-hover text-xl rounded-lg font-bold hidden peer-hover:block peer-active:block">
+              채팅 입력창 왼쪽의 + 버튼을 통해 사진을 전송할 수 있습니다
+            </p>
+          </>
+        </div>
+      )}
       <section
         ref={sectionRef}
-        className="my-20 min-h-0 flex-1 flex flex-col overflow-y-auto"
+        className={`${
+          user?.role !== "ADMIN" && "my-20"
+        } min-h-0 flex-1 flex flex-col overflow-y-auto`}
       >
         {connectionStatus === "연결되었습니다" ? (
           !messages || messages.length === 0 ? (
             <p className="text-xl text-center">채팅이 없습니다</p>
           ) : (
-            messages.map(({ id, sender, content, attachmentUrl }) => (
-              <Chat
-                key={id}
-                text={content}
-                imageUrl={attachmentUrl}
-                onLoadComplete={scrollToBottom}
-                sender={
-                  id === null || sender === "System"
-                    ? "system"
-                    : name === sender ||
-                      (user?.role === "ADMIN" && messages[0].sender === sender)
-                    ? "me"
-                    : "others"
-                }
-                senderName={sender}
-                isAdmin={user?.role === "ADMIN"}
-              />
-            ))
+            messages.map(
+              ({ id, sender, content, attachmentUrl, senderRole }) => (
+                <Chat
+                  key={id}
+                  text={content}
+                  imageUrl={attachmentUrl}
+                  onLoadComplete={scrollToBottom}
+                  sender={
+                    id === null || sender === "System"
+                      ? "system"
+                      : name === sender ||
+                        (user?.role === "ADMIN" &&
+                          messages[0].sender === sender)
+                      ? "me"
+                      : "others"
+                  }
+                  senderName={sender}
+                  isAdmin={user?.role === "ADMIN"}
+                  role={senderRole}
+                />
+              )
+            )
           )
         ) : (
           <p className="text-xl text-center">{connectionStatus}</p>
         )}
       </section>
-      <form
-        className="bg-lightyellow h-20 flex  justify-between items-center p-3 shrink-0 absolute bottom-0 left-0 right-0 gap-3"
-        onSubmit={send}
-      >
-        <label htmlFor="사진업로드">
-          <Plus className="top-auto cursor-pointer" />
-        </label>
-        <input
-          type="file"
-          name="사진업로드"
-          id="사진업로드"
-          className="hidden"
-          onChange={handleImage}
-          disabled={messages?.at(-1)?.id === null || user?.role === "ADMIN"}
-        />
-        <textarea
-          name="chatInputField"
-          id="chatInputField"
-          className="flex-1 bg-white rounded-full border-2 text-xl p-3 resize-none h-fit min-w-0 disabled:bg-gray"
-          placeholder={
-            messages?.at(-1)?.id === null
-              ? "채팅방이 종료되었습니다"
-              : "질문을 입력하세요"
-          }
-          rows={1}
-          onChange={handleText}
-          value={text}
-          onCompositionStart={handleCompositionStart}
-          onCompositionEnd={handleCompositionEnd}
-          disabled={messages?.at(-1)?.id === null || user?.role === "ADMIN"}
-          onKeyDown={handleKeyDown}
-        />
-        <Button
-          type="submit"
-          className="cursor-pointer"
-          disabled={messages?.at(-1)?.id === null || user?.role === "ADMIN"}
+      {user?.role !== "ADMIN" && (
+        <form
+          className="bg-lightyellow h-20 flex  justify-between items-center p-3 shrink-0 absolute bottom-0 left-0 right-0 gap-3"
+          onSubmit={send}
         >
-          보내기
-        </Button>
-      </form>
+          <label htmlFor="사진업로드">
+            <Plus className="top-auto cursor-pointer" />
+          </label>
+          <input
+            type="file"
+            name="사진업로드"
+            id="사진업로드"
+            className="hidden"
+            onChange={handleImage}
+            disabled={messages?.at(-1)?.id === null}
+          />
+          <textarea
+            name="chatInputField"
+            id="chatInputField"
+            className="flex-1 bg-white rounded-full border-2 text-xl p-3 resize-none h-fit min-w-0 disabled:bg-gray"
+            placeholder={
+              messages?.at(-1)?.id === null
+                ? "채팅방이 종료되었습니다"
+                : "질문을 입력하세요"
+            }
+            rows={1}
+            onChange={handleText}
+            value={text}
+            onCompositionStart={handleCompositionStart}
+            onCompositionEnd={handleCompositionEnd}
+            disabled={messages?.at(-1)?.id === null}
+            onKeyDown={handleKeyDown}
+          />
+          <Button
+            type="submit"
+            className="cursor-pointer"
+            disabled={messages?.at(-1)?.id === null}
+          >
+            보내기
+          </Button>
+        </form>
+      )}
       {preview && (
         <div className="bg-white rounded-t-xl p-5 inset-shadow-sm absolute bottom-20">
           <p className="text-xl pb-2 text-center font-bold">사진미리보기</p>
