@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { RequestStatus } from "@/types/archiveRequest";
 import { FILTER_CATEGORY_OPTIONS } from "@/constants/archiveRequest";
@@ -21,6 +22,14 @@ function MaterialRequestBoard() {
     handleCategoryChange,
     fetchRequests
   } = useArchiveRequestList();
+
+  //로그아웃 시 로그인 페이지로 이동
+  useEffect(() => {
+    if (!isLoading && !user) {
+      alert("로그인이 필요합니다.");
+      router.push("/login");
+    }
+  }, [user, isLoading, router]);
 
   // 권한이 없는 경우
   if (!canAccess) {
