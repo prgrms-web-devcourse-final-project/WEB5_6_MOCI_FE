@@ -34,6 +34,7 @@ function ChatListMento({ id }: { id: string }) {
     }
   };
 
+  console.log(messages);
   // 연결된 상태에서 메시지 새로 올라오면 맨밑으로 스크롤
   useEffect(() => {
     if (connectionStatus === "연결되었습니다") scrollToBottom();
@@ -162,24 +163,28 @@ function ChatListMento({ id }: { id: string }) {
           !messages || messages.length === 0 ? (
             <p className="text-xl text-center">채팅이 없습니다</p>
           ) : (
-            messages.map(({ id, sender, content, attachmentUrl }) => (
-              <Chat
-                key={id}
-                text={content}
-                imageUrl={attachmentUrl}
-                onLoadComplete={scrollToBottom}
-                sender={
-                  id === null || sender === "System"
-                    ? "system"
-                    : name === sender ||
-                      (user?.role === "ADMIN" && messages[0].sender === sender)
-                    ? "me"
-                    : "others"
-                }
-                senderName={sender}
-                isAdmin={user?.role === "ADMIN"}
-              />
-            ))
+            messages.map(
+              ({ id, sender, content, attachmentUrl, senderRole }) => (
+                <Chat
+                  key={id}
+                  text={content}
+                  imageUrl={attachmentUrl}
+                  onLoadComplete={scrollToBottom}
+                  sender={
+                    id === null || sender === "System"
+                      ? "system"
+                      : name === sender ||
+                        (user?.role === "ADMIN" &&
+                          messages[0].sender === sender)
+                      ? "me"
+                      : "others"
+                  }
+                  senderName={sender}
+                  isAdmin={user?.role === "ADMIN"}
+                  role={senderRole}
+                />
+              )
+            )
           )
         ) : (
           <p className="text-xl text-center">{connectionStatus}</p>

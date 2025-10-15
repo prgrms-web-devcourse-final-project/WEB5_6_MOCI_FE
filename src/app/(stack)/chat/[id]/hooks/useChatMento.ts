@@ -11,6 +11,7 @@ export type Message = {
   content: string;
   createdAt: string;
   attachmentUrl: string;
+  senderRole: "USER" | "MENTOR" | "ADMIN";
 };
 
 export default function useChatMento() {
