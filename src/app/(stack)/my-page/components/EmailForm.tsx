@@ -19,7 +19,7 @@ function EmailForm() {
       await changeEmail(email);
 
       setUser({ ...user, email });
-      router.push("/my-page");
+      router.replace("/my-page");
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);

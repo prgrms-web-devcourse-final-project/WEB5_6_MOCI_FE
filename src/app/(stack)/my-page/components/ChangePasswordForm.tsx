@@ -49,7 +49,7 @@ function ChangeButtonForm() {
     try {
       await changePW({ currentPassword, newPassword, confirmPassword });
       alert("비밀번호가 성공적으로 변경되었습니다.");
-      route.push("/my-page");
+      route.replace("/my-page");
     } catch (e) {
       alert(e instanceof Error ? e.message : "에러 발생");
     } finally {
