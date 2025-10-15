@@ -75,13 +75,13 @@ function TipTapEditor({ onChange, onFileAdd, initialValue }: Props) {
 
         onFileAdd(id, fileUrl);
       };
-    } catch{
+    } catch {
       alert("이미지 업로드에 실패했습니다.");
     }
   };
 
   return (
-    <div className="w-full px-2 border-1 rounded-lg mt-2 flex-1 overflow-hidden">
+    <div className="w-full max-h-[60dvh] px-2 border-1 rounded-lg mt-2 flex-1">
       {/* 툴바 */}
       <div className="py-2 flex gap-2 border-b-1 border-gray">
         <Button
@@ -145,7 +145,7 @@ function TipTapEditor({ onChange, onFileAdd, initialValue }: Props) {
       {/* 에디터 */}
       <EditorContent
         editor={editor}
-        className="flex-1 max-h-[60dvh] rounded-md text-black overflow-y-auto"
+        className="flex-1 h-[calc(60dvh-45px)] rounded-md text-black overflow-y-auto "
         aria-label="글 입력 에디터"
       />
     </div>
