@@ -161,12 +161,13 @@ function ChatListAi({ id }: { id: number }) {
   return (
     <>
       <section
-        ref={sectionRef}
         className={` ${
           user?.role !== "ADMIN" && "mb-20"
         } min-h-0 flex-1 flex flex-col overflow-y-auto`}
         aria-live="polite"
-        aria-label="AI 채팅 메시지 목록"
+        aria-label={`AI 채팅 메시지 목록 ${chatList.map(
+          (m) => `${m.senderName}가 보낸 메시지 ${m.content}`
+        )}`}
       >
         {!chatList || chatList.length === 0 ? (
           <div className="flex flex-1 items-center justify-center">

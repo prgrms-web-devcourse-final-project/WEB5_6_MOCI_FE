@@ -18,11 +18,14 @@ function MyChatRoomCard({
 }: MyChatRoomCardProps) {
   return (
     <div className="relative flex items-center justify-between p-4 bg-lightgreen border-b-1 border-darkgreen-default gap-4 hover:bg-lightyellow active:bg-lightyellow">
-      <button 
+      <button
         onClick={onEnter}
         className="flex-1 min-w-0 cursor-pointer text-left"
       >
-        <p className="font-semibold text-xl truncate">
+        <p
+          className="font-semibold text-xl truncate"
+          aria-label={`${question} 채팅방`}
+        >
           {question}
         </p>
       </button>
