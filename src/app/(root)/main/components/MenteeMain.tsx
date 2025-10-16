@@ -35,7 +35,6 @@ export const handleEnterRoomAI = (
 function MenteeMain() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabType>("MENTOR");
-  
 
   const [myRoomsData, setMyRoomsData] =
     useState<{ id: number; question: string; unread_count: number }[]>();

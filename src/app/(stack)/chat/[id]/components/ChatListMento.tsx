@@ -154,6 +154,9 @@ function ChatListMento({ id }: { id: string }) {
         </div>
       )}
       <section
+        aria-label={`${messages.map(
+          (m) => `${m.sender}${m.senderRole}가 보낸 메시지 ${m.content}`
+        )}`}
         ref={sectionRef}
         className={`${
           user?.role !== "ADMIN" && "my-20"
