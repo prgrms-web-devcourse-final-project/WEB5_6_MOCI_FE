@@ -10,7 +10,7 @@ type TabBarProps = {
   activeTab: TabType;
   onChange: (tab: TabType) => void;
   customLabels: Record<TabType, string>;
-}
+};
 
 const tabs: TabType[] = ["MENTOR", "AI"];
 
@@ -26,11 +26,14 @@ function TabBar({ activeTab, onChange, customLabels }: TabBarProps) {
               ? "border-b-2 border-darkgreen-default font-semibold"
               : "text-darkgray"
           }`}
+          aria-label={`${customLabels[key]} 탭 ${
+            activeTab === key ? "선택됨" : "선택되지 않음"
+          }`}
         >
           {customLabels[key]}
         </button>
       ))}
     </div>
-  )
+  );
 }
-export default TabBar
+export default TabBar;

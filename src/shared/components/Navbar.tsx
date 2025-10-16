@@ -63,7 +63,11 @@ function Navbar({ navRef: outRef, closeNav, openNav }: Props) {
     >
       <div className="flex justify-between items-center mt-3.5">
         <span className="text-3xl font-bold select-none">바로가기</span>
-        <button className="flex-center w-6 h-6" onClick={closeNav}>
+        <button
+          className="flex-center w-6 h-6"
+          onClick={closeNav}
+          aria-label="사이드바 닫기"
+        >
           <CloseIcon />
         </button>
       </div>
